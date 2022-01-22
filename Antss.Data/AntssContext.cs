@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Antss.Model;
+using System.Diagnostics;
 
 namespace Antss.Data
 {
@@ -36,5 +37,8 @@ namespace Antss.Data
                     new { Id = 3, RaisedById = 3, TicketStatus = TicketStatuses.InProgress, Description = "Emails not sending" }
                 );
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(message => Debug.WriteLine(message));
     }
 }

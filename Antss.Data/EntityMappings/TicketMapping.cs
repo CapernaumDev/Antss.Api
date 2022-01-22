@@ -11,7 +11,7 @@ namespace Antss.Data.EntityMappings
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.RaisedBy).WithMany().HasForeignKey(x => x.RaisedById).OnDelete(DeleteBehavior.NoAction);
             builder.Property(x => x.AssignedToId).IsRequired(false);
-            builder.HasOne(x => x.AssignedTo).WithMany().HasForeignKey(x => x.AssignedToId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.AssignedTo).WithMany().HasForeignKey(x => x.AssignedToId).OnDelete(DeleteBehavior.NoAction).IsRequired(false);
             builder.Property(x => x.TicketStatus).HasConversion<int>();
             // Don't specify max length for Description, can be any length
         }
