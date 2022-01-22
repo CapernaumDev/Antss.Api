@@ -86,7 +86,7 @@ namespace Antss.Data.Migrations
                         {
                             Id = 1,
                             AssignedToId = 2,
-                            Description = "PC IS ON FIRE",
+                            Description = "No monitor display",
                             RaisedById = 3,
                             TicketStatus = 1
                         },

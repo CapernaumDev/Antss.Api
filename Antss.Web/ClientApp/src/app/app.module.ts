@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { UserListComponent } from './admin/user-list.component';
+import { TicketListComponent } from './tickets/ticket-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    UserListComponent
+    UserListComponent,
+    TicketListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -22,7 +24,8 @@ import { UserListComponent } from './admin/user-list.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'admin', component: UserListComponent }
+      { path: 'admin', component: UserListComponent },
+      { path: 'tickets', component: TicketListComponent}
     ])
   ],
   providers: [],

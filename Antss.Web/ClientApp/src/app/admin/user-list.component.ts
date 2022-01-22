@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService} from '../api.service';
+import { ApiService } from '../api.service';
 import { User } from '../models/user';
 
 @Component({
