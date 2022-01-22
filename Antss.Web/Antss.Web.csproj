@@ -29,26 +29,12 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="ClientApp\src\app\models\office.ts" />
-    <None Remove="ClientApp\src\app\models\ticket.ts" />
-    <None Remove="ClientApp\src\app\models\user.ts" />
-    <None Remove="ClientApp\src\app\tickets\ticket-list.component.ts" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Antss.Data\Antss.Data.csproj" />
     <ProjectReference Include="..\Antss.Model\Antss.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\models\office.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\models\ticket.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\tickets\ticket-list.component.ts" />
-  </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
