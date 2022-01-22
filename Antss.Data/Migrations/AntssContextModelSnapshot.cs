@@ -127,17 +127,12 @@ namespace Antss.Data.Migrations
             modelBuilder.Entity("Antss.Model.User", b =>
                 {
                     b.HasOne("Antss.Model.Office", "Office")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("OfficeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Office");
-                });
-
-            modelBuilder.Entity("Antss.Model.Office", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

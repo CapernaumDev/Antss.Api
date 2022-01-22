@@ -6,11 +6,13 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>Type</th>
+        <th>Office</th>
       </tr>
       <tr *ngFor="let x of UserList | async">
         <td>{{x.firstName}}</td>
         <td>{{x.lastName}}</td>
         <td>{{x.userType}}</td>
+        <td>{{x.office.name}}</td>
       </tr>
     </table>
   </div>

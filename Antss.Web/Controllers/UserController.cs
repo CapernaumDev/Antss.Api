@@ -20,7 +20,7 @@ namespace Antss.Web.Controllers
         [Route("List")]
         public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            return await _db.Users.ToListAsync();
+            return await _db.Users.Include(x => x.Office).ToListAsync();
         }
     }
 }

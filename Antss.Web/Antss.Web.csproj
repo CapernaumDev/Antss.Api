@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\models\office.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
   </ItemGroup>
 
@@ -39,6 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\office.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
   </ItemGroup>
 

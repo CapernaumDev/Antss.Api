@@ -10,7 +10,6 @@ namespace Antss.Data.EntityMappings
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).HasMaxLength(50);
-            builder.HasMany(x => x.Users).WithOne(x => x.Office);
         }
     }
 }

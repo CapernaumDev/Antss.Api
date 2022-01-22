@@ -15,6 +15,7 @@ namespace Antss.Data.EntityMappings
             builder.Property(x => x.FirstName).HasMaxLength(20);
             builder.Property(x => x.LastName).HasMaxLength(20);
             builder.Property(x => x.OfficeId).IsRequired();
+            builder.HasOne(x => x.Office).WithMany().HasForeignKey(x => x.OfficeId);
         }
     }
 }
