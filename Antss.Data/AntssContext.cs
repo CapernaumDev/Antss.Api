@@ -16,6 +16,8 @@ namespace Antss.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AntssContext).Assembly);
+
             modelBuilder.Entity<User>().HasData(
                     new { Id = 1, FirstName = "Adam", LastName = "Smith", UserType = UserTypes.Admin, Location = "foo", ContactNumber = "foo", EmailAddress = "foo" },
                     new { Id = 2, FirstName = "John", LastName = "Jones", UserType = UserTypes.Support, Location = "foo", ContactNumber = "foo", EmailAddress = "foo" },

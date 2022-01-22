@@ -8,7 +8,6 @@ namespace Antss.Data.EntityMappings
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("POP_Details_Tbl");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.UserType).HasConversion<int>();
             builder.Property(x => x.ContactNumber).HasMaxLength(50);
