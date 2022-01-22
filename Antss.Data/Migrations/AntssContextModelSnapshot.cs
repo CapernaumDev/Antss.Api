@@ -80,6 +80,31 @@ namespace Antss.Data.Migrations
                     b.HasIndex("RaisedById");
 
                     b.ToTable("Tickets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AssignedToId = 2,
+                            Description = "PC IS ON FIRE",
+                            RaisedById = 3,
+                            TicketStatus = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AssignedToId = 1,
+                            Description = "No Wi-Fi",
+                            RaisedById = 3,
+                            TicketStatus = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Emails not sending",
+                            RaisedById = 3,
+                            TicketStatus = 2
+                        });
                 });
 
             modelBuilder.Entity("Antss.Model.User", b =>
