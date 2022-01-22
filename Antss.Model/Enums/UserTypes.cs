@@ -1,6 +1,6 @@
 ﻿namespace Antss.Model
 {
-    public enum UserType
+    public enum UserTypes
     {
         User = 1,
         Support,

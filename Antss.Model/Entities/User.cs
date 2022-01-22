@@ -9,7 +9,7 @@ namespace Antss.Model
         public string LastName { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public UserType UserType { get; set; }
+        public UserTypes UserType { get; set; }
         public string Location { get; set; }
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
