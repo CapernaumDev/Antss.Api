@@ -20,18 +20,26 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\services\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\services\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\services\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\services\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <None Remove="ClientApp\src\app\models\user.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Antss.Data\Antss.Data.csproj" />
     <ProjectReference Include="..\Antss.Model\Antss.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
