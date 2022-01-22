@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Antss.Model
+﻿namespace Antss.Model
 {
     public class Ticket
     {
@@ -10,7 +8,6 @@ namespace Antss.Model
         public int? AssignedToId { get; set; }
         public User AssignedTo { get; set; }
 
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public TicketStatuses TicketStatus { get; set; }
         public string Description { get; set; }
     }

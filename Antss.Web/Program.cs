@@ -1,9 +1,15 @@
 using Antss.Data;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(jsonOptions =>
+    {
+        jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
+    }); ;
+
 builder.Services.AddDbContext<AntssContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
