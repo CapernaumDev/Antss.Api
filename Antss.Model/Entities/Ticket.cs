@@ -7,7 +7,7 @@ namespace Antss.Model
         public int Id { get; set; }
         public int RaisedById { get; set; }
         public User RaisedBy { get; set; }
-        public int AssignedToId { get; set; }
+        public int? AssignedToId { get; set; }
         public User AssignedTo { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
