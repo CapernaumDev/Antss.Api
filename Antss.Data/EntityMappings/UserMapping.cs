@@ -14,7 +14,7 @@ namespace Antss.Data.EntityMappings
             builder.Property(x => x.EmailAddress).HasMaxLength(254);
             builder.Property(x => x.FirstName).HasMaxLength(20);
             builder.Property(x => x.LastName).HasMaxLength(20);
-            builder.Property(x => x.Location).HasMaxLength(254);
+            builder.Property(x => x.OfficeId).IsRequired();
         }
     }
 }

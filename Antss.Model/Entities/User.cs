@@ -10,7 +10,8 @@ namespace Antss.Model
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserTypes UserType { get; set; }
-        public string Location { get; set; }
+        public int OfficeId { get; set; }
+        public Office Office { get; set; }
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
     }
