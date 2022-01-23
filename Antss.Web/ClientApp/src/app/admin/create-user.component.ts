@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { User } from '../models/user';
+import { Office } from '../models/office';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AppStoreService } from "../app.store";
 
 @Component({
   selector: 'create-user',
@@ -11,10 +13,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 
 export class CreateUserComponent implements OnInit {
+  public offices$!: Observable<Office[]>;
+
   submitted = false;
   registerForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService) { }
 
   get f() { return this.registerForm.controls; }
 
@@ -32,12 +36,14 @@ export class CreateUserComponent implements OnInit {
 
   }
   ngOnInit() {
+    this.offices$ = this.appStoreService.offices$;
+
     this.registerForm = this.formBuilder.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       emailAddress: ['', [Validators.required, Validators.email]],
       userType: ['', [Validators.required]],
-      location: ['', [Validators.required]],
+      officeId: ['', [Validators.required]],
       contactNumber: ['', [Validators.required]]
     });
   }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './models/user';
 import { Ticket } from './models/ticket';
+import { AppData } from './models/appData';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,9 @@ export class ApiService {
 
   getTicketList(): Observable<Ticket[]> {
     return this.http.get<Ticket[]>(this.url + 'Ticket/List');
+  }
+
+  getAppData(): Observable<AppData> {
+    return this.http.get<AppData>(this.url + 'App/Appdata');
   }
 }

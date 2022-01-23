@@ -46,12 +46,15 @@
       </div>
     </div>
     <div class="col-md-6">
-      <label for="inputLocation" class="form-label">Location</label>
-      <input type="text" formControlName="location" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.location.errors }" id="inputLocation" />
-      <div *ngIf="submitted && f.location.errors" class="text-danger">
-        <div *ngIf="f.location.errors.required">
-          <small>Location is required</small>
+      <label for="inputOffice" class="form-label">Office</label>
+      <select formControlName="officeId" class="form-select" id="inputOffice">
+        <option *ngFor="let x of offices$ | async" value="{{ x.id }}">
+          {{ x.name }}
+        </option>
+      </select>
+      <div *ngIf="submitted && f.officeId.errors" class="text-danger">
+        <div *ngIf="f.officeId.errors.required">
+          <small>Office is required</small>
         </div>
       </div>
     </div>

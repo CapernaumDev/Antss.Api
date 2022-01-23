@@ -1,5 +1,5 @@
 ﻿using Antss.Data;
-using Antss.Model;
+using Antss.Model.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,20 +7,23 @@ namespace Antss.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class AppController : ControllerBase
     {
         private readonly AntssContext _db;
 
-        public UserController(AntssContext db)
+        public AppController(AntssContext db)
         {
             _db = db;
         }
 
         [HttpGet]
-        [Route("List")]
-        public async Task<ActionResult<IEnumerable<User>>> Get()
+        [Route("AppData")]
+        public ActionResult<AppData> Get()
         {
-            return await _db.Users.AsNoTracking().Include(x => x.Office).ToListAsync();
+            return new AppData
+            {
+                Offices = _db.Offices.AsNoTracking().ToList()
+            };
         }
     }
 }
