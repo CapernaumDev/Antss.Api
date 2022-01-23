@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './models/user';
 import { Ticket } from './models/ticket';
-import { AppData } from './models/appData';
-import { KeyValuePair } from './models/keyValuePair';
+import { AppData } from './models/app-data';
+import { KeyValuePair } from './models/key-value-pair';
 
 @Injectable({
   providedIn: 'root'
