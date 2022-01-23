@@ -15,6 +15,7 @@ import { AppStoreService } from "../app.store";
 
 export class CreateUserComponent implements OnInit {
   public offices$!: Observable<Office[]>;
+  public userTypes$!: Observable<any[]>;
 
   submitted = false;
   registerForm!: FormGroup;
@@ -47,6 +48,7 @@ export class CreateUserComponent implements OnInit {
   }
   ngOnInit() {
     this.offices$ = this.appStoreService.offices$;
+    this.userTypes$ = this.appStoreService.userTypes$;
 
     this.registerForm = this.formBuilder.group({
       firstName: ['', [Validators.required]],

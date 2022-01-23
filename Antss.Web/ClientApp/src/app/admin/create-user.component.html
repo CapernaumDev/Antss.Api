@@ -62,21 +62,10 @@
     <div class="col-12">
       <label class="form-label">User Type</label>
       <br />
-      <!-- TODO: populate from data -->
-      <div class="form-check form-check-inline">
-        <input id="userUserTypeInput" type="radio" class="form-check-input"
-               value="1" name="userType" formControlName="userType">
-        <label class="form-check-label" for="userUserTypeInput">User</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input id="supportUserTypeInput" type="radio" class="form-check-input"
-               value="2" name="userType" formControlName="userType">
-        <label class="form-check-label" for="supportUserTypeInput">Support</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input id="adminUserTypeInput" type="radio" class="form-check-input"
-               value="3" name="userType" formControlName="userType">
-        <label class="form-check-label" for="adminUserTypeInput">Admin</label>
+      <div *ngFor="let x of userTypes$ | async" class="form-check form-check-inline">
+        <input id="userTypeInput{{ x.key }}" type="radio" class="form-check-input"
+               value="{{ x.key }}" name="userType" formControlName="userType">
+        <label class="form-check-label" for="userTypeInput{{ x.key }}">{{ x.value }}</label>
       </div>
       <div *ngIf="submitted && f.userType.errors" class="text-danger">
         <div *ngIf="f.userType.errors.required">
