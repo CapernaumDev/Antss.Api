@@ -1,4 +1,5 @@
 using Antss.Data;
+using Antss.Model.Enums;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 
@@ -12,6 +13,8 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddDbContext<AntssContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient<EnumTransformer, EnumTransformer>();
 
 var app = builder.Build();
 

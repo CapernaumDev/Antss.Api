@@ -1,10 +1,9 @@
 ﻿using Antss.Data;
 using Antss.Model;
+using Antss.Model.Enums;
 using Antss.Model.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace Antss.Web.Controllers
 {
@@ -13,10 +12,12 @@ namespace Antss.Web.Controllers
     public class AppController : ControllerBase
     {
         private readonly AntssContext _db;
+        private readonly EnumTransformer _enumTransformer;
 
-        public AppController(AntssContext db)
+        public AppController(AntssContext db, EnumTransformer enumTransformer)
         {
             _db = db;
+            _enumTransformer = enumTransformer;
         }
 
         [HttpGet]
@@ -27,32 +28,8 @@ namespace Antss.Web.Controllers
             {
                 // TODO: security / login / permission to see some / all of these
                 Offices = _db.Offices.AsNoTracking().ToList(),
-                UserTypes = ConvertEnumToCollection<UserTypes>()
+                UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>()
             };
-        }
-
-        //TODO: Make a place for framework extensions
-        private IEnumerable<KeyValuePair<int, string>> ConvertEnumToCollection<T>() where T : Enum
-        {
-            var result = new List<KeyValuePair<int, string>>();
-            foreach (var enumValue in Enum.GetValues(typeof(T)).Cast<int>())
-            {
-                result.Add(new KeyValuePair<int, string>(enumValue, GetEnumMemberAttributeValue((T)(object)enumValue)));
-            }
-
-            return result;
-        }
-
-        private string GetEnumMemberAttributeValue(Enum value)
-        {
-            return
-                value
-                    .GetType()
-                    .GetMember(value.ToString())
-                    .FirstOrDefault()
-                    ?.GetCustomAttribute<EnumMemberAttribute>()
-                    ?.Value
-                ?? value.ToString();
         }
     }
 }
