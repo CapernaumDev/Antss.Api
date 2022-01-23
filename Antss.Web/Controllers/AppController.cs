@@ -25,19 +25,25 @@ namespace Antss.Web.Controllers
         {
             return new AppData
             {
+                // TODO: security / login / permission to see some / all of these
                 Offices = _db.Offices.AsNoTracking().ToList(),
-                UserTypes = new List<KeyValuePair<int, string>> 
-                {
-                    //TODO iterate enum
-                    new KeyValuePair<int, string>((int)UserTypes.User, GetEnumMemberAttributeValue(UserTypes.User)),
-                    new KeyValuePair<int, string>((int)UserTypes.Support, GetEnumMemberAttributeValue(UserTypes.Support)),
-                    new KeyValuePair<int, string>((int)UserTypes.Admin, GetEnumMemberAttributeValue(UserTypes.Admin))
-                }
+                UserTypes = ConvertEnumToCollection<UserTypes>()
             };
         }
 
-        //TODO: Find a place for framework extensions
-        private static string GetEnumMemberAttributeValue(Enum value)
+        //TODO: Make a place for framework extensions
+        private IEnumerable<KeyValuePair<int, string>> ConvertEnumToCollection<T>() where T : Enum
+        {
+            var result = new List<KeyValuePair<int, string>>();
+            foreach (var enumValue in Enum.GetValues(typeof(T)).Cast<int>())
+            {
+                result.Add(new KeyValuePair<int, string>(enumValue, GetEnumMemberAttributeValue((T)(object)enumValue)));
+            }
+
+            return result;
+        }
+
+        private string GetEnumMemberAttributeValue(Enum value)
         {
             return
                 value
