@@ -24,4 +24,8 @@ export class ApiService {
   getAppData(): Observable<AppData> {
     return this.http.get<AppData>(this.url + 'App/Appdata');
   }
+
+  createUser(user: any): Observable<any> {
+    return this.http.post<any>(this.url + 'User/Create', user);
+  }
 }

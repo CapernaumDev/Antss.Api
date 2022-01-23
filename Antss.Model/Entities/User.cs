@@ -7,7 +7,7 @@
         public string LastName { get; set; }
         public UserTypes UserType { get; set; }
         public int OfficeId { get; set; }
-        public Office Office { get; set; }
+        public Office? Office { get; set; }
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
     }

@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router"
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { User } from '../models/user';
 import { Office } from '../models/office';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppStoreService } from "../app.store";
 
 @Component({
@@ -18,7 +19,8 @@ export class CreateUserComponent implements OnInit {
   submitted = false;
   registerForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService) { }
+  constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService,
+    private apiService: ApiService, private router: Router ) { }
 
   get f() { return this.registerForm.controls; }
 
@@ -29,9 +31,17 @@ export class CreateUserComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    //True if all the fields are filled
+
     if (this.submitted) {
-      alert("Great!!");
+      this.apiService.createUser(this.registerForm.value).subscribe({
+        next: result => {
+          this.router.navigate(['/user-list'])
+        },
+        error: error => {
+          console.log(error);
+          alert('There was an error creating the user');
+        }
+      })
     }
 
   }

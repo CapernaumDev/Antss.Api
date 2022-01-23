@@ -65,17 +65,17 @@
       <!-- TODO: populate from data -->
       <div class="form-check form-check-inline">
         <input id="userUserTypeInput" type="radio" class="form-check-input"
-               value="user" name="userType" formControlName="userType">
+               value="1" name="userType" formControlName="userType">
         <label class="form-check-label" for="userUserTypeInput">User</label>
       </div>
       <div class="form-check form-check-inline">
         <input id="supportUserTypeInput" type="radio" class="form-check-input"
-               value="support" name="userType" formControlName="userType">
+               value="2" name="userType" formControlName="userType">
         <label class="form-check-label" for="supportUserTypeInput">Support</label>
       </div>
       <div class="form-check form-check-inline">
         <input id="adminUserTypeInput" type="radio" class="form-check-input"
-               value="admin" name="userType" formControlName="userType">
+               value="3" name="userType" formControlName="userType">
         <label class="form-check-label" for="adminUserTypeInput">Admin</label>
       </div>
       <div *ngIf="submitted && f.userType.errors" class="text-danger">
