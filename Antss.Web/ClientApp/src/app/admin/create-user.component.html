@@ -1,0 +1,87 @@
+<div class="container p-2">
+  <pre></pre>
+  <div class="alert alert-info"><b>Create User</b></div>
+  <form class="row g-3" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-6">
+      <label for="inputFirstName" class="form-label">First Name</label>
+      <input type="text" formControlName="firstName" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" id="inputFirstName" />
+      <div *ngIf="submitted && f.firstName.errors" class="text-danger">
+        <div *ngIf="f.firstName.errors.required">
+          <small>First Name is required</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="inputLastName" class="form-label">Last Name</label>
+      <input type="text" formControlName="lastName" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" id="inputLastName" />
+      <div *ngIf="submitted && f.lastName.errors" class="text-danger">
+        <div *ngIf="f.lastName.errors.required">
+          <small>Last Name is required</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="inputEmailAddress" class="form-label">Email</label>
+      <input type="email" formControlName="emailAddress" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" id="inputEmailAddress">
+      <div *ngIf="submitted && f.emailAddress.errors" class="text-danger">
+        <div *ngIf="f.emailAddress.errors.required">
+          <small>Email is required</small>
+        </div>
+        <div *ngIf="f.emailAddress.errors.email">
+          <small>Email must be a valid email address</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="inputContactNumber" class="form-label">Contact Number</label>
+      <input type="text" formControlName="contactNumber" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.contactNumber.errors }" id="inputContactNumber" />
+      <div *ngIf="submitted && f.contactNumber.errors" class="text-danger">
+        <div *ngIf="f.contactNumber.errors.required">
+          <small>Contact Number is required</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="inputLocation" class="form-label">Location</label>
+      <input type="text" formControlName="location" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.location.errors }" id="inputLocation" />
+      <div *ngIf="submitted && f.location.errors" class="text-danger">
+        <div *ngIf="f.location.errors.required">
+          <small>Location is required</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <!-- TODO: populate from data -->
+      <div class="form-check form-check-inline">
+        <input id="userUserTypeInput" type="radio" class="form-check-input"
+               value="user" name="userType" formControlName="userType">
+        <label class="form-check-label" for="userUserTypeInput">User</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input id="supportUserTypeInput" type="radio" class="form-check-input"
+               value="support" name="userType" formControlName="userType">
+        <label class="form-check-label" for="supportUserTypeInput">Support</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input id="adminUserTypeInput" type="radio" class="form-check-input"
+               value="admin" name="userType" formControlName="userType">
+        <label class="form-check-label" for="adminUserTypeInput">Admin</label>
+      </div>
+      <div *ngIf="submitted && f.userType.errors" class="text-danger">
+        <div *ngIf="f.userType.errors.required">
+          <small>User Type is required</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Create User</button>
+    </div>
+  </form>
+</div>
