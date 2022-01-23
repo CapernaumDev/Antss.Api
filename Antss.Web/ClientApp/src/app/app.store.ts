@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { KeyValuePair } from './models/keyValuePair';
 
 import { Office } from './models/office';
 
-interface KeyValuePair {
-  key: string;
-  value: string;
-}
+
 
 @Injectable({
   providedIn: 'root',

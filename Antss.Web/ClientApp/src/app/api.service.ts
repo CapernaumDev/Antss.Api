@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from './models/user';
 import { Ticket } from './models/ticket';
 import { AppData } from './models/appData';
+import { KeyValuePair } from './models/keyValuePair';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ApiService {
     return this.http.get<AppData>(this.url + 'App/Appdata');
   }
 
-  createUser(user: any): Observable<any> {
-    return this.http.post<any>(this.url + 'User/Create', user);
+  createUser(user: any): Observable<KeyValuePair> {
+    return this.http.post<KeyValuePair>(this.url + 'User/Create', user);
   }
 }
