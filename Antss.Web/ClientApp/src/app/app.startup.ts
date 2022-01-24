@@ -12,13 +12,6 @@ export class AppStartup {
   }
 
   getStartupData() {
-    this.apiService.getAppData().subscribe(
-      res => {
-        this.appStoreService.setOffices(res.offices);
-        this.appStoreService.setUserTypes(res.userTypes);
-      },
-      err => {
-        console.log(err);
-      });;
+    
   }
 }

@@ -8,18 +8,22 @@ import { environment } from '@environments/environment';
 import { User } from './models/user';
 import { AppStoreService } from './app.store.service';
 import { CurrentUser } from './models/current-user';
+import { LoginResult } from './models/login-result';
 
 @Injectable({ providedIn: 'root' })
+
 export class AuthenticationService {
 
-  constructor(private router: Router, private http: HttpClient, private appStoreService: AppStoreService) {  }
-  i = 1;
-  login(user: User) {
-    this.http.post<CurrentUser>(`${environment.apiUrl}/App/Login`, user)
+  constructor(private router: Router, private http: HttpClient, private appStoreService: AppStoreService) { }
+
+  login(userId: number) {
+    this.http.post<LoginResult>(`${environment.apiUrl}/App/Login`, { userId })
       .pipe(first())
       .subscribe(
         result => {
-          this.appStoreService.setCurrentUser(Object.assign(new CurrentUser(), result));
+          this.appStoreService.setCurrentUser(Object.assign(new CurrentUser(), result.user));
+          this.appStoreService.setOffices(result.appData.offices);
+          this.appStoreService.setUserTypes(result.appData.userTypes);
           this.router.navigate(['']);
         },
         err => {

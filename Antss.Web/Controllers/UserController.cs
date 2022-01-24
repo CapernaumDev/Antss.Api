@@ -1,5 +1,6 @@
 ﻿using Antss.Data;
-using Antss.Model;
+using Antss.Model.Entities;
+using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace Antss.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AdminAuthorize]
     public class UserController : ControllerBase
     {
         private readonly AntssContext _db;

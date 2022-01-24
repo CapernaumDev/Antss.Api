@@ -1,4 +1,6 @@
-﻿namespace Antss.Model.ViewModels
+﻿using Antss.Model.Entities;
+
+namespace Antss.Model.ViewModels
 {
     public class AppData
     {

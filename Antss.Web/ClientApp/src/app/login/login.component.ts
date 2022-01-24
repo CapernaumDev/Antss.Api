@@ -17,15 +17,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    var user = new User();
-    user.id = this.userId;
-    user.emailAddress = 'sd';
-    user.firstName = 'asda';
-    user.lastName = 'asdad';
-    user.contactNumber = '12312';
-    user.officeId = 1;
-    user.userType = "1";
-
-    this.authenticationService.login(user);
+    this.authenticationService.login(this.userId);
   }
 }

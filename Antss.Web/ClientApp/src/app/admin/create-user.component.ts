@@ -7,6 +7,7 @@ import { ApiService } from '../api.service';
 import { User } from '../models/user';
 import { Office } from '../models/office';
 import { AppStoreService } from "../app.store.service";
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'create-user',
@@ -34,15 +35,16 @@ export class CreateUserComponent implements OnInit {
     }
 
     if (this.submitted) {
-      this.apiService.createUser(this.registerForm.value).subscribe({
-        next: result => {
+      this.apiService.createUser(this.registerForm.value)
+        .pipe(first()).subscribe(
+        result => {
           this.router.navigate(['/user-list']);
         },
-        error: error => {
+        error => {
           console.log(error);
           alert('There was an error creating the user');
         }
-      })
+      )
     }
 
   }

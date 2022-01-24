@@ -2,6 +2,7 @@
 using Antss.Model;
 using Antss.Model.Enums;
 using Antss.Model.ViewModels;
+using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace Antss.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AppController : ControllerBase
     {
         private readonly AntssContext _db;
@@ -34,11 +36,27 @@ namespace Antss.Web.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public ActionResult<User> Login(User user)
+        [AllowAnonymous]
+        public ActionResult<LoginResult> Login(LoginCredential login)
         {
             //we're just going to get the user for now without authenticating
 
-            return _db.Users.Single(x => x.Id == user.Id);
+            var foundUser = _db.Users.SingleOrDefault(x => x.Id == login.UserId);
+            if (foundUser == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            var appData = new AppData
+            {
+                //here will go appdata relevant to all user types
+            };
+
+            if (foundUser.UserType == UserTypes.Admin)
+            {
+                appData.Offices = _db.Offices.AsNoTracking().ToList();
+                appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
+            }
+
+            return new LoginResult { User = foundUser, AppData = appData };
         }
     }
 }

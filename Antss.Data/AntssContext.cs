@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Antss.Model;
 using System.Diagnostics;
+using Antss.Model.Entities;
 
 namespace Antss.Data
 {

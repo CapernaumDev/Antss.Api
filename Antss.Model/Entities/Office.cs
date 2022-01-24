@@ -1,4 +1,4 @@
-﻿namespace Antss.Model
+﻿namespace Antss.Model.Entities
 {
     public class Office
     {

@@ -1,4 +1,4 @@
-﻿using Antss.Model;
+﻿using Antss.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
