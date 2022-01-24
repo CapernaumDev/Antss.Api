@@ -47,7 +47,8 @@
     </div>
     <div class="col-md-6">
       <label for="inputOffice" class="form-label">Office</label>
-      <select formControlName="officeId" class="form-select" id="inputOffice">
+      <select [ngClass]="{ 'is-invalid': submitted && f.officeId.errors }"
+              formControlName="officeId" class="form-select" id="inputOffice">
         <option *ngFor="let x of offices$ | async" value="{{ x.id }}">
           {{ x.name }}
         </option>
