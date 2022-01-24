@@ -5,8 +5,8 @@ export class User {
   firstName!: string;
   lastName!: string;
   userType!: string;
-  location!: string;
   contactNumber!: string;
   emailAddress!: string;
+  officeId!: number;
   office!: Office;
 }

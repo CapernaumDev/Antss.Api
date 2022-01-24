@@ -1,0 +1,15 @@
+<div>
+  <div class="alert alert-info"><b>Login</b></div>
+  <form class="row g-3" (ngSubmit)="onSubmit()">
+    <div class="col-6">
+      <label for="inputUserId" class="form-label">Office</label>
+      <select [(ngModel)]="userId" class="form-select" id="inputUserId" name="inputUsereId">
+        <option [value]="1">Adam Smith (Admin)</option>
+        <option [value]="2">John Jones (Support)</option>
+        <option [value]="3">Peter Taylor (User)</option>
+      </select>
+      <pre></pre>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </form>
+</div>

@@ -31,5 +31,14 @@ namespace Antss.Web.Controllers
                 UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>()
             };
         }
+
+        [HttpPost]
+        [Route("Login")]
+        public ActionResult<User> Login(User user)
+        {
+            //we're just going to get the user for now without authenticating
+
+            return _db.Users.Single(x => x.Id == user.Id);
+        }
     }
 }

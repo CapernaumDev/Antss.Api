@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { User } from '../models/user';
 import { Office } from '../models/office';
-import { AppStoreService } from "../app.store";
+import { AppStoreService } from "../app.store.service";
 
 @Component({
   selector: 'create-user',
@@ -21,7 +21,7 @@ export class CreateUserComponent implements OnInit {
   registerForm!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService,
-    private apiService: ApiService, private router: Router ) { }
+    private apiService: ApiService, private router: Router) { }
 
   get f() { return this.registerForm.controls; }
 
@@ -36,7 +36,7 @@ export class CreateUserComponent implements OnInit {
     if (this.submitted) {
       this.apiService.createUser(this.registerForm.value).subscribe({
         next: result => {
-          this.router.navigate(['/user-list'])
+          this.router.navigate(['/user-list']);
         },
         error: error => {
           console.log(error);

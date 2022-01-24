@@ -5,28 +5,28 @@ import { User } from './models/user';
 import { Ticket } from './models/ticket';
 import { AppData } from './models/app-data';
 import { KeyValuePair } from './models/key-value-pair';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ApiService {
-  url = 'https://localhost:7210/api/';
   constructor(private http: HttpClient) { }
 
   getUserList(): Observable<User[]> {
-    return this.http.get<User[]>(this.url + 'User/List');
+    return this.http.get<User[]>(`${environment.apiUrl}/User/List`);
   }
 
   getTicketList(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(this.url + 'Ticket/List');
+    return this.http.get<Ticket[]>(`${environment.apiUrl}/Ticket/List`);
   }
 
   getAppData(): Observable<AppData> {
-    return this.http.get<AppData>(this.url + 'App/Appdata');
+    return this.http.get<AppData>(`${environment.apiUrl}/App/Appdata`);
   }
 
-  createUser(user: any): Observable<KeyValuePair> {
-    return this.http.post<KeyValuePair>(this.url + 'User/Create', user);
+  createUser(user: User): Observable<KeyValuePair> {
+    return this.http.post<KeyValuePair>(`${environment.apiUrl}/User/Create`, user);
   }
 }

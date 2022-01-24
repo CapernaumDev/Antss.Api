@@ -1,10 +1,24 @@
 import { User } from "./user";
 
 export class CurrentUser extends User {
+
   constructor() {
     super();
-    isAdmin: this.userType === 'Admin';
-    isSupport: this.userType === 'Support' || this.userType === 'Admin';
-    isUser: this.userType === 'User';
+  }
+
+  get isAdmin() {
+    return this.userType === 'Admin';
+  }
+
+  get isSupport() {
+    return this.userType === 'Support' || this.userType === 'Admin';
+  }
+
+  get isUser() {
+    return this.userType === 'User';
+  }
+
+  get basicAuthToken() {
+    return window.btoa(this.id + ':' + 'password');
   }
 }
