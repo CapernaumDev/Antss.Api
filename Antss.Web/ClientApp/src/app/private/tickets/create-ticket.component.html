@@ -1,4 +1,47 @@
 <div class="container p-2">
   <pre></pre>
   <div class="alert alert-info"><b>Create Ticket</b></div>
+  <pre></pre>
+  <form class="row g-3" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-6">
+      <label for="inputDescription" class="form-label">Description</label>
+      <input type="text" formControlName="description" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.description.errors }" id="inputDescription" />
+      <div *ngIf="submitted && f.description.errors" class="text-danger">
+        <div *ngIf="f.description.errors.required">
+          <small>Issue description is required</small>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <label for="inputRaisedBy" class="form-label">Raised By</label>
+      <input type="text" [readonly]="true" formControlName="raisedBy" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.raisedBy.errors }" id="inputRaisedBy" />
+      <div *ngIf="submitted && f.raisedBy.errors" class="text-danger">
+        <div *ngIf="f.raisedBy.errors.required">
+          <small>Raised by is required</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="inputAssignedTo" class="form-label">Assigned To</label>
+      <input type="text" [readonly]="true" formControlName="assignedTo" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.assignedTo.errors }" id="inputAssignedTo" />
+      <div *ngIf="submitted && f.assignedTo.errors" class="text-danger">
+        <div *ngIf="f.assignedTo.errors.required">
+          <small>Assigned to is required</small>
+        </div>
+      </div>
+    </div>
+
+    <!--
+      TODO: if the user is an admin, allow them to override createdBy and choose assignedTo
+    -->
+
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Submit Ticket</button>
+    </div>
+  </form>
 </div>

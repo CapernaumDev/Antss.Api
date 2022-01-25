@@ -24,5 +24,21 @@ namespace Antss.Web.Controllers
         {
             return await _db.Tickets.AsNoTracking().Include(x => x.RaisedBy).Include(x => x.AssignedTo).ToListAsync();
         }
+
+        [HttpPost]
+        [Route("Create")]
+        public async Task<int> Create(Ticket ticket)
+        {
+            var newTicket = new Ticket{
+                RaisedById = ticket.RaisedById,
+                AssignedToId = ticket.AssignedToId,
+                TicketStatus = Model.TicketStatuses.Raised,
+                Description = ticket.Description
+            };
+
+            _db.Tickets.Add(newTicket);
+            await _db.SaveChangesAsync();
+            return newTicket.Id;
+        }
     }
 }
