@@ -10,12 +10,14 @@ import { CreateUserComponent } from './admin/create-user.component';
 import { UserListComponent } from './admin/user-list.component';
 import { TicketListComponent } from './tickets/ticket-list.component';
 import { MyProfileComponent } from '@app/private/my-profile/my-profile.component';
+import { CreateTicketComponent } from './tickets/create-ticket.component';
 
 @NgModule({
   declarations: [
     CreateUserComponent,
     UserListComponent,
     TicketListComponent,
+    CreateTicketComponent,
     MyProfileComponent
   ],
   imports: [
@@ -27,6 +29,7 @@ import { MyProfileComponent } from '@app/private/my-profile/my-profile.component
       { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'create-user', component: CreateUserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard], },
+      { path: 'create-ticket', component: CreateTicketComponent, canActivate: [AuthGuard], },
       { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] }
     ])
   ],
