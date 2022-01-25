@@ -64,9 +64,9 @@
       <label class="form-label">User Type</label>
       <br />
       <div *ngFor="let x of userTypes$ | async" class="form-check form-check-inline">
-        <input id="userTypeInput{{ x.key }}" type="radio" class="form-check-input"
-               value="{{ x.key }}" name="userType" formControlName="userType">
-        <label class="form-check-label" for="userTypeInput{{ x.key }}">{{ x.value }}</label>
+        <input id="userTypeInput{{ x.value }}" type="radio" class="form-check-input"
+               value="{{ x.value }}" name="userType" formControlName="userType">
+        <label class="form-check-label" for="userTypeInput{{ x.value }}">{{ x.label }}</label>
       </div>
       <div *ngIf="submitted && f.userType.errors" class="text-danger">
         <div *ngIf="f.userType.errors.required">

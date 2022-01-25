@@ -5,6 +5,6 @@ namespace Antss.Model.ViewModels
     public class AppData
     {
         public IEnumerable<Office> Offices { get; set; }
-        public IEnumerable<KeyValuePair<int, string>> UserTypes { get; set; }
+        public IEnumerable<OptionItem> UserTypes { get; set; }
     }
 }

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { User } from './models/user';
 import { Ticket } from './models/ticket';
 import { AppData } from './models/app-data';
-import { KeyValuePair } from './models/key-value-pair';
 import { environment } from '@environments/environment';
 
 @Injectable({
@@ -27,10 +26,10 @@ export class ApiService {
   }
 
   createUser(user: User) {
-    return this.http.post<KeyValuePair>(`${environment.apiUrl}/User/Create`, user);
+    return this.http.post(`${environment.apiUrl}/User/Create`, user);
   }
 
   createTicket(ticket: Ticket) {
-    return this.http.post<KeyValuePair>(`${environment.apiUrl}/Ticket/Create`, ticket)
+    return this.http.post(`${environment.apiUrl}/Ticket/Create`, ticket)
   }
 }

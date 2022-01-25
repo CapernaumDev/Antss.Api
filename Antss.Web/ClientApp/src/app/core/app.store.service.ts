@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CurrentUser } from './models/current-user';
-import { KeyValuePair } from './models/key-value-pair';
+import { OptionItem } from './models/option-item';
 
 import { Office } from './models/office';
 
@@ -11,13 +11,13 @@ import { Office } from './models/office';
 
 export class AppStoreService {
   private offices = new BehaviorSubject<Office[]>([]);
-  private userTypes = new BehaviorSubject<KeyValuePair[]>([]);
+  private userTypes = new BehaviorSubject<OptionItem[]>([]);
   
   private currentUser = new BehaviorSubject<CurrentUser>(new CurrentUser);
 
   // We do not expose Subjects, because it's an anti-pattern, we only expose Observables
   public offices$: Observable<Office[]> = this.offices;
-  public userTypes$: Observable<KeyValuePair[]> = this.userTypes;
+  public userTypes$: Observable<OptionItem[]> = this.userTypes;
   public currentUser$: Observable<CurrentUser> = this.currentUser;
 
   // We change data via methods
@@ -25,7 +25,7 @@ export class AppStoreService {
     this.offices.next(value);
   }
 
-  setUserTypes(value: KeyValuePair[]): void {
+  setUserTypes(value: OptionItem[]): void {
     this.userTypes.next(value);
   }
 
