@@ -26,11 +26,11 @@ export class ApiService {
     return this.http.get<AppData>(`${environment.apiUrl}/App/Appdata`);
   }
 
-  createUser(user: User): Observable<KeyValuePair> {
+  createUser(user: User) {
     return this.http.post<KeyValuePair>(`${environment.apiUrl}/User/Create`, user);
   }
 
-  createTicket(ticket: Ticket): Observable<KeyValuePair> {
+  createTicket(ticket: Ticket) {
     return this.http.post<KeyValuePair>(`${environment.apiUrl}/Ticket/Create`, ticket)
   }
 }
