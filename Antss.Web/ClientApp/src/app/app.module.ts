@@ -10,7 +10,7 @@ import { fas, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationInterceptor } from '@app/authentication.interceptor';
 import { ErrorInterceptor } from '@app/error.interceptor';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './login/auth.guard';
+import { AuthGuard } from './authentication.guard';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { UserListComponent } from './admin/user-list.component';
@@ -18,6 +18,7 @@ import { CreateUserComponent } from './admin/create-user.component';
 import { TicketListComponent } from './tickets/ticket-list.component';
 import { AppStartup } from './app.startup';
 import { LoginComponent } from './login/login.component';
+import { MyProfileComponent } from '@app/my-profile/my-profile.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LoginComponent } from './login/login.component';
     UserListComponent,
     CreateUserComponent,
     TicketListComponent,
-    LoginComponent
+    LoginComponent,
+    MyProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -38,6 +40,7 @@ import { LoginComponent } from './login/login.component';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
+      { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
       { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'create-user', component: CreateUserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard], }

@@ -34,13 +34,13 @@
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['login']">Login</a>
           </li>
-          <li class="nav-item" *ngIf="loggedIn">
+          <li class="nav-item" *ngIf="loggedIn" style="padding-right: 45px;">
             <a class="nav-link text-dark" [routerLink]="['/']" (click)="logout()">Logout</a>
           </li>
-          <li class="nav-item" *ngIf="loggedIn" style="padding-left: 45px;">
-            <a class="nav-link" [routerLink]="'edit-profile'" style="color: dodgerblue; padding: 0">
+          <li class="nav-item" *ngIf="loggedIn">
+            <a class="nav-link" [routerLink]="'my-profile'" style="color: dodgerblue; padding: 0">
               <fa-icon [icon]="faUserCircle" size="2x"
-                       title="Logged in as: {{userName}}"></fa-icon>
+                       title="{{userName}}"></fa-icon>
             </a>
           </li>
         </ul>
