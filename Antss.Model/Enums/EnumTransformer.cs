@@ -1,16 +1,17 @@
-﻿using System.Reflection;
+﻿using Antss.Model.ViewModels;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Antss.Model.Enums
 {
     public class EnumTransformer
     {
-        public IEnumerable<KeyValuePair<int, string>> ToFormattedCollection<T>() where T : Enum
+        public IEnumerable<OptionItem> ToFormattedCollection<T>() where T : Enum
         {
-            var result = new List<KeyValuePair<int, string>>();
+            var result = new List<OptionItem>();
             foreach (var enumValue in Enum.GetValues(typeof(T)).Cast<int>())
             {
-                result.Add(new KeyValuePair<int, string>(enumValue, GetEnumMemberAttributeValue((T)(object)enumValue)));
+                result.Add(new OptionItem(enumValue, GetEnumMemberAttributeValue((T)(object)enumValue)));
             }
 
             return result;

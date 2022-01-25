@@ -1,7 +1,7 @@
-import { KeyValuePair } from "./key-value-pair";
+import { OptionItem } from "./option-item";
 import { Office } from "./office";
 
 export class AppData {
   offices!: Office[]
-  userTypes!: KeyValuePair[]
+  userTypes!: OptionItem[]
 }
