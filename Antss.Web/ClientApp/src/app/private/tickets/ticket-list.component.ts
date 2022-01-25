@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
-import { ApiService } from '../api.service';
-import { Ticket } from '../models/ticket';
+import { Ticket } from '@core/models/ticket';
 
 @Component({
   selector: 'ticket-list',

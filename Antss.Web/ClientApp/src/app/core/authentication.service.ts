@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { User } from './models/user';
 import { AppStoreService } from './app.store.service';
 import { CurrentUser } from './models/current-user';
 import { LoginResult } from './models/login-result';
@@ -19,7 +17,7 @@ export class AuthenticationService {
   login(userId: number) {
     this.http.post<LoginResult>(`${environment.apiUrl}/App/Login`, { userId })
       .pipe(first())
-      .subscribe(
+      .subscribe( //TODO: Marked as deprecated since last rxJs update
         result => {
           this.appStoreService.setCurrentUser(Object.assign(new CurrentUser(), result.user));
           this.appStoreService.setOffices(result.appData.offices);

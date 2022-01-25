@@ -30,7 +30,6 @@ export class AppStoreService {
   }
 
   setCurrentUser(value: CurrentUser): void {
-    console.log('setting current user:' + value);
     this.currentUser.next(value);
   }
 }

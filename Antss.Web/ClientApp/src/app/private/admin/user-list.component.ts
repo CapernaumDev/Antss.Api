@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
-import { ApiService } from '../api.service';
-import { User } from '../models/user';
+import { User } from '@core/models/user';
 
 @Component({
   selector: 'user-list',

@@ -1,50 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { AuthenticationInterceptor } from '@app/authentication.interceptor';
-import { ErrorInterceptor } from '@app/error.interceptor';
+import { AuthenticationInterceptor } from '@core/authentication.interceptor';
+import { ErrorInterceptor } from '@core/error.interceptor';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './authentication.guard';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { UserListComponent } from './admin/user-list.component';
-import { CreateUserComponent } from './admin/create-user.component';
-import { TicketListComponent } from './tickets/ticket-list.component';
-import { AppStartup } from './app.startup';
-import { LoginComponent } from './login/login.component';
-import { MyProfileComponent } from '@app/my-profile/my-profile.component';
+import { AppStartup } from './core/app.startup';
+import { CoreModule } from './core/core.module';
+import { PublicModule } from './public/public.module';
+import { PrivateModule } from './private/private.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    UserListComponent,
-    CreateUserComponent,
-    TicketListComponent,
-    LoginComponent,
-    MyProfileComponent
+    AppComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    RouterModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    FontAwesomeModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
-      { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
-      { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
-      { path: 'create-user', component: CreateUserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
-      { path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard], }
-    ])
+    CoreModule,
+    PublicModule,
+    PrivateModule
   ],
   providers: [
     { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.getStartupData() },
@@ -53,9 +30,6 @@ import { MyProfileComponent } from '@app/my-profile/my-profile.component';
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { 
-  constructor(library: FaIconLibrary) {
-    library.addIconPacks(fas);
-    library.addIcons(faUserCircle);
-  }
 }
