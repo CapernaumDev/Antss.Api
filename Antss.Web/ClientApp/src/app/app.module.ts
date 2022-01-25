@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthenticationInterceptor } from '@app/authentication.interceptor';
 import { ErrorInterceptor } from '@app/error.interceptor';
@@ -32,6 +34,7 @@ import { LoginComponent } from './login/login.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    FontAwesomeModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
@@ -47,4 +50,9 @@ import { LoginComponent } from './login/login.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(library: FaIconLibrary) {
+    library.addIconPacks(fas);
+    library.addIcons(faUserCircle);
+  }
+}

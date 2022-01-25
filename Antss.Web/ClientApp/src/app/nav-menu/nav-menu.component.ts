@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { CurrentUser } from '../models/current-user';
 import { AppStoreService } from "../app.store.service";
 import { AuthenticationService } from '../authentication.service';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav-menu',
@@ -13,6 +14,8 @@ export class NavMenuComponent implements OnInit {
   public currentUser$!: Observable<CurrentUser>;
   public loggedIn: boolean = false;
   public isAdmin: boolean = false;
+  public userName: string = '';
+  public faUserCircle = faUserCircle;
 
   private subscriptions: Subscription[] = [];
 
@@ -25,6 +28,7 @@ export class NavMenuComponent implements OnInit {
       .subscribe(x => {
         this.loggedIn = x.id > 0;
         this.isAdmin = x.isAdmin;
+        this.userName = this.loggedIn ? `${x.firstName} ${x.lastName}` : '';
       });
 
     this.subscriptions.push(currentUserSubscription);
