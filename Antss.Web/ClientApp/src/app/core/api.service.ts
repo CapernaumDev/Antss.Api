@@ -25,8 +25,16 @@ export class ApiService {
     return this.http.get<AppData>(`${environment.apiUrl}/App/Appdata`);
   }
 
+  loadUser(userId: number): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/User/Get`, { params: { id: userId }});
+  }
+
   createUser(user: User) {
     return this.http.post(`${environment.apiUrl}/User/Create`, user);
+  }
+
+  editUser(user: User) {
+    return this.http.post(`${environment.apiUrl}/User/Update`, user);
   }
 
   createTicket(ticket: Ticket) {

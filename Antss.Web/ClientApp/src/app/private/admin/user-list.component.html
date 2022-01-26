@@ -1,5 +1,5 @@
 <div>
-  <a href="#" class="link-primary" [routerLink]="['/create-user']">Create User</a>
+  <a href="#" class="link-primary" [routerLink]="['/user']">Create User</a>
   <pre></pre>
   <div class="alert alert-info"><b>User List</b></div>
   <div class="table-responsive">
@@ -9,12 +9,14 @@
         <th>Last Name</th>
         <th>Type</th>
         <th>Office</th>
+        <th>Edit</th>
       </tr>
       <tr *ngFor="let x of UserList | async">
         <td>{{x.firstName}}</td>
         <td>{{x.lastName}}</td>
         <td>{{x.userType}}</td>
         <td>{{x.office.name}}</td>
+        <td><a [routerLink]="['/user', x.id]">edit</a></td>
       </tr>
     </table>
   </div>

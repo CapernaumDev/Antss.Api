@@ -22,18 +22,6 @@ namespace Antss.Web.Controllers
             _enumTransformer = enumTransformer;
         }
 
-        [HttpGet]
-        [Route("AppData")]
-        public ActionResult<AppData> Get()
-        {
-            return new AppData
-            {
-                // TODO: security / login / permission to see some / all of these
-                Offices = _db.Offices.AsNoTracking().ToList(),
-                UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>()
-            };
-        }
-
         [HttpPost]
         [Route("Login")]
         [AllowAnonymous]

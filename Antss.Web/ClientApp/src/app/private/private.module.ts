@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { CoreModule } from '@app/core/core.module';
 import { AuthGuard } from '@app/core/authentication.guard';
-import { CreateUserComponent } from './admin/create-user.component';
+import { UserComponent } from './admin/user.component';
 import { UserListComponent } from './admin/user-list.component';
 import { TicketListComponent } from './tickets/ticket-list.component';
 import { MyProfileComponent } from '@app/private/my-profile/my-profile.component';
@@ -14,7 +14,7 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
 
 @NgModule({
   declarations: [
-    CreateUserComponent,
+    UserComponent,
     UserListComponent,
     TicketListComponent,
     CreateTicketComponent,
@@ -27,7 +27,8 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
-      { path: 'create-user', component: CreateUserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
+      { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
+      { path: 'user/:id', component: UserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard], },
       { path: 'create-ticket', component: CreateTicketComponent, canActivate: [AuthGuard], },
       { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] }

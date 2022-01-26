@@ -5,6 +5,7 @@ export class User {
   firstName!: string;
   lastName!: string;
   userType!: string;
+  userTypeId!: number;
   contactNumber!: string;
   emailAddress!: string;
   officeId!: number;

@@ -1,4 +1,5 @@
 ﻿using Antss.Data;
+using Antss.Model;
 using Antss.Model.Entities;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,13 @@ namespace Antss.Web.Controllers
             return await _db.Users.AsNoTracking().Include(x => x.Office).ToListAsync();
         }
 
+        [HttpGet]
+        [Route("Get")]
+        public async Task<User> Get(int id)
+        {
+            return await _db.Users.SingleAsync(x => x.Id == id);
+        }
+
         [HttpPost]
         [Route("Create")]
         public async Task Create(User user)
@@ -40,6 +48,21 @@ namespace Antss.Web.Controllers
             };
 
             _db.Users.Add(userToSave);
+            await _db.SaveChangesAsync();
+        }
+
+        [HttpPost, Route("Update")]
+        public async Task Update(User user)
+        {
+            var existingUser = _db.Users.Single(x => x.Id == user.Id);
+
+            existingUser.UserType = (UserTypes)user.UserTypeId;
+            existingUser.LastName = user.LastName;
+            existingUser.FirstName = user.FirstName;
+            existingUser.ContactNumber = user.ContactNumber;
+            existingUser.EmailAddress = user.EmailAddress;
+            existingUser.OfficeId = user.OfficeId;
+
             await _db.SaveChangesAsync();
         }
     }

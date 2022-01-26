@@ -10,5 +10,17 @@
         public Office? Office { get; set; }
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
+
+        public int UserTypeId
+        {
+            get
+            {
+                return (int)UserType;
+            }
+            set
+            {
+                UserType = (UserTypes)value;
+            }
+        }
     }
 }
