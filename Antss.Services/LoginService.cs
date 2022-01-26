@@ -26,6 +26,11 @@ namespace Antss.Services
             var foundUser = _db.Users.SingleOrDefault(x => x.Id == login.UserId);
             if (foundUser == null) return result;
 
+            var accessToken = new Guid();
+            foundUser.AccessToken = accessToken;
+            foundUser.AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7);
+            _db.SaveChanges();
+
             var appData = new AppData
             {
                 //here will go appdata relevant to all user types
@@ -39,17 +44,23 @@ namespace Antss.Services
                 appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
             }
 
-            return new LoginResult { User = new UserDto
+            return new LoginResult
             {
-                Id = foundUser.Id,
-                ContactNumber = foundUser.ContactNumber,
-                EmailAddress = foundUser.EmailAddress,
-                FirstName = foundUser.FirstName,
-                LastName = foundUser.LastName,
-                OfficeId = foundUser.OfficeId,
-                UserTypeId = (int)foundUser.UserType,
-                UserType = foundUser.UserType.ToString()
-            }, AppData = appData };
+                User = new UserDto
+                {
+                    Id = foundUser.Id,
+                    ContactNumber = foundUser.ContactNumber,
+                    EmailAddress = foundUser.EmailAddress,
+                    FirstName = foundUser.FirstName,
+                    LastName = foundUser.LastName,
+                    OfficeId = foundUser.OfficeId,
+                    UserTypeId = (int)foundUser.UserType,
+                    UserType = foundUser.UserType.ToString(),
+
+                },
+                AppData = appData,
+                AccessToken = accessToken
+            };
         }
     }
 }

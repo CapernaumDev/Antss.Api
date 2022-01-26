@@ -1,7 +1,7 @@
 import { User } from "./user";
 
 export class CurrentUser extends User {
-
+  public accessToken!: string;
   constructor() {
     super();
   }
@@ -19,6 +19,6 @@ export class CurrentUser extends User {
   }
 
   get basicAuthToken() {
-    return window.btoa(this.id + ':' + 'password');
+    return window.btoa(`${this.id}:${this.accessToken}`);
   }
 }

@@ -19,9 +19,12 @@ export class AuthenticationService {
       .pipe(first())
       .subscribe( //TODO: Marked as deprecated since last rxJs update
         result => {
-          this.appStoreService.setCurrentUser(Object.assign(new CurrentUser(), result.user));
+          let user = Object.assign(new CurrentUser(), result.user);
+          user.accessToken = result.accessToken;
+          this.appStoreService.setCurrentUser(user);
           this.appStoreService.setOffices(result.appData.offices);
           this.appStoreService.setUserTypes(result.appData.userTypes);
+          localStorage["api-token"] = result.accessToken;
           this.router.navigate(['']);
         },
         err => {
@@ -30,6 +33,7 @@ export class AuthenticationService {
   }
 
   logout() {
+    localStorage["api-token"] = null;
     this.appStoreService.setCurrentUser(new CurrentUser);
     this.router.navigate(['']);
   }
