@@ -1,4 +1,4 @@
-﻿namespace Antss.Services.Contracts
+﻿namespace Antss.Services.Contracts.CommonContracts
 {
     public class LoginCredential
     {

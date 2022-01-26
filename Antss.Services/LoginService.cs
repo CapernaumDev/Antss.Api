@@ -1,7 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Model;
 using Antss.Model.Enums;
-using Antss.Services.Contracts;
+using Antss.Services.Contracts.CommonContracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services

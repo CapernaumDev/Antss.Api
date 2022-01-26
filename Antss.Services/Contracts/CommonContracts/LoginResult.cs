@@ -1,6 +1,6 @@
 ﻿using Antss.Model.Entities;
 
-namespace Antss.Services.Contracts
+namespace Antss.Services.Contracts.CommonContracts
 {
     public class LoginResult
     {

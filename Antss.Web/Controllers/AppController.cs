@@ -1,5 +1,5 @@
 ﻿using Antss.Services;
-using Antss.Services.Contracts;
+using Antss.Services.Contracts.CommonContracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

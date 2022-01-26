@@ -1,4 +1,4 @@
-﻿using Antss.Services.Contracts;
+﻿using Antss.Services.Contracts.CommonContracts;
 using System.Reflection;
 using System.Runtime.Serialization;
 

@@ -1,7 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Model;
 using Antss.Model.Entities;
-using Antss.Services.Contracts;
+using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
 using Microsoft.EntityFrameworkCore;
 
