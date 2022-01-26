@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Antss.Data.EntityMappings 
 {
-    public class TicketMapping : IEntityTypeConfiguration<Ticket>
+    public class TicketMapping : EntityBase, IEntityTypeConfiguration<Ticket>
     {
         public void Configure(EntityTypeBuilder<Ticket> builder)
         {
