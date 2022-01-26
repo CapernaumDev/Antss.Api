@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { AppStoreService } from './app.store.service';
-import { CurrentUser } from './models/current-user';
+import { CurrentUser } from './models/user/current-user';
 import { LoginResult } from './models/login-result';
 
 @Injectable({ providedIn: 'root' })

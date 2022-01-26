@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { CurrentUser } from '@core/models/current-user';
+import { CurrentUser } from '@core/models/user/current-user';
 import { AppStoreService } from "@core/app.store.service";
 import { AuthenticationService } from '@core/authentication.service';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';

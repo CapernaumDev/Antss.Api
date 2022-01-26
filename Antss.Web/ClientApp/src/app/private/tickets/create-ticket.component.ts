@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router"
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { CurrentUser } from '@core/models/current-user';
+import { CurrentUser } from '@core/models/user/current-user';
 import { User } from '@app/core/models/user/user';
 import { AppStoreService } from "@core/app.store.service";
 import { first } from 'rxjs/operators';

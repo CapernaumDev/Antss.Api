@@ -1,5 +1,3 @@
-import { Office } from '../office';
-
 export class User {
   id!: number;
   firstName!: string;
@@ -9,5 +7,4 @@ export class User {
   contactNumber!: string;
   emailAddress!: string;
   officeId!: number;
-  office!: Office;
 }

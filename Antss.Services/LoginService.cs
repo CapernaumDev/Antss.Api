@@ -32,7 +32,9 @@ namespace Antss.Services
 
             if (foundUser.UserType == UserTypes.Admin)
             {
-                appData.Offices = _db.Offices.AsNoTracking().ToList();
+                appData.Offices = _db.Offices.AsNoTracking()
+                    .Select(x => new OptionItem(x.Id, x.Name)).ToList();
+
                 appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
             }
 

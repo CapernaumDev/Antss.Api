@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-import { Office } from '@core/models/office';
 import { AppStoreService } from "@core/app.store.service";
 import { ApiService } from '@core/api.service';
 import { FormModes } from '@app/core/enums/form-modes';
 import { User } from '@app/core/models/user/user';
 import { PostResult } from '@core/models/post-result';
+import { OptionItem } from '../../core/models/option-item';
 
 @Component({
   selector: 'create-user',
@@ -17,8 +17,8 @@ import { PostResult } from '@core/models/post-result';
 })
 
 export class UserComponent implements OnInit {
-  public offices$!: Observable<Office[]>;
-  public userTypes$!: Observable<any[]>;
+  public offices$!: Observable<OptionItem[]>;
+  public userTypes$!: Observable<OptionItem[]>;
 
   submitted = false;
   registerForm!: FormGroup;
