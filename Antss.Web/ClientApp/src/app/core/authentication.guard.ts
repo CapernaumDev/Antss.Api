@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { AppStoreService } from './app.store.service';
 
 @Injectable({ providedIn: 'root' })
@@ -15,8 +15,9 @@ export class AuthGuard implements CanActivate {
     return new Observable<boolean>(obs => {
       let routeRole = route.data["role"] as string;
 
-      this.appStoreService.currentUser$
-        .subscribe(x => {
+      this.appStoreService.currentUser$.pipe(
+        take(1)
+      ).subscribe(x => {
           if (x.id > 0) {
             if (routeRole && routeRole.includes('Admin') && !x.isAdmin) {
               obs.next(false);
