@@ -1,6 +1,6 @@
 ﻿namespace Antss.Model.Entities
 {
-    public class Ticket
+    public class Ticket : EntityBase
     {
         public int Id { get; set; }
         public int RaisedById { get; set; }

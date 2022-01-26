@@ -1,5 +1,4 @@
-﻿using Antss.Data;
-using Antss.Services;
+﻿using Antss.Services;
 using Antss.Services.Contracts.TicketContracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +10,10 @@ namespace Antss.Web.Controllers
     [Authorize]
     public class TicketController : ControllerBase
     {
-        private readonly AntssContext _db;
         private readonly TicketService _svc;
 
-        public TicketController(AntssContext db, TicketService svc)
+        public TicketController(TicketService svc)
         {
-            _db = db;
             _svc = svc;
         }
 

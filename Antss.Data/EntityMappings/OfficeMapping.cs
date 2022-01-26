@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Antss.Data.EntityMappings 
 {
-    public class OfficeMapping : EntityBase, IEntityTypeConfiguration<Office>
+    public class OfficeMapping : IEntityTypeConfiguration<Office>
     {
         public void Configure(EntityTypeBuilder<Office> builder)
         {

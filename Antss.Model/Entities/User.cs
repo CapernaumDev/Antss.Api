@@ -1,6 +1,6 @@
 ﻿namespace Antss.Model.Entities
 {
-    public class User
+    public class User : EntityBase
     {
         public int Id { get; set; }        
         public string FirstName { get; set; }
