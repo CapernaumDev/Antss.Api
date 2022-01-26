@@ -1,11 +1,11 @@
-﻿using Antss.Model.Entities;
+﻿using Antss.Services.Contracts.UserContracts;
 
 namespace Antss.Services.Contracts.CommonContracts
 {
     public class LoginResult
     {
         public AppData? AppData { get; set; }
-        public User? User { get; set; }
+        public UserDto? User { get; set; }
         public bool IsValid => User != null;
     }
 }

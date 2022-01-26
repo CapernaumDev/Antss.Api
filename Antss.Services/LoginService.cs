@@ -2,6 +2,7 @@
 using Antss.Model;
 using Antss.Model.Enums;
 using Antss.Services.Contracts.CommonContracts;
+using Antss.Services.Contracts.UserContracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services
@@ -38,7 +39,17 @@ namespace Antss.Services
                 appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
             }
 
-            return new LoginResult { User = foundUser, AppData = appData };
+            return new LoginResult { User = new UserDto
+            {
+                Id = foundUser.Id,
+                ContactNumber = foundUser.ContactNumber,
+                EmailAddress = foundUser.EmailAddress,
+                FirstName = foundUser.FirstName,
+                LastName = foundUser.LastName,
+                OfficeId = foundUser.OfficeId,
+                UserTypeId = (int)foundUser.UserType,
+                UserType = foundUser.UserType.ToString()
+            }, AppData = appData };
         }
     }
 }
