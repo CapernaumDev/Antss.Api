@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from './models/user';
+import { User } from './models/user/user';
 import { Ticket } from './models/ticket';
 import { AppData } from './models/app-data';
 import { environment } from '@environments/environment';
 import { PostResult } from './models/post-result';
+import { UserListItem } from './models/user/user-list-item';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ import { PostResult } from './models/post-result';
 export class ApiService {
   constructor(private http: HttpClient) { }
 
-  getUserList(): Observable<User[]> {
-    return this.http.get<User[]>(`${environment.apiUrl}/User/List`);
+  getUserList(): Observable<UserListItem[]> {
+    return this.http.get<UserListItem[]>(`${environment.apiUrl}/User/List`);
   }
 
   getTicketList(): Observable<Ticket[]> {

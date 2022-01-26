@@ -8,7 +8,7 @@ import { Office } from '@core/models/office';
 import { AppStoreService } from "@core/app.store.service";
 import { ApiService } from '@core/api.service';
 import { FormModes } from '@app/core/enums/form-modes';
-import { User } from '@app/core/models/user';
+import { User } from '@app/core/models/user/user';
 import { PostResult } from '@core/models/post-result';
 
 @Component({
@@ -105,7 +105,8 @@ export class UserComponent implements OnInit {
   initialiseUser(userId: number) {
     if (userId) {
       this.apiService.loadUser(userId)
-      .subscribe(x => {
+      .pipe(first()).subscribe(
+        x => {
         this.registerForm.patchValue(x);
         this.registerForm.patchValue({userTypeId: x.userTypeId.toString()}); //TODO: string / int mismatch but same numeric id
       });

@@ -1,13 +1,9 @@
-import { Office } from './office';
-
-export class User {
+export class UserListItem {
   id!: number;
   firstName!: string;
   lastName!: string;
   userType!: string;
-  userTypeId!: number;
   contactNumber!: string;
   emailAddress!: string;
-  officeId!: number;
-  office!: Office;
+  officeName!: string;
 }

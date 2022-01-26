@@ -3,7 +3,7 @@ import { Router } from "@angular/router"
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { CurrentUser } from '@core/models/current-user';
-import { User } from '@core/models/user';
+import { User } from '@app/core/models/user/user';
 import { AppStoreService } from "@core/app.store.service";
 import { first } from 'rxjs/operators';
 import { ApiService } from '@core/api.service';

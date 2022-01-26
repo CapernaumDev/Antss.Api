@@ -1,5 +1,6 @@
 using Antss.Data;
 using Antss.Model.Enums;
+using Antss.Services;
 using Antss.Web.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
@@ -15,7 +16,9 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddDbContext<AntssContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//TODO: Automatically register services according to some selector
 builder.Services.AddTransient<EnumTransformer, EnumTransformer>();
+builder.Services.AddScoped<UserService, UserService>();
 
 var app = builder.Build();
 

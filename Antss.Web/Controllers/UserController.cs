@@ -1,10 +1,8 @@
-﻿using Antss.Data;
-using Antss.Model;
-using Antss.Model.Entities;
+﻿using Antss.Services;
 using Antss.Services.Contracts;
+using Antss.Services.Contracts.UserContracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Web.Controllers
 {
@@ -13,73 +11,38 @@ namespace Antss.Web.Controllers
     [AdminAuthorize]
     public class UserController : ControllerBase
     {
-        private readonly AntssContext _db;
+        private readonly UserService _svc;
 
-        public UserController(AntssContext db)
+        public UserController(UserService svc)
         {
-            _db = db;
+            _svc = svc;
         }
 
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult<IEnumerable<User>>> Get()
+        public async Task<ActionResult<IEnumerable<UserListItem>>> Get()
         {
-            return await _db.Users.AsNoTracking().Include(x => x.Office).ToListAsync();
+            return await _svc.GetList();
         }
 
         [HttpGet]
         [Route("Get")]
-        public async Task<User> Get(int id)
+        public async Task<UserDto> Get(int id)
         {
-            return await _db.Users.SingleAsync(x => x.Id == id);
+            return await _svc.GetById(id);
         }
 
         [HttpPost]
         [Route("Create")]
-        public async Task Create(User user)
+        public async Task<PostResult> Create(UserDto user)
         {
-            var userToSave = new User
-            {
-                ContactNumber = user.ContactNumber,
-                EmailAddress = user.EmailAddress,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                OfficeId = user.OfficeId,
-                UserType = user.UserType
-            };
-
-            _db.Users.Add(userToSave);
-            await _db.SaveChangesAsync();
+            return await _svc.Create(user);
         }
 
         [HttpPost, Route("Update")]
-        public async Task<PostResult> Update(User user)
+        public async Task<PostResult> Update(UserDto user)
         {
-            var result = new PostResult();
-            var existingUser = _db.Users.Include(x => x.AssignedTickets)
-                .Single(x => x.Id == user.Id);
-
-            if (user.UserType == UserTypes.User && 
-                (existingUser.UserType == UserTypes.Support || existingUser.UserType == UserTypes.Admin))
-            {
-                if (existingUser.AssignedTickets.Any())
-                {
-                    //user was changed from support/admin to user UserType but they have tickets assigned
-                    //which is not valid for a UserType of user
-                    result.ErrorMessage = "User Type cannot be changed to 'User' because the user has tickets assigned.";
-                    return result;
-                }
-            }
-
-            existingUser.UserType = (UserTypes)user.UserTypeId;
-            existingUser.LastName = user.LastName;
-            existingUser.FirstName = user.FirstName;
-            existingUser.ContactNumber = user.ContactNumber;
-            existingUser.EmailAddress = user.EmailAddress;
-            existingUser.OfficeId = user.OfficeId;
-
-            await _db.SaveChangesAsync();
-            return result;
+            return await _svc.Update(user);
         }
     }
 }
