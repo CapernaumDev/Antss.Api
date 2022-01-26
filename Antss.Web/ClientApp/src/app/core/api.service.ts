@@ -5,6 +5,7 @@ import { User } from './models/user';
 import { Ticket } from './models/ticket';
 import { AppData } from './models/app-data';
 import { environment } from '@environments/environment';
+import { PostResult } from './models/post-result';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +30,12 @@ export class ApiService {
     return this.http.get<User>(`${environment.apiUrl}/User/Get`, { params: { id: userId }});
   }
 
-  createUser(user: User) {
-    return this.http.post(`${environment.apiUrl}/User/Create`, user);
+  createUser(user: User): Observable<PostResult> {
+    return this.http.post<PostResult>(`${environment.apiUrl}/User/Create`, user);
   }
 
-  editUser(user: User) {
-    return this.http.post(`${environment.apiUrl}/User/Update`, user);
+  updateUser(user: User): Observable<PostResult> {
+    return this.http.post<PostResult>(`${environment.apiUrl}/User/Update`, user);
   }
 
   createTicket(ticket: Ticket) {

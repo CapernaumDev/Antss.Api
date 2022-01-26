@@ -1,6 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Model;
 using Antss.Model.Entities;
+using Antss.Model.ViewModels;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,9 +53,23 @@ namespace Antss.Web.Controllers
         }
 
         [HttpPost, Route("Update")]
-        public async Task Update(User user)
+        public async Task<PostResult> Update(User user)
         {
-            var existingUser = _db.Users.Single(x => x.Id == user.Id);
+            var result = new PostResult();
+            var existingUser = _db.Users.Include(x => x.AssignedTickets)
+                .Single(x => x.Id == user.Id);
+
+            if (user.UserType == UserTypes.User && 
+                (existingUser.UserType == UserTypes.Support || existingUser.UserType == UserTypes.Admin))
+            {
+                if (existingUser.AssignedTickets.Any())
+                {
+                    //user was changed from support/admin to user UserType but they have tickets assigned
+                    //which is not valid for a UserType of user
+                    result.ErrorMessage = "User Type cannot be changed to 'User' because the user has tickets assigned.";
+                    return result;
+                }
+            }
 
             existingUser.UserType = (UserTypes)user.UserTypeId;
             existingUser.LastName = user.LastName;
@@ -64,6 +79,7 @@ namespace Antss.Web.Controllers
             existingUser.OfficeId = user.OfficeId;
 
             await _db.SaveChangesAsync();
+            return result;
         }
     }
 }

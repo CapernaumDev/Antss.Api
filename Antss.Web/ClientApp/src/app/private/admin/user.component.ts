@@ -9,6 +9,7 @@ import { AppStoreService } from "@core/app.store.service";
 import { ApiService } from '@core/api.service';
 import { FormModes } from '@app/core/enums/form-modes';
 import { User } from '@app/core/models/user';
+import { PostResult } from '@core/models/post-result';
 
 @Component({
   selector: 'create-user',
@@ -74,7 +75,7 @@ export class UserComponent implements OnInit {
     this.apiService.createUser(user)
     .pipe(first()).subscribe(
     result => {
-      this.router.navigate(['/user-list']);
+      this.onPostResponse(result);
     },
     error => {
       console.log(error);
@@ -84,15 +85,22 @@ export class UserComponent implements OnInit {
   updateUser(user: User) {
     user.id = this.userId;
 
-    this.apiService.editUser(user)
+    this.apiService.updateUser(user)
     .pipe(first()).subscribe(
     result => {
-      this.router.navigate(['/user-list']);
+      this.onPostResponse(result);
     },
     error => {
       console.log(error);
-      alert('There was an error updating the user');
+      alert('There was an error editing the user');
     })
+  }
+  onPostResponse(result: PostResult) {
+    if (result.isValid) {
+      this.router.navigate(['/user-list']);
+    } else {
+      alert(result.errorMessage);
+    }
   }
   initialiseUser(userId: number) {
     if (userId) {

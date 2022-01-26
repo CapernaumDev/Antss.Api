@@ -22,5 +22,7 @@
                 UserType = (UserTypes)value;
             }
         }
+
+        public IEnumerable<Ticket>? AssignedTickets { get; set; }
     }
 }
