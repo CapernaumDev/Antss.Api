@@ -1,4 +1,6 @@
-﻿namespace Antss.Model.Entities
+﻿using Newtonsoft.Json;
+
+namespace Antss.Model.Entities
 {
     public class User
     {
@@ -11,6 +13,9 @@
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
 
+        // TODO: Remove JsonIgnore once ticket service uses contracts instead of entities
+        // And remove Newtonsoft from this asseembly
+        [JsonIgnore]
         public IEnumerable<Ticket>? AssignedTickets { get; set; }
     }
 }
