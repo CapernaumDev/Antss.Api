@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './models/user/user';
 import { Ticket } from './models/ticket';
+import { TicketListItem } from './models/ticket/ticket-list-item';
 import { AppData } from './models/app-data';
 import { environment } from '@environments/environment';
 import { PostResult } from './models/post-result';
@@ -19,8 +20,8 @@ export class ApiService {
     return this.http.get<UserListItem[]>(`${environment.apiUrl}/User/List`);
   }
 
-  getTicketList(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(`${environment.apiUrl}/Ticket/List`);
+  getTicketList(): Observable<TicketListItem[]> {
+    return this.http.get<TicketListItem[]>(`${environment.apiUrl}/Ticket/List`);
   }
 
   getAppData(): Observable<AppData> {

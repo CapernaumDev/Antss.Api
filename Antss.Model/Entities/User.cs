@@ -13,6 +13,8 @@ namespace Antss.Model.Entities
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
 
+        public string DisplayName => LastName + ", " + FirstName;
+
         // TODO: Remove JsonIgnore once ticket service uses contracts instead of entities
         // And remove Newtonsoft from this asseembly
         [JsonIgnore]

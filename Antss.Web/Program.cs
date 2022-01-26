@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AntssContext>(options =>
 builder.Services.AddTransient<EnumTransformer, EnumTransformer>();
 builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<LoginService, LoginService>();
+builder.Services.AddScoped<TicketService, TicketService>();
 
 var app = builder.Build();
 

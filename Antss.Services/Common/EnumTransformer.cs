@@ -17,7 +17,7 @@ namespace Antss.Model.Enums
             return result;
         }
 
-        private static string GetEnumMemberAttributeValue(Enum value)
+        public string GetEnumMemberAttributeValue(Enum value)
         {
             return
                 value

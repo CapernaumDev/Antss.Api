@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
-import { Ticket } from '@core/models/ticket';
+import { TicketListItem } from '@core/models/ticket/ticket-list-item';
 
 @Component({
   selector: 'ticket-list',
@@ -11,7 +11,7 @@ import { Ticket } from '@core/models/ticket';
 
 export class TicketListComponent implements OnInit {
 
-  TicketList!: Observable<Ticket[]>;
+  TicketList!: Observable<TicketListItem[]>;
   constructor(private httpClient: HttpClient, private apiService: ApiService) { }
 
   ngOnInit() {
