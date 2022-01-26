@@ -1,4 +1,4 @@
-﻿namespace Antss.Model.ViewModels
+﻿namespace Antss.Services.Contracts
 {
     public class OptionItem
     {

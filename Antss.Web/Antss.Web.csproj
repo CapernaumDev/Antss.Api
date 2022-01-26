@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Antss.Data\Antss.Data.csproj" />
     <ProjectReference Include="..\Antss.Model\Antss.Model.csproj" />
+    <ProjectReference Include="..\Antss.Services\Antss.Services.csproj" />
   </ItemGroup>
 
 

@@ -1,7 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Model;
 using Antss.Model.Entities;
-using Antss.Model.ViewModels;
+using Antss.Services.Contracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

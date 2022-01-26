@@ -1,4 +1,4 @@
-﻿using Antss.Model.ViewModels;
+﻿using Antss.Services.Contracts;
 using System.Reflection;
 using System.Runtime.Serialization;
 

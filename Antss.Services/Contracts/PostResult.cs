@@ -1,8 +1,8 @@
-﻿namespace Antss.Model.ViewModels
+﻿namespace Antss.Services.Contracts
 {
     public class PostResult
     {
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
         public bool IsValid => ErrorMessage == null;
     }
 }
