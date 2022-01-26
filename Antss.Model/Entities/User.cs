@@ -16,6 +16,6 @@ namespace Antss.Model.Entities
         // TODO: Remove JsonIgnore once ticket service uses contracts instead of entities
         // And remove Newtonsoft from this asseembly
         [JsonIgnore]
-        public IEnumerable<Ticket>? AssignedTickets { get; set; }
+        public IEnumerable<Ticket>? AssignedTickets { get; set; } = new List<Ticket>();
     }
 }

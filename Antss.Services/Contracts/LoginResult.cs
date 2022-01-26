@@ -6,5 +6,6 @@ namespace Antss.Services.Contracts
     {
         public AppData? AppData { get; set; }
         public User? User { get; set; }
+        public bool IsValid => User != null;
     }
 }

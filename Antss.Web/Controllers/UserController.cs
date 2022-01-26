@@ -18,22 +18,19 @@ namespace Antss.Web.Controllers
             _svc = svc;
         }
 
-        [HttpGet]
-        [Route("List")]
+        [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<UserListItem>>> Get()
         {
             return await _svc.GetList();
         }
 
-        [HttpGet]
-        [Route("Get")]
+        [HttpGet, Route("Get")]
         public async Task<UserDto> Get(int id)
         {
             return await _svc.GetById(id);
         }
 
-        [HttpPost]
-        [Route("Create")]
+        [HttpPost, Route("Create")]
         public async Task<PostResult> Create(UserDto user)
         {
             return await _svc.Create(user);

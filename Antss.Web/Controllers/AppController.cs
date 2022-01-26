@@ -1,50 +1,29 @@
-﻿using Antss.Data;
-using Antss.Model;
-using Antss.Model.Enums;
+﻿using Antss.Services;
 using Antss.Services.Contracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
+    [ApiController, Authorize, Route("api/[controller]")]
     public class AppController : ControllerBase
     {
-        private readonly AntssContext _db;
-        private readonly EnumTransformer _enumTransformer;
+        private readonly LoginService _svc;
 
-        public AppController(AntssContext db, EnumTransformer enumTransformer)
+        public AppController(LoginService svc)
         {
-            _db = db;
-            _enumTransformer = enumTransformer;
+            _svc = svc;
         }
 
-        [HttpPost]
-        [Route("Login")]
-        [AllowAnonymous]
-        public ActionResult<LoginResult> Login(LoginCredential login)
+        [HttpPost, AllowAnonymous, Route("Login")]
+        public ActionResult<LoginResult> Login(LoginCredential loginCredential)
         {
-            //we're just going to get the user for now without authenticating
+            var result = _svc.Login(loginCredential);
 
-            var foundUser = _db.Users.SingleOrDefault(x => x.Id == login.UserId);
-            if (foundUser == null)
+            if (!result.IsValid)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            var appData = new AppData
-            {
-                //here will go appdata relevant to all user types
-            };
-
-            if (foundUser.UserType == UserTypes.Admin)
-            {
-                appData.Offices = _db.Offices.AsNoTracking().ToList();
-                appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
-            }
-
-            return new LoginResult { User = foundUser, AppData = appData };
+            return result;
         }
     }
 }

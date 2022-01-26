@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AntssContext>(options =>
 //TODO: Automatically register services according to some selector
 builder.Services.AddTransient<EnumTransformer, EnumTransformer>();
 builder.Services.AddScoped<UserService, UserService>();
+builder.Services.AddScoped<LoginService, LoginService>();
 
 var app = builder.Build();
 
