@@ -67,16 +67,17 @@ export class CreateTicketComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       description: ['', [Validators.required]],
       raisedBy: [this.userName, [Validators.required]],
-      assignedTo: [null]
+      assignedTo: [null],
+      raisedById: [this.currentUserId]
     });
   }
 
-  // ngOnDestroy() {
-  //   this.subscriptions.forEach(x => {
-  //     if (!x.closed) {
-  //       x.unsubscribe();
-  //     }
-  //   });
-  // }
+   ngOnDestroy() {
+     this.subscriptions.forEach(x => {
+       if (!x.closed) {
+         x.unsubscribe();
+       }
+     });
+   }
 }
 

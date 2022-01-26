@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './models/user/user';
-import { Ticket } from './models/ticket';
+import { CreateTicket } from './models/ticket/create-ticket';
 import { TicketListItem } from './models/ticket/ticket-list-item';
 import { AppData } from './models/app-data';
 import { environment } from '@environments/environment';
@@ -40,7 +40,7 @@ export class ApiService {
     return this.http.post<PostResult>(`${environment.apiUrl}/User/Update`, user);
   }
 
-  createTicket(ticket: Ticket) {
+  createTicket(ticket: CreateTicket) {
     return this.http.post(`${environment.apiUrl}/Ticket/Create`, ticket)
   }
 }

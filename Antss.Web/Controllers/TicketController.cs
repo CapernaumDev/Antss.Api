@@ -1,10 +1,8 @@
 ﻿using Antss.Data;
-using Antss.Model.Entities;
 using Antss.Services;
 using Antss.Services.Contracts.TicketContracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Web.Controllers
 {
@@ -29,18 +27,9 @@ namespace Antss.Web.Controllers
         }
 
         [HttpPost, Route("Create")]
-        public async Task<int> Create(Ticket ticket)
+        public async Task<int> Create(CreateTicketDto ticketDto)
         {
-            var newTicket = new Ticket{
-                RaisedById = ticket.RaisedById,
-                AssignedToId = ticket.AssignedToId,
-                TicketStatus = Model.TicketStatuses.Raised,
-                Description = ticket.Description
-            };
-
-            _db.Tickets.Add(newTicket);
-            await _db.SaveChangesAsync();
-            return newTicket.Id;
+            return await _svc.Create(ticketDto);
         }
     }
 }

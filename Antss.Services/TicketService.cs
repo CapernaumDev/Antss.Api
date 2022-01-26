@@ -1,4 +1,5 @@
 ﻿using Antss.Data;
+using Antss.Model.Entities;
 using Antss.Model.Enums;
 using Antss.Services.Contracts.TicketContracts;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,22 @@ namespace Antss.Services
                     RaisedBy = x.RaisedBy.DisplayName,
                     TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus)
                 }).ToListAsync();
+        }
+
+        public async Task<int> Create(CreateTicketDto ticketDto)
+        {
+            var newTicket = new Ticket
+            {
+                RaisedById = ticketDto.RaisedById,
+                AssignedToId = ticketDto.AssignedToId,
+                TicketStatus = Model.TicketStatuses.Raised,
+                Description = ticketDto.Description
+            };
+
+            _db.Tickets.Add(newTicket);
+            await _db.SaveChangesAsync();
+
+            return newTicket.Id;
         }
     }
 }
