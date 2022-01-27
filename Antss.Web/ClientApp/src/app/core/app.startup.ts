@@ -21,11 +21,9 @@ export class AppStartup {
     
     let credential = new LoginCredential();
     credential.accessToken = token;
-    if (token != null) {
-      let userWithToken = new CurrentUser();
-      userWithToken.accessToken = token;
-      this.appStoreService.setCurrentUser(userWithToken);
-      this.authenticationService.login(credential);
-    }
+    let userWithToken = new CurrentUser();
+    userWithToken.accessToken = token;
+    this.appStoreService.setCurrentUser(userWithToken);
+    this.authenticationService.login(credential);
   }
 }
