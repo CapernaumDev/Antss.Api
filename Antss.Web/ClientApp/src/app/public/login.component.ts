@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LoginCredential } from '@app/core/models/login-credential';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { AuthenticationService } from '@core/authentication.service';
 
 @Component({
@@ -10,15 +10,29 @@ import { AuthenticationService } from '@core/authentication.service';
 
 export class LoginComponent implements OnInit {
   userId: number = 0;
+  emailAddress!: string;
+  password!: string;
+  submitted = false;
+  form!: FormGroup;
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) { }
+  constructor(private authenticationService: AuthenticationService, private formBuilder: FormBuilder) { }
+
+  get f() { return this.form.controls; }
 
   ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      emailAddress: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
   }
 
   onSubmit() {
-    let credential = new LoginCredential();
-    credential.userId = parseInt(this.userId.toString()); //TODO why is string otherwise
-    this.authenticationService.login(credential);
+    this.submitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.authenticationService.login(this.form.value);
   }
 }

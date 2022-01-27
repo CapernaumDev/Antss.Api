@@ -15,7 +15,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
         const newRequest = request.clone({
           setHeaders: {
-            Authorization: `Basic ${user.basicAuthToken}`
+            Authorization: `Basic ${user.apiToken}`
           }
         });
 

@@ -10,6 +10,7 @@
         public Office? Office { get; set; }
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
+        public string Password { get; set; }
         public Guid? AccessToken { get; set; } 
         public DateTime? AccessTokenExpiryUtc { get; set; }
 

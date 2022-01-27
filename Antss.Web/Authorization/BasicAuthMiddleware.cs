@@ -22,10 +22,7 @@ public class BasicAuthMiddleware
         {
             var authHeader = AuthenticationHeaderValue.Parse(context.Request.Headers["Authorization"]);
             var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-            var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
-
-            int.TryParse(credentials[0], out var userId);
-            var accessToken = string.IsNullOrWhiteSpace(credentials[1]) ? (Guid?)null : Guid.Parse(credentials[1]);
+            var accessToken = Guid.Parse(Encoding.UTF8.GetString(credentialBytes));
 
             var connectionstring = _configuration.GetConnectionString("DefaultConnection");
             var optionsBuilder = new DbContextOptionsBuilder<AntssContext>();
@@ -33,9 +30,7 @@ public class BasicAuthMiddleware
 
             using (var db = new AntssContext(optionsBuilder.Options))
             {
-                var user = accessToken == null ?
-                    await db.Users.SingleOrDefaultAsync(x => x.Id == userId) :
-                    await db.Users.SingleOrDefaultAsync(x => x.AccessToken == accessToken);
+                var user = await db.Users.SingleOrDefaultAsync(x => x.AccessToken == accessToken);
 
                 if (user != null && user.AccessTokenExpiryUtc > DateTime.UtcNow)
                 {

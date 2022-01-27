@@ -20,21 +20,17 @@ namespace Antss.Services
 
         public LoginResult Login(LoginCredential loginCredential)
         {
-            //we're just going to get the user for now without authenticating
             var result = new LoginResult();
+            var isLoginWithEmailAndPassword = loginCredential.EmailAddress != null;
 
-            // todo: remove testing bypass
-            var foundUser = _db.Users.SingleOrDefault(x => x.Id == loginCredential.UserId);
-            
-            if (loginCredential.AccessToken != null)
-            {
-                foundUser = _db.Users.SingleOrDefault(x => x.AccessToken == Guid.Parse(loginCredential.AccessToken));
-            }
+            var foundUser = isLoginWithEmailAndPassword ?
+                _db.Users.SingleOrDefault(x => x.EmailAddress == loginCredential.EmailAddress && x.Password == loginCredential.Password) :
+                _db.Users.SingleOrDefault(x => x.AccessToken == Guid.Parse(loginCredential.AccessToken));
 
             if (foundUser == null) return result;
 
             Guid? accessToken = null;
-            if (loginCredential.UserId != null)
+            if (isLoginWithEmailAndPassword)
             {
                 accessToken = Guid.NewGuid();
                 foundUser.AccessToken = accessToken;

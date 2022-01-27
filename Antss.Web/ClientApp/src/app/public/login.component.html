@@ -1,15 +1,36 @@
 <div>
   <div class="alert alert-info"><b>Login</b></div>
-  <form class="row g-3" (ngSubmit)="onSubmit()">
-    <div class="col-6">
-      <label for="inputUserId" class="form-label">Login as:</label>
-      <select [(ngModel)]="userId" class="form-select" id="inputUserId" name="inputUsereId">
-        <option [value]="1">Adam Smith (Admin)</option>
-        <option [value]="2">John Jones (Support)</option>
-        <option [value]="3">Peter Taylor (User)</option>
-      </select>
-      <pre></pre>
-      <button type="submit" class="btn btn-primary">Login</button>
+  <form [formGroup]="form" class="row g-3" (ngSubmit)="onSubmit()">
+    <div class="col-lg-4 col-md-6 col-sm-12">
+      <div class="col-12">
+        <label for="inputEmailAddress" class="form-label">Email</label>
+        <input type="email" formControlName="emailAddress" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" id="inputEmailAddress">
+        <div *ngIf="submitted && f.emailAddress.errors" class="text-danger">
+          <div *ngIf="f.emailAddress.errors.required">
+            <small>Email is required</small>
+          </div>
+          <div *ngIf="f.emailAddress.errors.email">
+            <small>Email must be a valid email address</small>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12">
+        <label for="inputPassword" class="form-label">Password</label>
+        <input type="password" formControlName="password" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" id="inputPassword">
+        <div *ngIf="submitted && f.password.errors" class="text-danger">
+          <div *ngIf="f.password.errors.required">
+            <small>Password is required</small>
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-12">
+        <pre></pre>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
     </div>
   </form>
 </div>

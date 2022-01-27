@@ -18,7 +18,7 @@ export class CurrentUser extends User {
     return this.userType === 'User';
   }
 
-  get basicAuthToken() {
-    return window.btoa(`${this.id}:${this.accessToken || ''}`);
+  get apiToken() {
+    return window.btoa(this.accessToken);
   }
 }

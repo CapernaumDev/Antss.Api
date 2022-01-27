@@ -1,4 +1,5 @@
 export class LoginCredential {
-  userId!: number;
+  emailAddress!: string;
+  passWord!: string;
   accessToken!: string;
 }
