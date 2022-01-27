@@ -1,6 +1,8 @@
 ﻿using Antss.Data;
 using Antss.Model;
+using Antss.Model.Entities;
 using Antss.Model.Enums;
+using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
 using Microsoft.EntityFrameworkCore;
@@ -11,39 +13,34 @@ namespace Antss.Services
     {
         private readonly AntssContext _db;
         private readonly EnumTransformer _enumTransformer;
+        private readonly Encryptor _encryptor;
+        
+        private bool _loggedIn;
+        private LoginResult _loginResult = new LoginResult();
+        private User _user;
 
-        public LoginService(AntssContext db, EnumTransformer enumTransformer)
+        public LoginService(AntssContext db, EnumTransformer enumTransformer, Encryptor encryptor)
         {
             _db = db;
             _enumTransformer = enumTransformer;
+            _encryptor = encryptor;
         }
 
         public LoginResult Login(LoginCredential loginCredential)
         {
-            var result = new LoginResult();
-            var isLoginWithEmailAndPassword = loginCredential.EmailAddress != null;
+            if (loginCredential.EmailAddress != null)
+                LoginWithCredentials(loginCredential.EmailAddress, loginCredential.Password);
+            else
+                LoginWithToken(loginCredential.AccessToken);
 
-            var foundUser = isLoginWithEmailAndPassword ?
-                _db.Users.SingleOrDefault(x => x.EmailAddress == loginCredential.EmailAddress && x.Password == loginCredential.Password) :
-                _db.Users.SingleOrDefault(x => x.AccessToken == Guid.Parse(loginCredential.AccessToken));
-
-            if (foundUser == null) return result;
-
-            Guid? accessToken = null;
-            if (isLoginWithEmailAndPassword)
-            {
-                accessToken = Guid.NewGuid();
-                foundUser.AccessToken = accessToken;
-                foundUser.AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7);
-                _db.SaveChanges();
-            }
+            if (!_loggedIn) return _loginResult;
 
             var appData = new AppData
             {
                 //here will go appdata relevant to all user types
             };
 
-            if (foundUser.UserType == UserTypes.Admin)
+            if (_user.UserType == UserTypes.Admin)
             {
                 appData.Offices = _db.Offices.AsNoTracking()
                     .Select(x => new OptionItem(x.Id, x.Name)).ToList();
@@ -51,23 +48,53 @@ namespace Antss.Services
                 appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
             }
 
-            return new LoginResult
+            _loginResult.User = new UserDto
             {
-                User = new UserDto
-                {
-                    Id = foundUser.Id,
-                    ContactNumber = foundUser.ContactNumber,
-                    EmailAddress = foundUser.EmailAddress,
-                    FirstName = foundUser.FirstName,
-                    LastName = foundUser.LastName,
-                    OfficeId = foundUser.OfficeId,
-                    UserTypeId = (int)foundUser.UserType,
-                    UserType = foundUser.UserType.ToString(),
-
-                },
-                AppData = appData,
-                AccessToken = accessToken
+                Id = _user.Id,
+                ContactNumber = _user.ContactNumber,
+                EmailAddress = _user.EmailAddress,
+                FirstName = _user.FirstName,
+                LastName = _user.LastName,
+                OfficeId = _user.OfficeId,
+                UserTypeId = (int)_user.UserType,
+                UserType = _user.UserType.ToString(),
             };
+
+            _loginResult.AppData = appData;
+
+            return _loginResult;
+        }
+
+        private void LoginWithCredentials(string emailAddress, string password)
+        {
+            var loginResult = new LoginResult();
+
+            var user = _db.Users.FirstOrDefault(x => x.EmailAddress == emailAddress);
+
+            if (user == null) return;
+
+            if (!_encryptor.VerifyHashedPassword(user.Password, password)) return;
+
+            var accessToken = Guid.NewGuid();
+            _loginResult.AccessToken = accessToken;
+            user.AccessToken = accessToken;
+            user.AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7);
+            _db.SaveChanges();
+
+            _user = user;
+            _loggedIn = true;
+        }
+
+        private void LoginWithToken(string accessToken)
+        {
+            var loginResult = new LoginResult();
+
+            var user = _db.Users.SingleOrDefault(x => x.AccessToken == Guid.Parse(accessToken));
+
+            if (user == null || user.AccessTokenExpiryUtc < DateTime.UtcNow) return;
+
+            _user = user;
+            _loggedIn = true;
         }
     }
 }
