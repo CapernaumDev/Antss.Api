@@ -18,7 +18,7 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
     UserListComponent,
     TicketListComponent,
     CreateTicketComponent,
-    MyProfileComponent
+    MyProfileComponent,
   ],
   imports: [
     CommonModule,
