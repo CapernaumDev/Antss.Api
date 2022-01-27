@@ -21,7 +21,7 @@ namespace Antss.Web.Controllers
         [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<UserListItem>>> Get()
         {
-            return await _svc.GetList();
+             return await _svc.GetList();
         }
 
         [HttpGet, Route("Get")]

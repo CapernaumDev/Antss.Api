@@ -78,7 +78,6 @@ export class UserComponent implements OnInit {
       this.onPostResponse(result);
     },
     error => {
-      console.log(error);
       alert('There was an error creating the user');
     })
   }
@@ -91,7 +90,6 @@ export class UserComponent implements OnInit {
       this.onPostResponse(result);
     },
     error => {
-      console.log(error);
       alert('There was an error editing the user');
     })
   }

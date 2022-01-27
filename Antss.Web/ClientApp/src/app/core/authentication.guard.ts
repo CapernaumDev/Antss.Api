@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return new Observable<boolean>(obs => {
       let routeRole = route.data["role"] as string;
+      let redirectAfterLogin = route.url.toString();
 
       this.appStoreService.currentUser$.pipe(
         take(1)
@@ -27,8 +28,8 @@ export class AuthGuard implements CanActivate {
 
             obs.next(true);
           } else {
+            this.appStoreService.setRedirectAfterLogin(redirectAfterLogin);
             obs.next(false);
-            this.router.navigate(['login']);
           }
         });
     });

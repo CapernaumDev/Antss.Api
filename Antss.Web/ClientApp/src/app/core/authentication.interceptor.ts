@@ -12,6 +12,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.appStoreService.currentUser$.pipe(
       switchMap(user => {
+
         const newRequest = request.clone({
           setHeaders: {
             Authorization: `Basic ${user.basicAuthToken}`

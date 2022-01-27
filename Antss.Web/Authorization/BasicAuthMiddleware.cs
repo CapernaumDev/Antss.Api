@@ -21,12 +21,11 @@ public class BasicAuthMiddleware
         try
         {
             var authHeader = AuthenticationHeaderValue.Parse(context.Request.Headers["Authorization"]);
-            if (authHeader.Parameter == null) return;
-
             var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
             var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':', 2);
-            var userId = int.Parse(credentials[0]);
-            var accessToken = Guid.Parse(credentials[1]);
+
+            int.TryParse(credentials[0], out var userId);
+            var accessToken = string.IsNullOrWhiteSpace(credentials[1]) ? (Guid?)null : Guid.Parse(credentials[1]);
 
             var connectionstring = _configuration.GetConnectionString("DefaultConnection");
             var optionsBuilder = new DbContextOptionsBuilder<AntssContext>();
@@ -34,15 +33,17 @@ public class BasicAuthMiddleware
 
             using (var db = new AntssContext(optionsBuilder.Options))
             {
-                var user = await db.Users.SingleOrDefaultAsync(x => x.Id == userId && x.AccessToken == accessToken);
-                
-                if (user == null) return;
-                if (user.AccessTokenExpiryUtc < DateTime.UtcNow) return;
+                var user = accessToken == null ?
+                    await db.Users.SingleOrDefaultAsync(x => x.Id == userId) :
+                    await db.Users.SingleOrDefaultAsync(x => x.AccessToken == accessToken);
 
-                context.Items["User"] = user;
+                if (user != null && user.AccessTokenExpiryUtc > DateTime.UtcNow)
+                {
+                    context.Items["User"] = user;
+                }
             }
         }
-        catch
+        catch (Exception ex)
         {
             // do nothing if invalid auth header
             // user is not attached to context so request won't have access to secure routes

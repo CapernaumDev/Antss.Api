@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginCredential } from '@app/core/models/login-credential';
 import { AuthenticationService } from '@core/authentication.service';
 
 @Component({
@@ -16,6 +17,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authenticationService.login(this.userId);
+    let credential = new LoginCredential();
+    credential.userId = parseInt(this.userId.toString()); //TODO why is string otherwise
+    this.authenticationService.login(credential);
   }
 }

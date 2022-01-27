@@ -18,18 +18,29 @@ namespace Antss.Services
             _enumTransformer = enumTransformer;
         }
 
-        public LoginResult Login(LoginCredential login)
+        public LoginResult Login(LoginCredential loginCredential)
         {
             //we're just going to get the user for now without authenticating
             var result = new LoginResult();
 
-            var foundUser = _db.Users.SingleOrDefault(x => x.Id == login.UserId);
+            // todo: remove testing bypass
+            var foundUser = _db.Users.SingleOrDefault(x => x.Id == loginCredential.UserId);
+            
+            if (loginCredential.AccessToken != null)
+            {
+                foundUser = _db.Users.SingleOrDefault(x => x.AccessToken == Guid.Parse(loginCredential.AccessToken));
+            }
+
             if (foundUser == null) return result;
 
-            var accessToken = new Guid();
-            foundUser.AccessToken = accessToken;
-            foundUser.AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7);
-            _db.SaveChanges();
+            Guid? accessToken = null;
+            if (loginCredential.UserId != null)
+            {
+                accessToken = Guid.NewGuid();
+                foundUser.AccessToken = accessToken;
+                foundUser.AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7);
+                _db.SaveChanges();
+            }
 
             var appData = new AppData
             {
