@@ -1,1 +1,9 @@
-<h1>{{welcomeMessage}}</h1>
+<h1 *ngIf="this.isSigningIn == true; else checkIfUser">Signing in...</h1>
+
+<ng-template #checkIfUser>
+    <h1 *ngIf="this.currentUserId > 0; else noUser">Welcome, {{this.currentUserFirstName}}</h1>
+</ng-template>
+
+<ng-template #noUser>
+    <h1>Welcome to ANTSS</h1>
+</ng-template>

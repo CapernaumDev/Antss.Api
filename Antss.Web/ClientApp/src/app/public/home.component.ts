@@ -7,18 +7,27 @@ import { Subscription } from 'rxjs';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  public welcomeMessage!: string;
+  public isSigningIn!: boolean;
+  public currentUserId!: number;
+  public currentUserFirstName!: string;
 
   private subscriptions: Subscription[] = [];
 
   constructor(private appStoreService: AppStoreService) { }
 
   ngOnInit() {
+    var isSigningInSubscription = this.appStoreService.isSigningIn$
+      .subscribe(x => {
+        this.isSigningIn = x;
+      });
+
     var currentUserSubscription = this.appStoreService.currentUser$
       .subscribe(x => {
-        x.id > 0 ? this.welcomeMessage = `Welcome, ${x.firstName}` : this.welcomeMessage = 'Welcome to ANTSS';
+        this.currentUserId = x.id;
+        this.currentUserFirstName = x.firstName
       });
-      
+    
+    this.subscriptions.push(isSigningInSubscription);
     this.subscriptions.push(currentUserSubscription);
   }
 

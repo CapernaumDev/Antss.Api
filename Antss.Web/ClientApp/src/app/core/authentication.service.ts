@@ -17,6 +17,7 @@ export class AuthenticationService {
   constructor(private router: Router, private http: HttpClient, private appStoreService: AppStoreService) { }
 
   async login(loginCredential: LoginCredential) {
+    this.appStoreService.setSigningIn(true);
 
     let result = await firstValueFrom(
       this.http.post<LoginResult>(`${environment.apiUrl}/App/Login`, loginCredential)
@@ -27,6 +28,8 @@ export class AuthenticationService {
           return throwError(x);
         })
       ));
+
+    this.appStoreService.setSigningIn(false);
 
     let user = Object.assign(new CurrentUser(), result.user);
     user.accessToken = result.accessToken || JSON.parse(localStorage["api-token"]);
