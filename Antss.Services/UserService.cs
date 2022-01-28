@@ -1,6 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Model;
 using Antss.Model.Entities;
+using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace Antss.Services
     public class UserService
     {
         private readonly AntssContext _db;
+        private readonly Encryptor _encryptor;
 
-        public UserService(AntssContext db)
+        public UserService(AntssContext db, Encryptor encryptor)
         {
             _db = db;
+            _encryptor = encryptor;
         }
 
         public async Task<List<UserListItem>> GetList()
@@ -54,7 +57,8 @@ namespace Antss.Services
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 OfficeId = userDto.OfficeId,
-                UserType = (UserTypes)userDto.UserTypeId
+                UserType = (UserTypes)userDto.UserTypeId,
+                Password = _encryptor.HashPassword(userDto.Password)
             };
 
             _db.Users.Add(userToSave);

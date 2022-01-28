@@ -1,4 +1,4 @@
-export const enum FormModes {
+export enum FormModes {
     Create,
     Edit
 }

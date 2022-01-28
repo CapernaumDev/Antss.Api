@@ -35,6 +35,16 @@
         </div>
       </div>
     </div>
+    <div class="col-6" *ngIf="this.formMode == FormModes.Create">
+      <label for="inputPassword" class="form-label">Password</label>
+      <input type="password" formControlName="password" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" id="inputPassword">
+      <div *ngIf="submitted && f.password.errors" class="text-danger">
+        <div *ngIf="f.password.errors.required">
+          <small>Password is required</small>
+        </div>
+      </div>
+    </div>
     <div class="col-md-6">
       <label for="inputContactNumber" class="form-label">Contact Number</label>
       <input type="text" formControlName="contactNumber" class="form-control"

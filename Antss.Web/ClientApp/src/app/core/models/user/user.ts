@@ -7,4 +7,5 @@ export class User {
   contactNumber!: string;
   emailAddress!: string;
   officeId!: number;
+  password!: string
 }

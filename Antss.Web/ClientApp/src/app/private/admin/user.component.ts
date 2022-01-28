@@ -17,6 +17,7 @@ import { OptionItem } from '../../core/models/option-item';
 })
 
 export class UserComponent implements OnInit {
+  FormModes = FormModes;
   public offices$!: Observable<OptionItem[]>;
   public userTypes$!: Observable<OptionItem[]>;
 
@@ -65,7 +66,8 @@ export class UserComponent implements OnInit {
       emailAddress: ['', [Validators.required, Validators.email]],
       userTypeId: ['', [Validators.required]],
       officeId: ['', [Validators.required]],
-      contactNumber: ['', [Validators.required]]
+      contactNumber: ['', [Validators.required]],
+      password: ['', Validators.required]
     });
 
     this.offices$ = this.appStoreService.offices$;
