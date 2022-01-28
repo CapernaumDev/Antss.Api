@@ -52,6 +52,12 @@ export class CreateTicketComponent implements OnInit {
     }
   }
 
+  cancelAndReturn() {
+    if (this.registerForm.dirty && !confirm("Are you sure you wish to cancel?")) return;
+
+    this.router.navigate(['ticket-list'])
+  }
+
   ngOnInit() {
     var currentUserSubscription = this.appStoreService.currentUser$
       .subscribe(x => {
