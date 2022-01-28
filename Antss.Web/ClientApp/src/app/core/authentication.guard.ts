@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
       this.appStoreService.currentUser$.pipe(
         take(1)
       ).subscribe(x => {
-          if (x.id > 0) {
+          if (x.isLoggedIn) {
             if (routeRole && routeRole.includes('Admin') && !x.isAdmin) {
               obs.next(false);
               this.router.navigate(['']);

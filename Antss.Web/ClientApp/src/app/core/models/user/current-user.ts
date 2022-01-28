@@ -18,6 +18,10 @@ export class CurrentUser extends User {
     return this.userType === 'User';
   }
 
+  get isLoggedIn() {
+    return this.id > 0;
+  }
+
   get apiToken() {
     return window.btoa(this.accessToken);
   }

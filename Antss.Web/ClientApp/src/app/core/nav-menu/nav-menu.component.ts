@@ -26,7 +26,7 @@ export class NavMenuComponent implements OnInit {
   ngOnInit(): void {
     var currentUserSubscription = this.appStoreService.currentUser$
       .subscribe(x => {
-        this.loggedIn = x.id > 0;
+        this.loggedIn = x.isLoggedIn;
         this.isAdmin = x.isAdmin;
         this.userName = this.loggedIn ? `${x.firstName} ${x.lastName}` : '';
       });

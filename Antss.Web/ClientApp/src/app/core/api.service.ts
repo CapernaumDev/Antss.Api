@@ -24,10 +24,6 @@ export class ApiService {
     return this.http.get<TicketListItem[]>(`${environment.apiUrl}/Ticket/List`);
   }
 
-  getAppData(): Observable<AppData> {
-    return this.http.get<AppData>(`${environment.apiUrl}/App/Appdata`);
-  }
-
   loadUser(userId: number): Observable<User> {
     return this.http.get<User>(`${environment.apiUrl}/User/Get`, { params: { id: userId }});
   }
