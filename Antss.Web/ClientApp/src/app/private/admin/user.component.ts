@@ -50,6 +50,13 @@ export class UserComponent implements OnInit {
       }
     }
   }
+
+  cancelAndReturn() {
+    if (this.registerForm.dirty && !confirm("Are you sure you wish to cancel?")) return;
+
+    this.router.navigate(['user-list'])
+  }
+
   ngOnInit() {
     this.subscriptions.push(this.route.queryParams.subscribe(params => {
       const routeParams = this.route.snapshot.paramMap;
