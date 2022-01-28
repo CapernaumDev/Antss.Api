@@ -30,6 +30,7 @@ export class AuthGuard implements CanActivate {
           } else {
             this.appStoreService.setRedirectAfterLogin(redirectAfterLogin);
             obs.next(false);
+            this.router.navigate(['login']);
           }
         });
     });
