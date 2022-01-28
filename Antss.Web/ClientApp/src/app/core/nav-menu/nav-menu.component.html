@@ -19,30 +19,33 @@
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item" *ngIf="isAdmin"
+          <ng-container *ngIf="appStoreService.currentUser$ | async as user">
+            <li class="nav-item" *ngIf="user.isAdmin"
               [routerLinkActive]="['link-active']"
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['user-list']">Admin</a>
-          </li>
-          <li class="nav-item" *ngIf="loggedIn"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['ticket-list']">Tickets</a>
-          </li>
-          <li class="nav-item" *ngIf="!loggedIn"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['login']">Login</a>
-          </li>
-          <li class="nav-item" *ngIf="loggedIn" style="padding-right: 45px;">
-            <a class="nav-link text-dark" [routerLink]="['/']" (click)="logout()">Logout</a>
-          </li>
-          <li class="nav-item" *ngIf="loggedIn">
-            <a class="nav-link" [routerLink]="'my-profile'" style="color: dodgerblue; padding: 0">
-              <fa-icon [icon]="faUserCircle" size="2x"
-                       title="{{userName}}"></fa-icon>
-            </a>
-          </li>
+            </li>
+            <li class="nav-item" *ngIf="user.isLoggedIn"
+                [routerLinkActive]="['link-active']"
+                [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link text-dark" [routerLink]="['ticket-list']">Tickets</a>
+            </li>
+            <li class="nav-item" *ngIf="!user.isLoggedIn"
+                [routerLinkActive]="['link-active']"
+                [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link text-dark" [routerLink]="['login']">Login</a>
+            </li>
+            <li class="nav-item" *ngIf="user.isLoggedIn" style="padding-right: 45px;">
+              <a class="nav-link text-dark" [routerLink]="['/']" (click)="logout()">Logout</a>
+            </li>
+            <li class="nav-item" *ngIf="user.isLoggedIn">
+              <a class="nav-link" [routerLink]="'my-profile'" style="color: dodgerblue; padding: 0">
+                <fa-icon [icon]="faUserCircle" size="2x"
+                        [title]="user.firstName + ' ' + user.lastName"></fa-icon>
+              </a>
+            </li>
+          </ng-container>
+          
         </ul>
       </div>
     </div>

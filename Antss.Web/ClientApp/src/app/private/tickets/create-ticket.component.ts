@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router"
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { ApiService } from '@core/api.service';
 
 @Component({
   selector: 'create-ticket',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './create-ticket.component.html'
 })
 

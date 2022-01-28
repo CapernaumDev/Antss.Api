@@ -1,37 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { CurrentUser } from '@core/models/user/current-user';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AppStoreService } from "@core/app.store.service";
 import { AuthenticationService } from '@core/authentication.service';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav-menu',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent implements OnInit {
-  public currentUser$!: Observable<CurrentUser>;
-  public loggedIn: boolean = false;
-  public isAdmin: boolean = false;
-  public userName: string = '';
   public faUserCircle = faUserCircle;
-
-  private subscriptions: Subscription[] = [];
 
   isExpanded = false;
 
-  constructor(private appStoreService: AppStoreService, private authenticationService: AuthenticationService) { }
+  constructor(public appStoreService: AppStoreService, private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
-    var currentUserSubscription = this.appStoreService.currentUser$
-      .subscribe(x => {
-        this.loggedIn = x.isLoggedIn;
-        this.isAdmin = x.isAdmin;
-        this.userName = this.loggedIn ? `${x.firstName} ${x.lastName}` : '';
-      });
-
-    this.subscriptions.push(currentUserSubscription);
   }
 
   collapse() {
@@ -44,13 +29,5 @@ export class NavMenuComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(x => {
-      if (!x.closed) {
-        x.unsubscribe();
-      }
-    });
   }
 }

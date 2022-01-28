@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { OptionItem } from '../../core/models/option-item';
 
 @Component({
   selector: 'create-user',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user.component.html'
 })
 
@@ -57,18 +58,22 @@ export class UserComponent implements OnInit {
       this.initialiseUser(this.userId);
       let editing = this.userId > 0;
       this.formMode = editing ? FormModes.Edit : FormModes.Create;
+      
+      this.registerForm = this.formBuilder.group({
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        emailAddress: ['', [Validators.required, Validators.email]],
+        userTypeId: ['', [Validators.required]],
+        officeId: ['', [Validators.required]],
+        contactNumber: ['', [Validators.required]],
+        password: ['', Validators.required]
+      });
+
+      if (editing)
+        this.registerForm.controls["password"].removeValidators([Validators.required]);
+
       this.formModeDescription = editing ? "Edit" : "Create";
     }));
-
-    this.registerForm = this.formBuilder.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      emailAddress: ['', [Validators.required, Validators.email]],
-      userTypeId: ['', [Validators.required]],
-      officeId: ['', [Validators.required]],
-      contactNumber: ['', [Validators.required]],
-      password: ['', Validators.required]
-    });
 
     this.offices$ = this.appStoreService.offices$;
     this.userTypes$ = this.appStoreService.userTypes$;

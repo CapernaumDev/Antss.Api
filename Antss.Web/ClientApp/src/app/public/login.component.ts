@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AuthenticationService } from '@core/authentication.service';
 
 @Component({
   selector: 'app-login',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.component.html',
 })
 

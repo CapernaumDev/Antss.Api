@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
 import { UserListItem } from '@app/core/models/user/user-list-item';
 
 @Component({
   selector: 'user-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-list.component.html',
 })
 
