@@ -14,6 +14,7 @@ import { Editor } from 'ngx-editor';
 
 export class CreateTicketComponent implements OnInit {
   submitted = false;
+  saving = false;
   registerForm!: FormGroup;
   editor!: Editor;
   html!: '';
@@ -25,9 +26,12 @@ export class CreateTicketComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    if (this.saving) return;
+    this.saving = true;
 
     // stop here if form is invalid
     if (this.registerForm.invalid) {
+      this.saving = false;
       return;
     }
 
@@ -36,8 +40,10 @@ export class CreateTicketComponent implements OnInit {
       .pipe(first()).subscribe(
         result => {
           this.router.navigate(['/ticket-list']);
+          this.saving = false;
         },
         error => {
+          this.saving = false;
           console.error(error);
           alert('There was an error creating the ticket: ' + error)
         }

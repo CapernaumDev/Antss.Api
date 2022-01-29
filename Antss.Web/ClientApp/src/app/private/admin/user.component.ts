@@ -23,6 +23,7 @@ export class UserComponent implements OnInit {
   public userTypes$!: Observable<OptionItem[]>;
 
   submitted = false;
+  saving = false;
   registerForm!: FormGroup;
   formMode: FormModes = FormModes.Create;
   formModeDescription: string = 'Create';
@@ -37,9 +38,11 @@ export class UserComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    if (this.saving) return;
+    this.saving = true;
     // stop here if form is invalid
     if (this.registerForm.invalid) {
+      this.saving = false;
       return;
     }
 
@@ -113,6 +116,8 @@ export class UserComponent implements OnInit {
     } else {
       alert(result.errorMessage);
     }
+
+    this.saving = false;
   }
   initialiseUser(userId: number) {
     if (userId) {
