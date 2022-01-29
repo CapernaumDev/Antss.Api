@@ -8,16 +8,16 @@ import { FormGroup } from '@angular/forms';
 export class BaseFormComponent {
     saving = false;
     submitted = false;
-    registerForm!: FormGroup;
+    form!: FormGroup;
     
-  get f() { return this.registerForm.controls; }
+  get f() { return this.form.controls; }
 
   beforeSubmit() : boolean {
     this.submitted = true;
     if (this.saving) return false;
     this.saving = true;
 
-    if (this.registerForm.invalid) {
+    if (this.form.invalid) {
       this.saving = false;
       return false;
     }

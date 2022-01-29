@@ -24,7 +24,7 @@ export class CreateTicketComponent extends BaseFormComponent implements OnInit {
   onSubmit() {
     if (!super.beforeSubmit()) return;
 
-    this.apiService.createTicket(this.registerForm.value)
+    this.apiService.createTicket(this.form.value)
       .pipe(first()).subscribe(
         result => {
           this.router.navigate(['/ticket-list']);
@@ -39,7 +39,7 @@ export class CreateTicketComponent extends BaseFormComponent implements OnInit {
   }
 
   cancelAndReturn() {
-    if (this.registerForm.dirty && !confirm("Are you sure you wish to cancel?")) return;
+    if (this.form.dirty && !confirm("Are you sure you wish to cancel?")) return;
 
     this.router.navigate(['ticket-list'])
   }
@@ -47,7 +47,7 @@ export class CreateTicketComponent extends BaseFormComponent implements OnInit {
   ngOnInit() {
     this.editor = new Editor();
 
-    this.registerForm = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       description: ['', [Validators.required]],
       assignedToId: [null]
     });

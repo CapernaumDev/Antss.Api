@@ -38,14 +38,14 @@ export class UserComponent extends BaseFormComponent implements OnInit {
     if (!super.beforeSubmit()) return;
     
     if (this.formMode == FormModes.Create) {
-      this.createUser(this.registerForm.value)  
+      this.createUser(this.form.value)  
     } else {
-      this.updateUser(this.registerForm.value);
+      this.updateUser(this.form.value);
     }
   }
 
   cancelAndReturn() {
-    if (this.registerForm.dirty && !confirm("Are you sure you wish to cancel?")) return;
+    if (this.form.dirty && !confirm("Are you sure you wish to cancel?")) return;
 
     this.router.navigate(['user-list'])
   }
@@ -58,7 +58,7 @@ export class UserComponent extends BaseFormComponent implements OnInit {
       let editing = this.userId > 0;
       this.formMode = editing ? FormModes.Edit : FormModes.Create;
       
-      this.registerForm = this.formBuilder.group({
+      this.form = this.formBuilder.group({
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
         emailAddress: ['', [Validators.required, Validators.email]],
@@ -69,7 +69,7 @@ export class UserComponent extends BaseFormComponent implements OnInit {
       });
 
       if (editing)
-        this.registerForm.controls["password"].removeValidators([Validators.required]);
+        this.form.controls["password"].removeValidators([Validators.required]);
 
       this.formModeDescription = editing ? "Edit" : "Create";
     }));
@@ -113,8 +113,8 @@ export class UserComponent extends BaseFormComponent implements OnInit {
       this.apiService.loadUser(userId)
       .pipe(first()).subscribe(
         x => {
-        this.registerForm.patchValue(x);
-        this.registerForm.patchValue({userTypeId: x.userTypeId.toString()}); //TODO: string / int mismatch but same numeric id
+        this.form.patchValue(x);
+        this.form.patchValue({userTypeId: x.userTypeId.toString()}); //TODO: string / int mismatch but same numeric id
       });
     }
   }
