@@ -10,7 +10,7 @@
           "strict": true
         },
         "@schematics/angular:component": {
-          "changeDetection": "OnPush",
+          "changeDetection": "OnPush"
         }
       },
       "root": "",

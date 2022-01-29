@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { PublicModule } from './public/public.module';
 import { PrivateModule } from './private/private.module';
 import { RouterModule } from '@angular/router';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     CoreModule,
     PublicModule,
-    PrivateModule
+    PrivateModule,
+    NgbTypeaheadModule
   ],
   providers: [
     { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.loginWithAccessToken() },

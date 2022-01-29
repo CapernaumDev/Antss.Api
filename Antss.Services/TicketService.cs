@@ -22,18 +22,19 @@ namespace Antss.Services
         {
             var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
-                .Include(x => x.AssignedTo)
-                .Where(x => user.UserType != UserTypes.User || x.RaisedById == user.Id)
-                .Select(x => new TicketListItem
-                {
-                    Id = x.Id,
-                    AssignedTo = x.AssignedTo.DisplayName,
-                    Description = x.Description,
-                    RaisedBy = x.RaisedBy.DisplayName,
-                    TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus)
-                });
+                .Include(x => x.AssignedTo).AsQueryable();
 
-            return await query.ToListAsync();
+            if (user.UserType == UserTypes.User)
+                query = query.Where(x => x.RaisedById == user.Id);
+
+            return await query.Select(x => new TicketListItem
+            {
+                Id = x.Id,
+                AssignedTo = x.AssignedTo.DisplayName,
+                Description = x.Description,
+                RaisedBy = x.RaisedBy.DisplayName,
+                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus)
+            }).ToListAsync();
         }
 
         public async Task<int> Create(CreateTicketDto ticketDto)
