@@ -20,7 +20,7 @@ export class AuthenticationService {
     this.appStoreService.setSigningIn(true);
 
     let result = await firstValueFrom(
-      this.http.post<LoginResult>(`${environment.apiUrl}/App/Login`, loginCredential)
+      this.http.post<LoginResult>(`${environment.apiUrl}/Authentication/Login/`, loginCredential)
       .pipe(
         catchError(x => {
           alert(x);
@@ -36,7 +36,8 @@ export class AuthenticationService {
     this.appStoreService.setCurrentUser(user);
     this.appStoreService.setOffices(result.appData.offices);
     this.appStoreService.setUserTypes(result.appData.userTypes);
-    
+    this.appStoreService.setAssignableUsers(result.appData.assignableUsers);
+
     this.appStoreService.redirectAfterLogin$.pipe(
       take(1)
     ).subscribe(x => {

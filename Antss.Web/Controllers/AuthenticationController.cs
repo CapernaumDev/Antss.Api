@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Antss.Web.Controllers
 {
     [ApiController, Authorize, Route("api/[controller]")]
-    public class AppController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
-        private readonly LoginService _svc;
+        private readonly AuthenticationService _svc;
 
-        public AppController(LoginService svc)
+        public AuthenticationController(AuthenticationService svc)
         {
             _svc = svc;
         }

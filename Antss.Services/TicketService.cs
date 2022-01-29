@@ -37,12 +37,15 @@ namespace Antss.Services
             }).ToListAsync();
         }
 
-        public async Task<int> Create(CreateTicketDto ticketDto)
+        public async Task<int> Create(CreateTicketDto ticketDto, User raisedBy)
         {
+            //TODO: permissions based authorization
+            var canAssignOnCreation = raisedBy.UserType == UserTypes.Admin || raisedBy.UserType == UserTypes.Support;
+
             var newTicket = new Ticket
             {
-                RaisedById = ticketDto.RaisedById,
-                AssignedToId = ticketDto.AssignedToId,
+                RaisedById = raisedBy.Id,
+                AssignedToId = canAssignOnCreation ? ticketDto.AssignedToId : null,
                 TicketStatus = TicketStatuses.Raised,
                 Description = ticketDto.Description
             };

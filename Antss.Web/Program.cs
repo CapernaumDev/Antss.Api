@@ -22,7 +22,7 @@ builder.Services.AddTransient<EnumTransformer, EnumTransformer>();
 builder.Services.AddTransient<Encryptor, Encryptor>();
 
 builder.Services.AddScoped<UserService, UserService>();
-builder.Services.AddScoped<LoginService, LoginService>();
+builder.Services.AddScoped<AuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<TicketService, TicketService>();
 
 var app = builder.Build();

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services
 {
-    public class LoginService
+    public class AuthenticationService
     {
         private readonly AntssContext _db;
         private readonly EnumTransformer _enumTransformer;
@@ -19,7 +19,7 @@ namespace Antss.Services
         private LoginResult _loginResult = new LoginResult();
         private User _user;
 
-        public LoginService(AntssContext db, EnumTransformer enumTransformer, Encryptor encryptor)
+        public AuthenticationService(AntssContext db, EnumTransformer enumTransformer, Encryptor encryptor)
         {
             _db = db;
             _enumTransformer = enumTransformer;
@@ -37,7 +37,10 @@ namespace Antss.Services
 
             var appData = new AppData
             {
-                //here will go appdata relevant to all user types
+                AssignableUsers = _db.Users
+                    .Where(x => x.UserType == UserTypes.Support || x.UserType == UserTypes.Admin)
+                    .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
+                    .Select(x => new OptionItem(x.Id, x.DisplayName))
             };
 
             if (_user.UserType == UserTypes.Admin)

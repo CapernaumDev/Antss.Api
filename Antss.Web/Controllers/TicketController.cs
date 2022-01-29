@@ -22,15 +22,17 @@ namespace Antss.Web.Controllers
         [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<TicketListItem>>> Get()
         {
-            var user = (User)HttpContext.Items["User"]; // crash here by design
-
+            var user = (User)HttpContext.Items["User"];
+            
             return await _svc.GetList(user);
         }
 
         [HttpPost, Route("Create")]
         public async Task<int> Create(CreateTicketDto ticketDto)
         {
-            return await _svc.Create(ticketDto);
+            var user = (User)HttpContext.Items["User"];
+
+            return await _svc.Create(ticketDto, user);
         }
     }
 }

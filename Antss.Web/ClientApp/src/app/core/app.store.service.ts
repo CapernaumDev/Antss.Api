@@ -10,7 +10,7 @@ import { OptionItem } from './models/option-item';
 export class AppStoreService {
   private offices = new BehaviorSubject<OptionItem[]>([]);
   private userTypes = new BehaviorSubject<OptionItem[]>([]);
-  
+  private assignableUsers = new BehaviorSubject<OptionItem[]>([]);
   private currentUser = new BehaviorSubject<CurrentUser>(new CurrentUser);
   private redirectAfterLogin = new BehaviorSubject<string>('');
   private isSigningIn = new BehaviorSubject<boolean>(false);
@@ -18,6 +18,7 @@ export class AppStoreService {
   // We do not expose Subjects, because it's an anti-pattern, we only expose Observables
   public offices$: Observable<OptionItem[]> = this.offices;
   public userTypes$: Observable<OptionItem[]> = this.userTypes;
+  public assignableUsers$: Observable<OptionItem[]> = this.assignableUsers;
   public currentUser$: Observable<CurrentUser> = this.currentUser;
   public redirectAfterLogin$: Observable<string> = this.redirectAfterLogin;
   public isSigningIn$: Observable<boolean> = this.isSigningIn;
@@ -29,6 +30,10 @@ export class AppStoreService {
 
   setUserTypes(value: OptionItem[]): void {
     this.userTypes.next(value);
+  }
+
+  setAssignableUsers(value: OptionItem[]): void {
+    this.assignableUsers.next(value);
   }
 
   setCurrentUser(value: CurrentUser): void {

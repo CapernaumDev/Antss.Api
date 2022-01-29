@@ -3,12 +3,6 @@
   <div class="alert alert-info"><b>Create Ticket</b></div>
   <pre></pre>
   <form class="row g-3" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <!--<div class="col-md-6">
-    <label for="inputDescription" class="form-label">Description</label>
-    <input type="text" formControlName="description" class="form-control"
-           [ngClass]="{ 'is-invalid': submitted && f.description.errors }" id="inputDescription" />
-    
-  </div>-->
     <div class="col-md-6 ">
 
     </div>
@@ -17,8 +11,6 @@
       <label for="inputDescription" class="form-label">Description</label>
       <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
       <ngx-editor [editor]="editor"
-                  [ngModel]="html"
-                  [disabled]="false"
                   [placeholder]="'Describe the issue here...'"
                   formControlName="description"
                   class="form-control"
@@ -32,31 +24,17 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <label for="inputRaisedBy" class="form-label">Raised By</label>
-      <input type="text" [readonly]="true" formControlName="raisedBy" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.raisedBy.errors }" id="inputRaisedBy" />
-      <div *ngIf="submitted && f.raisedBy.errors" class="text-danger">
-        <div *ngIf="f.raisedBy.errors.required">
-          <small>Raised by is required</small>
-        </div>
+    <ng-container *ngIf="appStoreService.currentUser$ | async as user">
+      <div class="col-md-6" *ngIf="user.isSupport">
+        <label for="inputAssignedTo" class="form-label">Assign To</label>
+        <select [ngClass]="{ 'is-invalid': submitted && f.assignedToId.errors }"
+                formControlName="assignedToId" class="form-select" id="inputAssignedTo">
+          <option *ngFor="let x of appStoreService.assignableUsers$ | async" value="{{ x.value }}">
+            {{ x.label }}
+          </option>
+        </select>
       </div>
-    </div>
-
-    <div class="col-md-6">
-      <label for="inputAssignedTo" class="form-label">Assigned To</label>
-      <input type="text" [readonly]="true" formControlName="assignedTo" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.assignedTo.errors }" id="inputAssignedTo" />
-      <div *ngIf="submitted && f.assignedTo.errors" class="text-danger">
-        <div *ngIf="f.assignedTo.errors.required">
-          <small>Assigned to is required</small>
-        </div>
-      </div>
-    </div>
-
-    <!--
-    TODO: if the user is an admin, allow them to override createdBy and choose assignedTo
-  -->
+    </ng-container>
 
     <div class="col-12">
       <button type="submit" class="btn btn-primary">Submit Ticket</button>
