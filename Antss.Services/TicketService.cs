@@ -1,4 +1,5 @@
 ﻿using Antss.Data;
+using Antss.Model;
 using Antss.Model.Entities;
 using Antss.Model.Enums;
 using Antss.Services.Contracts.TicketContracts;
@@ -17,11 +18,12 @@ namespace Antss.Services
             _enumTransformer = enumTransformer;
         }
 
-        public async Task<List<TicketListItem>> GetList()
+        public async Task<List<TicketListItem>> GetList(User user)
         {
-            return await _db.Tickets.AsNoTracking()
+            var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
                 .Include(x => x.AssignedTo)
+                .Where(x => user.UserType != UserTypes.User || x.RaisedById == user.Id)
                 .Select(x => new TicketListItem
                 {
                     Id = x.Id,
@@ -29,7 +31,9 @@ namespace Antss.Services
                     Description = x.Description,
                     RaisedBy = x.RaisedBy.DisplayName,
                     TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus)
-                }).ToListAsync();
+                });
+
+            return await query.ToListAsync();
         }
 
         public async Task<int> Create(CreateTicketDto ticketDto)
@@ -38,7 +42,7 @@ namespace Antss.Services
             {
                 RaisedById = ticketDto.RaisedById,
                 AssignedToId = ticketDto.AssignedToId,
-                TicketStatus = Model.TicketStatuses.Raised,
+                TicketStatus = TicketStatuses.Raised,
                 Description = ticketDto.Description
             };
 

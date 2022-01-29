@@ -1,4 +1,6 @@
-﻿using Antss.Services;
+﻿using Antss.Model;
+using Antss.Model.Entities;
+using Antss.Services;
 using Antss.Services.Contracts.TicketContracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,9 @@ namespace Antss.Web.Controllers
         [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<TicketListItem>>> Get()
         {
-            return await _svc.GetList();
+            var user = (User)HttpContext.Items["User"]; // crash here by design
+
+            return await _svc.GetList(user);
         }
 
         [HttpPost, Route("Create")]
