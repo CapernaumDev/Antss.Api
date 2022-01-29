@@ -7,6 +7,7 @@ import { User } from '@app/core/models/user/user';
 import { AppStoreService } from "@core/app.store.service";
 import { first } from 'rxjs/operators';
 import { ApiService } from '@core/api.service';
+import { Editor } from 'ngx-editor';
 
 @Component({
   selector: 'create-ticket',
@@ -24,6 +25,9 @@ export class CreateTicketComponent implements OnInit {
 
   submitted = false;
   registerForm!: FormGroup;
+  editor!: Editor;
+  html!: '';
+
 
   constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService,
     private apiService: ApiService, private router: Router) { }
@@ -67,6 +71,8 @@ export class CreateTicketComponent implements OnInit {
 
     this.subscriptions.push(currentUserSubscription);
 
+    this.editor = new Editor();
+
     //
     // TODO: populate Users array with all existing users so that admins may override assignedTo and raisedBy values
     //
@@ -85,6 +91,8 @@ export class CreateTicketComponent implements OnInit {
          x.unsubscribe();
        }
      });
+
+     this.editor.destroy();
    }
 }
 

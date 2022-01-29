@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { NgxEditorModule } from 'ngx-editor';
 import { CoreModule } from '@app/core/core.module';
 import { AuthGuard } from '@app/core/authentication.guard';
 import { UserComponent } from './admin/user.component';
@@ -18,13 +18,14 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
     UserListComponent,
     TicketListComponent,
     CreateTicketComponent,
-    MyProfileComponent,
+    MyProfileComponent
   ],
   imports: [
     CommonModule,
     CoreModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxEditorModule,
     RouterModule.forRoot([
       { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
