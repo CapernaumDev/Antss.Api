@@ -29,7 +29,7 @@
         <label for="inputAssignedTo" class="form-label">Assign To</label>
         <select [ngClass]="{ 'is-invalid': submitted && f.assignedToId.errors }"
                 formControlName="assignedToId" class="form-select" id="inputAssignedTo">
-          <option *ngFor="let x of appStoreService.assignableUsers$ | async" value="{{ x.value }}">
+          <option *ngFor="let x of allUsers" value="{{ x.value }}">
             {{ x.label }}
           </option>
         </select>
@@ -41,4 +41,14 @@
       <button type="button" class="btn btn-outline-dark mx-1" (click)="cancelAndReturn()">Cancel</button>
     </div>
   </form>
+  <div class="col-md-6">
+    <label for="typeahead-prevent-manual-entry">Assign To</label>
+    <input id="typeahead-prevent-manual-entry" type="text" class="form-control"
+           [(ngModel)]="selectedUser"
+           [ngbTypeahead]="search"
+           [inputFormatter]="formatter"
+           [resultFormatter]="formatter"
+           [editable]="false"
+           placeholder="Type to search.." />
+  </div>
 </div>

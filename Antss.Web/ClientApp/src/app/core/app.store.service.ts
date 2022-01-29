@@ -36,6 +36,12 @@ export class AppStoreService {
     this.assignableUsers.next(value);
   }
 
+  addAssignableUser(value: OptionItem): void {
+    let assignableUsers = this.assignableUsers.getValue();
+    assignableUsers.push(value);
+    this.assignableUsers.next(assignableUsers);
+  }
+
   setCurrentUser(value: CurrentUser): void {
     this.currentUser.next(value);
   }

@@ -25,7 +25,6 @@ export class PreventDoubleSubmitDirective implements OnInit, OnDestroy {
 
   emitThrottledSubmission(e: any) {
     this.throttledOnSubmit.emit(e);
-    console.log('emitting ' + e)
   }
 
   ngOnDestroy() {
@@ -34,7 +33,6 @@ export class PreventDoubleSubmitDirective implements OnInit, OnDestroy {
 
   @HostListener('submit', ['$event'])
   onSubmit(event: Event) {
-    console.log('onSubmit in directive')
     event.stopPropagation();
     event.preventDefault();
     this.submissions.next(event);
