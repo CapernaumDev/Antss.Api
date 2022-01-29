@@ -1,6 +1,6 @@
 <div>
   <div class="alert alert-info"><b>Login</b></div>
-  <form [formGroup]="form" class="row g-3" (ngSubmit)="onSubmit()">
+  <form preventDoubleSubmit (throttledOnSubmit)="onSubmit()" [formGroup]="form" class="row g-3">
     <div class="col-lg-4 col-md-6 col-sm-12">
       <div class="col-12">
         <label for="inputEmailAddress" class="form-label">Email</label>

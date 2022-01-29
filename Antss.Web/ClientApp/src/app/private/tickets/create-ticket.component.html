@@ -2,7 +2,7 @@
   <pre></pre>
   <div class="alert alert-info"><b>Create Ticket</b></div>
   <pre></pre>
-  <form class="row g-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form preventDoubleSubmit (throttledOnSubmit)="onSubmit()" class="row g-3" [formGroup]="form">
     <div class="col-md-6 ">
 
     </div>

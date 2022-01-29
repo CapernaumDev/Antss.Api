@@ -27,7 +27,7 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (super.beforeSubmit()) return;
+    if (!super.beforeSubmit()) return;
 
     this.authenticationService.login(this.form.value);
   }

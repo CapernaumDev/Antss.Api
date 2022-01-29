@@ -5,11 +5,13 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { BaseFormComponent } from './base-components/base-form-component';
+import { PreventDoubleSubmitDirective } from './directives/prevent-double-submit.directive';
 
 @NgModule({
   declarations: [
     NavMenuComponent,
-    BaseFormComponent
+    BaseFormComponent,
+    PreventDoubleSubmitDirective
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { BaseFormComponent } from './base-components/base-form-component';
   ],
   exports: [
     NavMenuComponent,
-    BaseFormComponent
+    BaseFormComponent,
+    PreventDoubleSubmitDirective
   ]
 })
 

@@ -32,7 +32,6 @@ export class CreateTicketComponent extends BaseFormComponent implements OnInit {
         },
         error => {
           this.saving = false;
-          console.error(error);
           alert('There was an error creating the ticket: ' + error)
         }
       );
