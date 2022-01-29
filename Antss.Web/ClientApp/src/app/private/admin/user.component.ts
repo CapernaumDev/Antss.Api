@@ -10,6 +10,7 @@ import { FormModes } from '@app/core/enums/form-modes';
 import { User } from '@app/core/models/user/user';
 import { PostResult } from '@core/models/post-result';
 import { OptionItem } from '../../core/models/option-item';
+import { BaseFormComponent } from '../../core/base-components/base-form-component';
 
 @Component({
   selector: 'create-user',
@@ -17,14 +18,11 @@ import { OptionItem } from '../../core/models/option-item';
   templateUrl: './user.component.html'
 })
 
-export class UserComponent implements OnInit {
+export class UserComponent extends BaseFormComponent implements OnInit {
   FormModes = FormModes;
   public offices$!: Observable<OptionItem[]>;
   public userTypes$!: Observable<OptionItem[]>;
 
-  submitted = false;
-  saving = false;
-  registerForm!: FormGroup;
   formMode: FormModes = FormModes.Create;
   formModeDescription: string = 'Create';
   userId!: number;
@@ -32,26 +30,17 @@ export class UserComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService,
-    private apiService: ApiService, private router: Router, private route: ActivatedRoute) { }
-
-  get f() { return this.registerForm.controls; }
+    private apiService: ApiService, private router: Router, private route: ActivatedRoute) {
+    super();
+  }
 
   onSubmit() {
-    this.submitted = true;
-    if (this.saving) return;
-    this.saving = true;
-    // stop here if form is invalid
-    if (this.registerForm.invalid) {
-      this.saving = false;
-      return;
-    }
-
-    if (this.submitted) {
-      if (this.formMode == FormModes.Create) {
-        this.createUser(this.registerForm.value)  
-      } else {
-        this.updateUser(this.registerForm.value);
-      }
+    if (!super.beforeSubmit()) return;
+    
+    if (this.formMode == FormModes.Create) {
+      this.createUser(this.registerForm.value)  
+    } else {
+      this.updateUser(this.registerForm.value);
     }
   }
 

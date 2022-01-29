@@ -5,6 +5,7 @@ import { AppStoreService } from "@core/app.store.service";
 import { first } from 'rxjs/operators';
 import { ApiService } from '@core/api.service';
 import { Editor } from 'ngx-editor';
+import { BaseFormComponent } from '@app/core/base-components/base-form-component';
 
 @Component({
   selector: 'create-ticket',
@@ -12,31 +13,18 @@ import { Editor } from 'ngx-editor';
   templateUrl: './create-ticket.component.html'
 })
 
-export class CreateTicketComponent implements OnInit {
-  submitted = false;
-  saving = false;
-  registerForm!: FormGroup;
+export class CreateTicketComponent extends BaseFormComponent implements OnInit {
   editor!: Editor;
-  html!: '';
 
   constructor(private formBuilder: FormBuilder, public appStoreService: AppStoreService,
-    private apiService: ApiService, private router: Router) { }
-
-  get f() { return this.registerForm.controls; }
+    private apiService: ApiService, private router: Router) {
+    super();
+  }
 
   onSubmit() {
-    this.submitted = true;
-    if (this.saving) return;
-    this.saving = true;
+    if (!super.beforeSubmit()) return;
 
-    // stop here if form is invalid
-    if (this.registerForm.invalid) {
-      this.saving = false;
-      return;
-    }
-
-    if (this.submitted) {
-      this.apiService.createTicket(this.registerForm.value)
+    this.apiService.createTicket(this.registerForm.value)
       .pipe(first()).subscribe(
         result => {
           this.router.navigate(['/ticket-list']);
@@ -47,8 +35,7 @@ export class CreateTicketComponent implements OnInit {
           console.error(error);
           alert('There was an error creating the ticket: ' + error)
         }
-      )
-    }
+      );
   }
 
   cancelAndReturn() {
@@ -66,8 +53,8 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
-   ngOnDestroy() {
-      this.editor.destroy();
-   }
+  ngOnDestroy() {
+    this.editor.destroy();
+  }
 }
 
