@@ -5,7 +5,7 @@ import { AppStoreService } from "@core/app.store.service";
 import { first } from 'rxjs/operators';
 import { ApiService } from '@core/api.service';
 import { Editor } from 'ngx-editor';
-import { BaseFormComponent } from '@app/core/base-components/base-form-component';
+import { BaseFormComponent } from '@app/core/components/base-form-component';
 
 @Component({
   selector: 'create-ticket',

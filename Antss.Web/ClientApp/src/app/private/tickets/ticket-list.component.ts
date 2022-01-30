@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
 import { TicketListItem } from '@core/models/ticket/ticket-list-item';
+import { SortableDirective } from '@app/core/directives/sortable.directive';
+import { TicketListDataSource } from '@app/core/data-sources/ticket-list-data-source';
 
 @Component({
   selector: 'ticket-list',
@@ -11,15 +12,23 @@ import { TicketListItem } from '@core/models/ticket/ticket-list-item';
 })
 
 export class TicketListComponent implements OnInit {
+  ticketsDataSource = new TicketListDataSource([]);
+  tickets$: Observable<TicketListItem[]> = this.ticketsDataSource.data$;
 
-  TicketList!: Observable<TicketListItem[]>;
-  constructor(private httpClient: HttpClient, private apiService: ApiService) { }
+  @ViewChild(SortableDirective) sorter!: SortableDirective;
+
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.getTicketList();
+    const tickets$ = this.apiService.getTicketList();
+    this.ticketsDataSource.updateData(tickets$);
   }
 
-  getTicketList() {
-    this.TicketList = this.apiService.getTicketList();
+  ngAfterViewInit() {
+    this.ticketsDataSource.sorter = this.sorter;
+  }
+
+  ngOnDestroy() {
+    this.ticketsDataSource.destroy();
   }
 }

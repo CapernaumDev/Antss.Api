@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { BaseFormComponent } from '@app/core/base-components/base-form-component';
+import { BaseFormComponent } from '@app/core/components/base-form-component';
 
 import { AuthenticationService } from '@core/authentication.service';
 

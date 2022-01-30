@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
 import { UserListItem } from '@app/core/models/user/user-list-item';
+import { UserListDataSource } from '@app/core/data-sources/user-list-data-source';
+import { SortableDirective } from '@app/core/directives/sortable.directive';
 
 @Component({
   selector: 'user-list',
@@ -10,15 +12,23 @@ import { UserListItem } from '@app/core/models/user/user-list-item';
 })
 
 export class UserListComponent implements OnInit {
+  usersDataSource = new UserListDataSource([]);
+  users$: Observable<UserListItem[]> = this.usersDataSource.data$;
 
-  UserList!: Observable<UserListItem[]>;
+  @ViewChild(SortableDirective) sorter!: SortableDirective;
+
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.getUserList();
+    const users$ = this.apiService.getUserList();
+    this.usersDataSource.updateData(users$);
   }
 
-  getUserList() {
-    this.UserList = this.apiService.getUserList();
+  ngAfterViewInit() {
+    this.usersDataSource.sorter = this.sorter;
+  }
+
+  ngOnDestroy() {
+    this.usersDataSource.destroy();
   }
 }

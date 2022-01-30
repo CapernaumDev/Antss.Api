@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxEditorModule } from 'ngx-editor';
 
-
 import { CoreModule } from '@app/core/core.module';
 import { AuthGuard } from '@app/core/authentication.guard';
 import { UserComponent } from './admin/user.component';
