@@ -9,8 +9,8 @@ import { ApiService } from '@core/api.service';
 import { FormModes } from '@app/core/enums/form-modes';
 import { User } from '@app/core/models/user/user';
 import { PostResult } from '@core/models/post-result';
-import { OptionItem } from '../../core/models/option-item';
-import { BaseFormComponent } from '../../core/base-components/base-form-component';
+import { OptionItem } from '@core/models/option-item';
+import { BaseFormComponent } from '@core/base-components/base-form-component';
 
 @Component({
   selector: 'create-user',

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, OperatorFunction } from 'rxjs';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged, filter, map, merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { OptionItem } from '../models/option-item';
 
 @Component({
@@ -16,11 +17,14 @@ import { OptionItem } from '../models/option-item';
   ]
 })
 
-// Makes ngbTypeahead available as a formcontrol with OptionItem as available options
+// Makes ngbTypeahead available as a formcontrol with OptionItem[] as available options
 // TODO: full implementation of formcontrol validation etc
 export class AutocompleteFormControl implements ControlValueAccessor, OnInit {
 
-  @ViewChild('inputElement') input!: HTMLElement;
+  @ViewChild('inputElement') inputElement!: HTMLElement;
+  @ViewChild('instance', {static: true}) instance!: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
 
   @Input() optionItems!: Observable<OptionItem[]>;
   @Input() elementId!: string;
@@ -35,12 +39,17 @@ export class AutocompleteFormControl implements ControlValueAccessor, OnInit {
 
   formatter = (optionItem: OptionItem) => optionItem.label;
 
-  search: OperatorFunction<string, readonly { value: number, label: string }[]> = (text$: Observable<string>) => text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    filter(term => term.length >= 2),
-    map(term => this.allItems.filter((optionItem: { label: string; }) => new RegExp(term, 'mi').test(optionItem.label)).slice(0, 10))
-  )
+  search: OperatorFunction<string, readonly OptionItem[]> = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? this.allItems
+        : this.allItems.filter(x => x.label.toLowerCase().indexOf(term.toLowerCase()) > -1))
+        .slice(0, 10))
+    );
+  }
 
   ngOnInit(): void {
     this.optionItems.subscribe(x => this.allItems = x);

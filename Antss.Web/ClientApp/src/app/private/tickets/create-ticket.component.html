@@ -25,7 +25,7 @@
       <div class="col-md-6" *ngIf="user.isSupport">
         <label for="inputAssignedTo">Assign To</label>
         <autocomplete-form-control [optionItems]="appStoreService.assignableUsers$"
-                                   formControlName="assignedToId" elementId="inputAssignedTo"></autocomplete-form-control>
+          formControlName="assignedToId" elementId="inputAssignedTo"></autocomplete-form-control>
       </div>
     </ng-container>
 
