@@ -21,13 +21,13 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <label for="inputAssignedTo">Assign To</label>
-      <autocomplete-form-control [optionItems]="appStoreService.assignableUsers$"
-                                 formControlName="assignedToId" elementId="inputAssignedTo">
-
-      </autocomplete-form-control>
-    </div>
+    <ng-container *ngIf="appStoreService.currentUser$ | async as user">
+      <div class="col-md-6" *ngIf="user.isSupport">
+        <label for="inputAssignedTo">Assign To</label>
+        <autocomplete-form-control [optionItems]="appStoreService.assignableUsers$"
+                                   formControlName="assignedToId" elementId="inputAssignedTo"></autocomplete-form-control>
+      </div>
+    </ng-container>
 
     <div class="col-12">
       <button type="submit" [disabled]="saving" class="btn btn-primary">Submit Ticket</button>
