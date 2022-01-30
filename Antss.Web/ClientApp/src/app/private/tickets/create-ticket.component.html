@@ -3,9 +3,6 @@
   <div class="alert alert-info"><b>Create Ticket</b></div>
   <pre></pre>
   <form preventDoubleSubmit (throttledOnSubmit)="onSubmit()" class="row g-3" [formGroup]="form">
-    <div class="col-md-6 ">
-
-    </div>
 
     <div class="NgxEditor__Wrapper">
       <label for="inputDescription" class="form-label">Description</label>
@@ -24,31 +21,18 @@
       </div>
     </div>
 
-    <ng-container *ngIf="appStoreService.currentUser$ | async as user">
-      <div class="col-md-6" *ngIf="user.isSupport">
-        <label for="inputAssignedTo" class="form-label">Assign To</label>
-        <select [ngClass]="{ 'is-invalid': submitted && f.assignedToId.errors }"
-                formControlName="assignedToId" class="form-select" id="inputAssignedTo">
-          <option *ngFor="let x of allUsers" value="{{ x.value }}">
-            {{ x.label }}
-          </option>
-        </select>
-      </div>
-    </ng-container>
+    <div class="col-md-6">
+      <label for="inputAssignedTo">Assign To</label>
+      <autocomplete-form-control [optionItems]="appStoreService.assignableUsers$"
+                                 formControlName="assignedToId" elementId="inputAssignedTo">
+
+      </autocomplete-form-control>
+    </div>
 
     <div class="col-12">
       <button type="submit" [disabled]="saving" class="btn btn-primary">Submit Ticket</button>
       <button type="button" class="btn btn-outline-dark mx-1" (click)="cancelAndReturn()">Cancel</button>
     </div>
   </form>
-  <div class="col-md-6">
-    <label for="typeahead-prevent-manual-entry">Assign To</label>
-    <input id="typeahead-prevent-manual-entry" type="text" class="form-control"
-           [(ngModel)]="selectedUser"
-           [ngbTypeahead]="search"
-           [inputFormatter]="formatter"
-           [resultFormatter]="formatter"
-           [editable]="false"
-           placeholder="Type to search.." />
-  </div>
+
 </div>
