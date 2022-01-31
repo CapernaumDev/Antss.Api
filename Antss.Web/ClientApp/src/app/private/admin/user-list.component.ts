@@ -5,6 +5,7 @@ import { UserListItem } from '@app/core/models/user/user-list-item';
 import { UserListDataSource } from './user-list-data-source';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
+import { FilterInputComponent } from '@app/core/components/filter-input.component';
 
 @Component({
   selector: 'user-list',
@@ -18,6 +19,7 @@ export class UserListComponent implements OnInit {
 
   @ViewChild(SortableDirective) sorter!: SortableDirective;
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
+  @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
   constructor(private apiService: ApiService) { }
 

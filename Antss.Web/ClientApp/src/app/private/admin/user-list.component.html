@@ -2,7 +2,7 @@
   <a href="#" class="link-primary" [routerLink]="['/user']">Create User</a>
   <pre></pre>
   <div class="alert alert-info"><b>User List</b></div>
-  Search Users: <span filterInput filterSource></span>
+  Search Users: <span filterInput filterSource #filterElement></span>
   <div class="table-responsive">
     <table sortable class="table table-striped">
       <thead>
@@ -16,10 +16,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let x of users$ | async">
-          <td>{{x.firstName}}</td>
-          <td>{{x.lastName}}</td>
-          <td>{{x.userType}}</td>
-          <td>{{x.officeName}}</td>
+          <td><ngb-highlight [result]="x.firstName" [term]="filterElement.currentValue">{{x.firstName}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.lastName" [term]="filterElement.currentValue">{{x.lastName}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.userType" [term]="filterElement.currentValue">{{x.userType}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.officeName" [term]="filterElement.currentValue">{{x.officeName}}</ngb-highlight></td>
           <td><a [routerLink]="['/user', x.id]">Edit</a></td>
         </tr>
       </tbody>

@@ -5,6 +5,7 @@ import { TicketListItem } from '@core/models/ticket/ticket-list-item';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
 import { TicketListDataSource } from './ticket-list-data-source';
 import { FilterSourceDirective } from '../../core/directives/filter-source.directive';
+import { FilterInputComponent } from '@app/core/components/filter-input.component';
 
 @Component({
   selector: 'ticket-list',
@@ -18,6 +19,7 @@ export class TicketListComponent implements OnInit {
 
   @ViewChild(SortableDirective) sorter!: SortableDirective;
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
+  @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
   constructor(private apiService: ApiService) { }
 

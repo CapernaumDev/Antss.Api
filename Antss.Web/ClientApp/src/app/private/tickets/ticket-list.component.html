@@ -2,7 +2,7 @@
   <a href="#" class="link-primary" [routerLink]="['/create-ticket']">Create Ticket</a>
   <pre></pre>
   <div class="alert alert-info"><b>Ticket List</b></div>
-  Search Tickets: <span filterInput filterSource></span>
+  Search Tickets: <span filterInput filterSource #filterElement></span>
   <div class="table-responsive">
     <table sortable class="table table-striped">
       <thead>
@@ -16,11 +16,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let x of tickets$ | async">
-          <td>{{x.id}}</td>
-          <td>{{x.raisedBy}}</td>
-          <td>{{x.assignedTo}}</td>
-          <td>{{x.ticketStatus}}</td>
-          <td>{{x.description}}</td>
+          <td><ngb-highlight [result]="x.id.toString()" [term]="filterElement.currentValue">{{x.id}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.raisedBy" [term]="filterElement.currentValue">{{x.raisedBy}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.assignedTo" [term]="filterElement.currentValue">{{x.assignedTo}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.ticketStatus" [term]="filterElement.currentValue">{{x.ticketStatus}}</ngb-highlight></td>
+          <td><ngb-highlight [result]="x.description" [term]="filterElement.currentValue">{{x.description}}</ngb-highlight></td>
         </tr>
       </tbody>
     </table>

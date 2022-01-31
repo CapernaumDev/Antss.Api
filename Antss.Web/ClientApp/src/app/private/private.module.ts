@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxEditorModule } from 'ngx-editor';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CoreModule } from '@app/core/core.module';
 import { AuthGuard } from '@app/core/authentication.guard';
@@ -27,6 +28,7 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
     FormsModule,
     ReactiveFormsModule,
     NgxEditorModule,
+    NgbTypeaheadModule,
     RouterModule.forRoot([
       { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },

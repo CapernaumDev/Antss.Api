@@ -11,11 +11,12 @@ import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 })
 
 export class FilterInputComponent implements OnInit {
+  public currentValue: string = '';
   private filterTerm$ = new Subject<string>();
 
   filterUpdated(event: Event) {
-    let value = (event?.currentTarget as HTMLInputElement)?.value;
-    this.filterTerm$.next(value);
+    this.currentValue = (event?.currentTarget as HTMLInputElement)?.value || '';
+    this.filterTerm$.next(this.currentValue);
   }
 
   constructor(public filter: FilterSourceDirective) { }
