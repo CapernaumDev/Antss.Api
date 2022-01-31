@@ -1,6 +1,6 @@
-﻿using Antss.Model;
-using Antss.Model.Entities;
+﻿using Antss.Model.Entities;
 using Antss.Services;
+using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
 using Antss.Web.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +22,18 @@ namespace Antss.Web.Controllers
         [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<TicketListItem>>> Get()
         {
+            //TODO: stop repeating this in each action
             var user = (User)HttpContext.Items["User"];
             
             return await _svc.GetList(user);
+        }
+
+        [HttpGet, Route("Board")]
+        public async Task<ActionResult<IEnumerable<BoardColumn<TicketListItem>>>> Board()
+        {
+            var user = (User)HttpContext.Items["User"];
+
+            return await _svc.GetBoard(user);
         }
 
         [HttpPost, Route("Create")]

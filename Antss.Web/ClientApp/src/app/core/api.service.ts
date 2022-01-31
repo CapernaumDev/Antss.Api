@@ -8,6 +8,7 @@ import { AppData } from './models/app-data';
 import { environment } from '@environments/environment';
 import { PostResult } from './models/post-result';
 import { UserListItem } from './models/user/user-list-item';
+import { BoardColumn } from './models/board-column';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,10 @@ export class ApiService {
 
   getTicketList(): Observable<TicketListItem[]> {
     return this.http.get<TicketListItem[]>(`${environment.apiUrl}/Ticket/List`);
+  }
+
+  getTicketBoard(): Observable<BoardColumn<TicketListItem>[]> {
+    return this.http.get<BoardColumn<TicketListItem>[]>(`${environment.apiUrl}/Ticket/Board`);
   }
 
   loadUser(userId: number): Observable<User> {

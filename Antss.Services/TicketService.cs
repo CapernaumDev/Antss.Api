@@ -2,6 +2,7 @@
 using Antss.Model;
 using Antss.Model.Entities;
 using Antss.Model.Enums;
+using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,8 +34,31 @@ namespace Antss.Services
                 AssignedTo = x.AssignedTo.DisplayName,
                 Description = x.Description,
                 RaisedBy = x.RaisedBy.DisplayName,
-                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus)
+                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus),
+                TicketStatusId = (int)x.TicketStatus
             }).ToListAsync();
+        }
+
+        public async Task<List<BoardColumn<TicketListItem>>> GetBoard(User user)
+        {
+            return await _db.Tickets.AsNoTracking()
+                .Include(x => x.RaisedBy)
+                .Include(x => x.AssignedTo)
+                .GroupBy(x => x.TicketStatus)
+                .Select(x => new BoardColumn<TicketListItem>
+                {
+                    Title = _enumTransformer.GetEnumMemberAttributeValue(x.Key),
+                    Id = (int)x.Key,
+                    Data = x.Select(y => new TicketListItem
+                    {
+                        Id = y.Id,
+                        AssignedTo = y.AssignedTo.DisplayName,
+                        Description = y.Description,
+                        RaisedBy = y.RaisedBy.DisplayName,
+                        TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(y.TicketStatus),
+                        TicketStatusId = (int)y.TicketStatus
+                    })
+                }).ToListAsync();
         }
 
         public async Task<int> Create(CreateTicketDto ticketDto, User raisedBy)

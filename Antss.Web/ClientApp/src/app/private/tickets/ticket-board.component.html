@@ -1,0 +1,26 @@
+<div class="root">
+  <div class="board">
+    <div class="board-wrapper">
+      <div class="board-columns">
+
+        <div cdkDropList cdkDropListOrientation="horizontal" class="board-columns">
+          <!-- above: (cdkDropListDropped)="dropGrid($event)" -->
+          <div cdkDragLockAxis="x" class="board-column" *ngFor="let column of board$ | async" cdkDrag>
+            <div class="column-title" cdkDragHandle>
+              {{ column.title }}
+            </div>
+            <div class="tasks-container" id="{{column.id}}" [cdkDropListConnectedTo]="['21', '32']" cdkDropList
+              [cdkDropListData]="column.data" (cdkDropListDropped)="drop($event)">
+              <div class="task" *ngFor="let ticket of column.data as TicketListItem" cdkDrag>
+                {{ ticket.description }}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
