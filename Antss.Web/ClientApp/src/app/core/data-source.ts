@@ -13,6 +13,9 @@ export abstract class DataSource<T> {
   private dataSubject = new Subject<T[]>();
   data$ = this.dataSubject.asObservable();
 
+  private recordCount = new Subject<number>();
+  recordCount$ = this.recordCount.asObservable();
+
   private lastSortEvent?: SortChangeEvent;
   private lastFilterEvent?: SetFilterEvent;
 
@@ -37,15 +40,13 @@ export abstract class DataSource<T> {
       const sub = data
         .pipe(
           tap((res) => {
-            this.dataSubject.next(res);
-            this.inititalDataSubject.next(res);
+            this.setData(res);
           })
         )
         .subscribe();
       this.subscriptions.push(sub);
     } else {
-      this.dataSubject.next(data);
-      this.inititalDataSubject.next(data);
+      this.setData(data);
     }
   }
 
@@ -93,6 +94,7 @@ export abstract class DataSource<T> {
         }
 
         this.dataSubject.next(data);
+        this.recordCount.next(data.length);
       });
 
     this.subscriptions.push(sub);
@@ -112,8 +114,15 @@ export abstract class DataSource<T> {
         }
 
         this.dataSubject.next(data);
+        this.recordCount.next(data.length);
       });
 
     this.subscriptions.push(sub);
+  }
+
+  private setData(data: T[]) {
+    this.dataSubject.next(data);
+    this.inititalDataSubject.next(data);
+    this.recordCount.next(data.length);
   }
 }

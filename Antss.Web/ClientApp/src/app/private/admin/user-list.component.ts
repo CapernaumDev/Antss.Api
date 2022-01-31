@@ -16,6 +16,7 @@ import { FilterInputComponent } from '@app/core/components/filter-input.componen
 export class UserListComponent implements OnInit {
   usersDataSource = new UserListDataSource([]);
   users$: Observable<UserListItem[]> = this.usersDataSource.data$;
+  recordCount$: Observable<number> = this.usersDataSource.recordCount$;
 
   @ViewChild(SortableDirective) sorter!: SortableDirective;
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;

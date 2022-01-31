@@ -2,7 +2,14 @@
   <a href="#" class="link-primary" [routerLink]="['/user']">Create User</a>
   <pre></pre>
   <div class="alert alert-info"><b>User List</b></div>
-  Search Users: <span filterInput filterSource #filterElement></span>
+  <div class="row justify-content-between">
+    <div class="col-4">
+      Search Users: <span filterInput filterSource #filterElement></span>
+    </div>
+    <div class="col-4 text-end">
+      Showing {{recordCount$ | async}} Users
+    </div>
+  </div>
   <div class="table-responsive">
     <table sortable class="table table-striped">
       <thead>

@@ -16,7 +16,8 @@ import { FilterInputComponent } from '@app/core/components/filter-input.componen
 export class TicketListComponent implements OnInit {
   ticketsDataSource = new TicketListDataSource([]);
   tickets$: Observable<TicketListItem[]> = this.ticketsDataSource.data$;
-
+  recordCount$: Observable<number> = this.ticketsDataSource.recordCount$;
+  
   @ViewChild(SortableDirective) sorter!: SortableDirective;
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
