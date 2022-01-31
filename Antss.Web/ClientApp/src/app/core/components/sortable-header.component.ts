@@ -1,8 +1,9 @@
-import { Component, Input, HostListener } from "@angular/core";
+import { Component, Input, HostListener, ChangeDetectionStrategy } from "@angular/core";
 import { SortableDirective } from "@app/core/directives/sortable.directive";
 
 @Component({
   selector: "[sortHeader]",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="sort-col">
       <ng-content></ng-content>

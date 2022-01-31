@@ -1,8 +1,9 @@
-import { Component, Input, HostListener } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { FilterSourceDirective } from "@app/core/directives/filter-source.directive";
 
 @Component({
   selector: "[filterInput]",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <input (input)="filterUpdated($event)"/>
   `
