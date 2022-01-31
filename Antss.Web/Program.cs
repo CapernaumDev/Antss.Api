@@ -14,8 +14,13 @@ builder.Services.AddControllersWithViews()
         jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
     }); ;
 
-builder.Services.AddDbContext<AntssContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.IsDevelopment())
+    builder.Services.AddDbContext<AntssContext>(options =>
+         options.EnableSensitiveDataLogging().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+else
+    builder.Services.AddDbContext<AntssContext>(options =>
+         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 //TODO: Automatically register services according to some selector
 builder.Services.AddTransient<EnumTransformer, EnumTransformer>();

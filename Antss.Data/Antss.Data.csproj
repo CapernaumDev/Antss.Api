@@ -27,4 +27,19 @@
     <ProjectReference Include="..\Antss.Model\Antss.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="SeedData\Seed.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Seed.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="SeedData\Seed.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Seed.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
