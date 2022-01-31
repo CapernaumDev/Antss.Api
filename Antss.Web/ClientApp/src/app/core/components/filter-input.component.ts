@@ -15,8 +15,7 @@ export class FilterInputComponent implements OnInit {
   private filterTerm$ = new Subject<string>();
 
   filterUpdated(event: Event) {
-    this.currentValue = (event?.currentTarget as HTMLInputElement)?.value || '';
-    this.filterTerm$.next(this.currentValue);
+    this.filterTerm$.next((event?.currentTarget as HTMLInputElement)?.value || '');
   }
 
   constructor(public filter: FilterSourceDirective) { }
@@ -27,6 +26,7 @@ export class FilterInputComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe((filterValue: string) => {
       this.filter.filter(filterValue);
+      this.currentValue = filterValue;
     });
   }
 }
