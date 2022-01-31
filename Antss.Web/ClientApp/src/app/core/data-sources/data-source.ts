@@ -1,4 +1,4 @@
-﻿import { catchError, isObservable, map, Observable, of, Subject, Subscription, tap, withLatestFrom } from "rxjs";
+import { catchError, isObservable, map, Observable, of, Subject, Subscription, tap, withLatestFrom } from "rxjs";
 import { FilterSourceDirective } from "../directives/filter-source.directive";
 import { SortableDirective } from "../directives/sortable.directive";
 import { SetFilterEvent } from "../interfaces/set-filter-event";
@@ -66,8 +66,8 @@ export abstract class DataSource<T> {
         return order * (a[column] - b[column]);
       } else {
         return order * a[column].localeCompare(b[column], undefined, { sensitivity: 'base' });
-      }     
-      
+      }
+
     });
 
     return sorted;
@@ -96,5 +96,7 @@ export abstract class DataSource<T> {
         catchError(() => of([]))
       )
       .subscribe((data) => this.dataSubject.next(data));
+
+    this.subscriptions.push(sub);
   }
 }
