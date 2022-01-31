@@ -13,6 +13,8 @@ import { UserListComponent } from './admin/user-list.component';
 import { TicketListComponent } from './tickets/ticket-list.component';
 import { MyProfileComponent } from '@app/private/my-profile/my-profile.component';
 import { CreateTicketComponent } from './tickets/create-ticket.component';
+import { TicketBoardComponent } from './tickets/ticket-board/ticket-board.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
     UserListComponent,
     TicketListComponent,
     CreateTicketComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    TicketBoardComponent
   ],
   imports: [
     CommonModule,
@@ -29,11 +32,13 @@ import { CreateTicketComponent } from './tickets/create-ticket.component';
     ReactiveFormsModule,
     NgxEditorModule,
     NgbTypeaheadModule,
+    DragDropModule,
     RouterModule.forRoot([
       { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
       { path: 'user/:id', component: UserComponent, canActivate: [AuthGuard], data: { role: ['Admin'] }  },
-      { path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard], },
+      { path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuard] },
+      { path: 'ticket-board', component: TicketBoardComponent, canActivate: [AuthGuard] },
       { path: 'create-ticket', component: CreateTicketComponent, canActivate: [AuthGuard], },
       { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] }
     ])
