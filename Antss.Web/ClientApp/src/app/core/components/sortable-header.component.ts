@@ -3,7 +3,6 @@ import { SortableDirective } from "@app/core/directives/sortable.directive";
 
 @Component({
   selector: "[sortHeader]",
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="sort-col">
       <ng-content></ng-content>

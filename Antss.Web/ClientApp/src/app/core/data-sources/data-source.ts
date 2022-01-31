@@ -13,6 +13,9 @@ export abstract class DataSource<T> {
   private dataSubject = new Subject<T[]>();
   data$ = this.dataSubject.asObservable();
 
+  private lastSortEvent?: SortChangeEvent;
+  private lastFilterEvent?: SetFilterEvent;
+
   constructor(data: T[] = []) {
     this.updateData(data);
   }
@@ -80,10 +83,17 @@ export abstract class DataSource<T> {
     const sub = sorter.sortChange
       .pipe(
         withLatestFrom(this.initialData$),
+        tap(([sortEvent]) => this.lastSortEvent = sortEvent),
         map(([sortEvent, data]) => this.sortLogic(sortEvent, data)),
         catchError(() => of([]))
       )
-      .subscribe((data) => this.dataSubject.next(data));
+      .subscribe((data) => { 
+        if (this.lastFilterEvent && this.lastFilterEvent.filterTerm) {
+          data = this.filterLogic(this.lastFilterEvent, data);
+        }
+
+        this.dataSubject.next(data);
+      });
 
     this.subscriptions.push(sub);
   }
@@ -92,10 +102,17 @@ export abstract class DataSource<T> {
     const sub = filterSource.filterChange
       .pipe(
         withLatestFrom(this.initialData$),
+        tap(([setFilterEvent]) => this.lastFilterEvent = setFilterEvent),
         map(([setFilterEvent, data]) => this.filterLogic(setFilterEvent, data)),
         catchError(() => of([]))
       )
-      .subscribe((data) => this.dataSubject.next(data));
+      .subscribe((data) => { 
+        if (this.lastSortEvent) {
+          data = this.sortLogic(this.lastSortEvent, data);
+        }
+
+        this.dataSubject.next(data);
+      });
 
     this.subscriptions.push(sub);
   }
