@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/
 import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
 import { UserListItem } from '@app/core/models/user/user-list-item';
-import { UserListDataSource } from '@app/core/data-sources/user-list-data-source';
+import { UserListDataSource } from './user-list-data-source';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 

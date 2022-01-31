@@ -1,8 +1,8 @@
 import { catchError, isObservable, map, Observable, of, Subject, Subscription, tap, withLatestFrom } from "rxjs";
-import { FilterSourceDirective } from "../directives/filter-source.directive";
-import { SortableDirective } from "../directives/sortable.directive";
-import { SetFilterEvent } from "../interfaces/set-filter-event";
-import { SortChangeEvent, SortDirection } from "../interfaces/sort-change-event";
+import { FilterSourceDirective } from "./directives/filter-source.directive";
+import { SortableDirective } from "./directives/sortable.directive";
+import { SetFilterEvent } from "./interfaces/set-filter-event";
+import { SortChangeEvent, SortDirection } from "./interfaces/sort-change-event";
 
 export abstract class DataSource<T> {
   private subscriptions: Subscription[] = [];

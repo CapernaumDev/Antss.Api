@@ -3,7 +3,7 @@ import { ApiService } from '@core/api.service';
 import { Observable } from 'rxjs';
 import { TicketListItem } from '@core/models/ticket/ticket-list-item';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
-import { TicketListDataSource } from '@app/core/data-sources/ticket-list-data-source';
+import { TicketListDataSource } from './ticket-list-data-source';
 import { FilterSourceDirective } from '../../core/directives/filter-source.directive';
 
 @Component({

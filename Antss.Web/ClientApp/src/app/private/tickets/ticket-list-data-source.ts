@@ -1,7 +1,7 @@
-import { SetFilterEvent } from "../interfaces/set-filter-event";
-import { SortChangeEvent } from "../interfaces/sort-change-event";
-import { TicketListItem } from "../models/ticket/ticket-list-item";
-import { DataSource } from "./data-source";
+import { SetFilterEvent } from "../../core/interfaces/set-filter-event";
+import { SortChangeEvent } from "../../core/interfaces/sort-change-event";
+import { TicketListItem } from "../../core/models/ticket/ticket-list-item";
+import { DataSource } from "../../core/data-source";
 
 export class TicketListDataSource extends DataSource<TicketListItem> {
     sortLogic({ column, direction }: SortChangeEvent, data: TicketListItem[]) {

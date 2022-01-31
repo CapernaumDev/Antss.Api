@@ -1,7 +1,7 @@
-﻿import { SetFilterEvent } from "../interfaces/set-filter-event";
-import { SortChangeEvent } from "../interfaces/sort-change-event";
-import { UserListItem } from "../models/user/user-list-item";
-import { DataSource } from "./data-source";
+import { SetFilterEvent } from "../../core/interfaces/set-filter-event";
+import { SortChangeEvent } from "../../core/interfaces/sort-change-event";
+import { UserListItem } from "../../core/models/user/user-list-item";
+import { DataSource } from "../../core/data-source";
 
 export class UserListDataSource extends DataSource<UserListItem> {
   sortLogic({ column, direction }: SortChangeEvent, data: UserListItem[]) {
