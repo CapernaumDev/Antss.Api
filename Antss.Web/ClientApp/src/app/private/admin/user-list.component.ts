@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { UserListItem } from '@app/core/models/user/user-list-item';
 import { UserListDataSource } from '@app/core/data-sources/user-list-data-source';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
+import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 
 @Component({
   selector: 'user-list',
@@ -16,6 +17,7 @@ export class UserListComponent implements OnInit {
   users$: Observable<UserListItem[]> = this.usersDataSource.data$;
 
   @ViewChild(SortableDirective) sorter!: SortableDirective;
+  @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
 
   constructor(private apiService: ApiService) { }
 
@@ -26,6 +28,7 @@ export class UserListComponent implements OnInit {
 
   ngAfterViewInit() {
     this.usersDataSource.sorter = this.sorter;
+    this.usersDataSource.filterSource = this.filterSource;
   }
 
   ngOnDestroy() {

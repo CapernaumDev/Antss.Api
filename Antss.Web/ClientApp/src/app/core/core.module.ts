@@ -10,7 +10,9 @@ import { PreventDoubleSubmitDirective } from './directives/prevent-double-submit
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { AutocompleteFormControl } from './form-controls/autocomplete-form-control';
 import { SortableDirective } from './directives/sortable.directive';
-import { SortableHeaderComponent } from '@app/core/components/sortable-header.component';
+import { SortableHeaderComponent } from './components/sortable-header.component';
+import { FilterInputComponent } from './components/filter-input.component';
+import { FilterSourceDirective } from './directives/filter-source.directive';
 
 
 @NgModule({
@@ -18,9 +20,11 @@ import { SortableHeaderComponent } from '@app/core/components/sortable-header.co
     NavMenuComponent,
     BaseFormComponent,
     SortableHeaderComponent,
+    FilterInputComponent,
     AutocompleteFormControl,
     PreventDoubleSubmitDirective,
-    SortableDirective
+    SortableDirective,
+    FilterSourceDirective
   ],
   imports: [
     CommonModule,
@@ -33,9 +37,11 @@ import { SortableHeaderComponent } from '@app/core/components/sortable-header.co
     NavMenuComponent,
     BaseFormComponent,
     SortableHeaderComponent,
+    FilterInputComponent,
     AutocompleteFormControl,
     PreventDoubleSubmitDirective,
-    SortableDirective
+    SortableDirective,
+    FilterSourceDirective
   ]
 })
 

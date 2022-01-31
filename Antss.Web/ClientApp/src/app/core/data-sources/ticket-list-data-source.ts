@@ -1,9 +1,10 @@
-﻿import { SortChangeEvent } from "../interfaces/sort-change-event";
+import { SetFilterEvent } from "../interfaces/set-filter-event";
+import { SortChangeEvent } from "../interfaces/sort-change-event";
 import { TicketListItem } from "../models/ticket/ticket-list-item";
 import { DataSource } from "./data-source";
 
 export class TicketListDataSource extends DataSource<TicketListItem> {
-    sortLogic({ column, direction }: SortChangeEvent, data: any[]) {
+    sortLogic({ column, direction }: SortChangeEvent, data: TicketListItem[]) {
         let sorted = data;
         if (direction === null) {
           return sorted;
@@ -12,6 +13,22 @@ export class TicketListDataSource extends DataSource<TicketListItem> {
           // can provide custom sorting logic by column or fall through to default implementation
           default:
             return super.sort(data, column, direction);
+        }
+      }
+      filterLogic({ filterTerm }: SetFilterEvent, data: TicketListItem[]) {
+        let filterTermAsNumber = parseInt(filterTerm);
+
+        if (isNaN(filterTermAsNumber)) {
+          const term = filterTerm.toLowerCase();
+
+          return data.filter(x => {
+            return x.assignedTo?.toLowerCase().includes(term)
+              || x.raisedBy.toLowerCase().includes(term)
+              || x.ticketStatus.toLowerCase().includes(term)
+              || x.description.toLowerCase().includes(term)
+          });
+        } else {
+          return data.filter(x => x.id === filterTermAsNumber);
         }
       }
 }

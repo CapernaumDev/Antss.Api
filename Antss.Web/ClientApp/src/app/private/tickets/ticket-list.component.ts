@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { TicketListItem } from '@core/models/ticket/ticket-list-item';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
 import { TicketListDataSource } from '@app/core/data-sources/ticket-list-data-source';
+import { FilterSourceDirective } from '../../core/directives/filter-source.directive';
 
 @Component({
   selector: 'ticket-list',
@@ -16,6 +17,7 @@ export class TicketListComponent implements OnInit {
   tickets$: Observable<TicketListItem[]> = this.ticketsDataSource.data$;
 
   @ViewChild(SortableDirective) sorter!: SortableDirective;
+  @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
 
   constructor(private apiService: ApiService) { }
 
@@ -26,6 +28,7 @@ export class TicketListComponent implements OnInit {
 
   ngAfterViewInit() {
     this.ticketsDataSource.sorter = this.sorter;
+    this.ticketsDataSource.filterSource = this.filterSource;
   }
 
   ngOnDestroy() {
