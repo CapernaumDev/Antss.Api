@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { FilterSourceDirective } from "@app/core/directives/filter-source.directive";
+import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 
 @Component({
   selector: "[filterInput]",
@@ -9,12 +10,22 @@ import { FilterSourceDirective } from "@app/core/directives/filter-source.direct
   `
 })
 
-export class FilterInputComponent {
-  filterUpdated(event: any) {
+export class FilterInputComponent implements OnInit {
+  private filterTerm$ = new Subject<string>();
+
+  filterUpdated(event: Event) {
     let value = (event?.currentTarget as HTMLInputElement)?.value;
-    console.log('FilterSourceComponeent filterUpdated' + value);
-    this.filter.filter(value);
+    this.filterTerm$.next(value);
   }
 
-  constructor(public filter: FilterSourceDirective) {}
+  constructor(public filter: FilterSourceDirective) { }
+
+  ngOnInit(): void {
+    this.filterTerm$.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((filterValue: string) => {
+      this.filter.filter(filterValue);
+    });
+  }
 }
