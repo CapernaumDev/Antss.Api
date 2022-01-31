@@ -25,8 +25,7 @@ namespace Antss.Services
                 .Include(x => x.RaisedBy)
                 .Include(x => x.AssignedTo).AsQueryable();
 
-            if (user.UserType == UserTypes.User)
-                query = query.Where(x => x.RaisedById == user.Id);
+            query = ApplySecurityRules(query, user);
 
             return await query.Select(x => new TicketListItem
             {
@@ -41,10 +40,13 @@ namespace Antss.Services
 
         public async Task<List<BoardColumn<TicketListItem>>> GetBoard(User user)
         {
-            return await _db.Tickets.AsNoTracking()
+            var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
-                .Include(x => x.AssignedTo)
-                .GroupBy(x => x.TicketStatus)
+                .Include(x => x.AssignedTo).AsQueryable();
+
+            query = ApplySecurityRules(query, user);
+
+            return await query.GroupBy(x => x.TicketStatus)
                 .Select(x => new BoardColumn<TicketListItem>
                 {
                     Title = _enumTransformer.GetEnumMemberAttributeValue(x.Key),
@@ -78,6 +80,14 @@ namespace Antss.Services
             await _db.SaveChangesAsync();
 
             return newTicket.Id;
+        }
+        
+        private IQueryable<Ticket> ApplySecurityRules(IQueryable<Ticket> query, User user)
+        {
+            if (user.UserType == UserTypes.User)
+                query = query.Where(x => x.RaisedById == user.Id);
+
+            return query;
         }
     }
 }
