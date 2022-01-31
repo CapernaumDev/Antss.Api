@@ -50,16 +50,16 @@ export abstract class DataSource<T> {
     let sorted = [...data].sort((a, b) => {
       const order = direction === "asc" ? 1 : -1;
 
+      if (!a[column] && !b[column]) {
+        return 0;
+      }
+
       if (!a[column]) {
         return +1;
       }
 
       if (!b[column]) {
         return -1;
-      }
-
-      if (!a[column] && !b[column]) {
-        return 0;
       }
 
       if (typeof(a[column]) === 'number') {
