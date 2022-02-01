@@ -43,5 +43,11 @@ namespace Antss.Web.Controllers
 
             return await _svc.Create(ticketDto, user);
         }
+
+        [HttpPost, Route("UpdateStatus")]
+        public async Task<PostResult> UpdateStatus(UpdateTicketStatus model)
+        {
+            return await _svc.UpdateStatus(model);
+        }
     }
 }

@@ -1,14 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, take } from 'rxjs';
 import { User } from './models/user/user';
 import { CreateTicket } from './models/ticket/create-ticket';
 import { TicketListItem } from './models/ticket/ticket-list-item';
-import { AppData } from './models/app-data';
 import { environment } from '@environments/environment';
 import { PostResult } from './models/post-result';
 import { UserListItem } from './models/user/user-list-item';
 import { BoardColumn } from './models/board-column';
+import { UpdateTicketStatus } from './models/ticket/update-ticket-status';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +42,10 @@ export class ApiService {
   }
 
   createTicket(ticket: CreateTicket) {
-    return this.http.post(`${environment.apiUrl}/Ticket/Create`, ticket)
+    return this.http.post(`${environment.apiUrl}/Ticket/Create`, ticket);
+  }
+
+  updateTicketStatus(model: UpdateTicketStatus) {
+    return this.http.post(`${environment.apiUrl}/Ticket/UpdateStatus`, model);
   }
 }

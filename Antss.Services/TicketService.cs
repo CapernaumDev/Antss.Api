@@ -46,7 +46,7 @@ namespace Antss.Services
 
             query = ApplySecurityRules(query, user);
 
-            return await query.GroupBy(x => x.TicketStatus)
+            var boardColumns = await query.GroupBy(x => x.TicketStatus)
                 .Select(x => new BoardColumn<TicketListItem>
                 {
                     Title = _enumTransformer.GetEnumMemberAttributeValue(x.Key),
@@ -61,6 +61,24 @@ namespace Antss.Services
                         TicketStatusId = (int)y.TicketStatus
                     })
                 }).ToListAsync();
+
+            var requiredBoardColumns = new List<TicketStatuses>()
+            {
+                TicketStatuses.Raised, TicketStatuses.InProgress, TicketStatuses.Completed
+            };
+
+            foreach (var ticketStatus in requiredBoardColumns)
+            {
+                if (!boardColumns.Any(x => x.Id == (int)ticketStatus))
+                    boardColumns.Add(new BoardColumn<TicketListItem>
+                    {
+                        Id = (int)ticketStatus,
+                        Data = new List<TicketListItem>(),
+                        Title = _enumTransformer.GetEnumMemberAttributeValue(ticketStatus)
+                    });
+            }
+
+            return boardColumns.OrderBy(x => x.Id).ToList();
         }
 
         public async Task<int> Create(CreateTicketDto ticketDto, User raisedBy)
@@ -80,6 +98,16 @@ namespace Antss.Services
             await _db.SaveChangesAsync();
 
             return newTicket.Id;
+        }
+
+        public async Task<PostResult> UpdateStatus(UpdateTicketStatus model)
+        {
+            var ticket = await _db.Tickets.FirstAsync(x => x.Id == model.TicketId);
+            ticket.TicketStatus = (TicketStatuses)model.TicketStatusId;
+
+            await _db.SaveChangesAsync();
+
+            return new PostResult();
         }
         
         private IQueryable<Ticket> ApplySecurityRules(IQueryable<Ticket> query, User user)
