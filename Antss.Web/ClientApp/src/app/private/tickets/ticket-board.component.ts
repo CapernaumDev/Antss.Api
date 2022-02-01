@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
@@ -12,7 +12,8 @@ import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status
 @Component({
   selector: 'app-ticket-board',
   templateUrl: './ticket-board.component.html',
-  styleUrls: ['./ticket-board.component.css']
+  styleUrls: ['./ticket-board.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
@@ -22,7 +23,7 @@ export class TicketBoardComponent implements OnInit {
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
-  constructor(private apiService: ApiService){}
+  constructor(private apiService: ApiService, private cdr: ChangeDetectorRef){}
 
   public ngOnInit(): void {
     const board$ = this.apiService.getTicketBoard();
@@ -50,7 +51,8 @@ export class TicketBoardComponent implements OnInit {
               event.previousContainer.data,
               event.currentIndex,
               event.previousIndex);
-
+            
+            this.cdr.markForCheck(); //onPush strategy needs a nudge here
             throw err;
           }))
           .subscribe();
