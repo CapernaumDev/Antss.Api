@@ -42,6 +42,8 @@ export class TicketBoardComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
 
+      this.boardDataSource.moveTicket(ticketId, event.previousContainer.id, event.container.id, event.currentIndex);
+
       this.apiService.updateTicketStatus(new UpdateTicketStatus(ticketId, ticketStatusId))
         .pipe(
           take(1),
@@ -52,6 +54,7 @@ export class TicketBoardComponent implements OnInit {
               event.currentIndex,
               event.previousIndex);
             
+            this.boardDataSource.moveTicket(ticketId, event.container.id, event.previousContainer.id, event.previousIndex);
             this.cdr.markForCheck(); //onPush strategy needs a nudge here
             throw err;
           }))

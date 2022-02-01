@@ -1,11 +1,11 @@
-import { catchError, isObservable, map, Observable, of, Subject, Subscription, tap, withLatestFrom } from "rxjs";
+import { isObservable, map, Observable, of, Subject, Subscription, tap, withLatestFrom } from "rxjs";
 import { FilterSourceDirective } from "./directives/filter-source.directive";
 import { SortableDirective } from "./directives/sortable.directive";
 import { SetFilterEvent } from "./interfaces/set-filter-event";
 import { SortChangeEvent, SortDirection } from "./interfaces/sort-change-event";
 
 export abstract class DataSource<T> {
-  private subscriptions: Subscription[] = [];
+  private subs: Subscription[] = [];
 
   private inititalDataSubject = new Subject<T[]>();
   initialData$ = this.inititalDataSubject.asObservable();
@@ -32,7 +32,7 @@ export abstract class DataSource<T> {
   }
 
   destroy() {
-    this.subscriptions.forEach(x => x.unsubscribe());
+    this.subs.forEach(x => x.unsubscribe());
   }
 
   updateData(data: T[] | Observable<T[]>) {
@@ -44,10 +44,14 @@ export abstract class DataSource<T> {
           })
         )
         .subscribe();
-      this.subscriptions.push(sub);
+      this.subs.push(sub);
     } else {
       this.setInitialData(data);
     }
+  }
+
+  patchInitialData(data: T[]) {
+    this.inititalDataSubject.next(data);
   }
 
   sort(data: any[], column: string, direction: SortDirection) {
@@ -96,7 +100,7 @@ export abstract class DataSource<T> {
         this.recordCount.next(data.length);
       });
 
-    this.subscriptions.push(sub);
+    this.subs.push(sub);
   }
 
   private listenToFilterChanges(filterSource: FilterSourceDirective) {
@@ -115,7 +119,7 @@ export abstract class DataSource<T> {
         this.recordCount.next(data.length);
       });
 
-    this.subscriptions.push(sub);
+    this.subs.push(sub);
   }
 
   private setInitialData(data: T[]) {
