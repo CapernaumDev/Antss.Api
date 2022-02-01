@@ -24,7 +24,7 @@
     </div>
     <div class="col-md-6">
       <label for="inputEmailAddress" class="form-label">Email</label>
-      <input type="email" formControlName="emailAddress" class="form-control"
+      <input type="email" autocomplete="new-password" formControlName="emailAddress" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" id="inputEmailAddress">
       <div *ngIf="submitted && f.emailAddress.errors" class="text-danger">
         <div *ngIf="f.emailAddress.errors.required">
@@ -37,7 +37,7 @@
     </div>
     <div class="col-6" *ngIf="this.formMode == FormModes.Create">
       <label for="inputPassword" class="form-label">Password</label>
-      <input type="password" formControlName="password" class="form-control"
+      <input type="password" autocomplete="new-password" formControlName="password" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" id="inputPassword">
       <div *ngIf="submitted && f.password.errors" class="text-danger">
         <div *ngIf="f.password.errors.required">
