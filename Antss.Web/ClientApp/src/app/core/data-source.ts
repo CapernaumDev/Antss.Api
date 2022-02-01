@@ -40,13 +40,13 @@ export abstract class DataSource<T> {
       const sub = data
         .pipe(
           tap((res) => {
-            this.setData(res);
+            this.setInitialData(res);
           })
         )
         .subscribe();
       this.subscriptions.push(sub);
     } else {
-      this.setData(data);
+      this.setInitialData(data);
     }
   }
 
@@ -85,8 +85,7 @@ export abstract class DataSource<T> {
       .pipe(
         withLatestFrom(this.initialData$),
         tap(([sortEvent]) => this.lastSortEvent = sortEvent),
-        map(([sortEvent, data]) => this.sortLogic(sortEvent, data)),
-        catchError(() => of([]))
+        map(([sortEvent, data]) => this.sortLogic(sortEvent, data))
       )
       .subscribe((data) => { 
         if (this.lastFilterEvent && this.lastFilterEvent.filterTerm) {
@@ -105,8 +104,7 @@ export abstract class DataSource<T> {
       .pipe(
         withLatestFrom(this.initialData$),
         tap(([setFilterEvent]) => this.lastFilterEvent = setFilterEvent),
-        map(([setFilterEvent, data]) => this.filterLogic(setFilterEvent, data)),
-        catchError(() => of([]))
+        map(([setFilterEvent, data]) => this.filterLogic(setFilterEvent, data))
       )
       .subscribe((data) => { 
         if (this.lastSortEvent) {
@@ -120,7 +118,7 @@ export abstract class DataSource<T> {
     this.subscriptions.push(sub);
   }
 
-  private setData(data: T[]) {
+  private setInitialData(data: T[]) {
     this.dataSubject.next(data);
     this.inititalDataSubject.next(data);
     this.recordCount.next(data.length);

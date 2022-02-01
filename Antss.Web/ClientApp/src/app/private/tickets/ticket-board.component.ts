@@ -1,10 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
 import { Observable } from 'rxjs';
 import { ApiService } from '@app/core/api.service';
 import { TicketBoardDataSource } from './ticket-board-data-source';
+import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
+import { FilterInputComponent } from '@app/core/components/filter-input.component';
 
 @Component({
   selector: 'app-ticket-board',
@@ -16,6 +18,9 @@ export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
+
+  @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
+  @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
   constructor(private apiService: ApiService){}
 
@@ -37,6 +42,10 @@ export class TicketBoardComponent implements OnInit {
           event.previousIndex,
           event.currentIndex);
     }
+  }
+
+  ngAfterViewInit() {
+    this.boardDataSource.filterSource = this.filterSource;
   }
 
   ngOnDestroy() {

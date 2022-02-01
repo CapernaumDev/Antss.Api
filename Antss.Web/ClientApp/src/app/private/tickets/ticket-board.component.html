@@ -1,4 +1,13 @@
 <div class="root">
+  <div class="alert alert-info"><b>Ticket Board</b></div>
+  <div class="row justify-content-between">
+    <div class="col-4">
+      Search Tickets: <span filterInput filterSource #filterElement></span>
+    </div>
+    <div class="col-4 text-end">
+      Showing {{recordCount$ | async}} Tickets
+    </div>
+  </div>
   <div class="board">
     <div class="board-wrapper">
       <div class="board-columns">
