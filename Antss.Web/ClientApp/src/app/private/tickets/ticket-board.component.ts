@@ -20,7 +20,7 @@ import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status
     trigger('confirmationHighlight', [
       transition('*=>isConfirmed', animate('600ms', keyframes([
         style({backgroundColor: 'initial', boxShadow: 'none', offset: 0} ),
-        style({backgroundColor: '#5cff4c', boxShadow: '0 0 5px #5cff4c', offset: 0.1} ),
+        style({backgroundColor: '#5cff4c', boxShadow: '0 0 5px #5cff4c', offset: 0.01} ),
         style({backgroundColor: 'initial', boxShadow: 'none', offset: 1} ),
       ])))
     ])
