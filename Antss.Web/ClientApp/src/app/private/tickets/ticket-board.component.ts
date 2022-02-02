@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {animate, keyframes, style, transition, trigger} from "@angular/animations";
+
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
 import { catchError, Observable, take } from 'rxjs';
@@ -14,11 +16,21 @@ import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status
   templateUrl: './ticket-board.component.html',
   styleUrls: ['./ticket-board.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('confirmationHighlight', [
+      transition('*=>isConfirmed', animate('600ms', keyframes([
+        style({backgroundColor: 'initial', boxShadow: 'none', offset: 0} ),
+        style({backgroundColor: '#5cff4c', boxShadow: '0 0 5px #5cff4c', offset: 0.1} ),
+        style({backgroundColor: 'initial', boxShadow: 'none', offset: 1} ),
+      ])))
+    ])
+  ]
 })
 export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
+  showConfirmationFor!: TicketListItem | null;
 
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
@@ -58,7 +70,10 @@ export class TicketBoardComponent implements OnInit {
             this.cdr.markForCheck(); //onPush strategy needs a nudge here
             throw err;
           }))
-          .subscribe();
+          .subscribe(() => {
+            this.showConfirmationFor = event.container.data[event.currentIndex];
+            this.cdr.detectChanges(); //onPush strategy needs a shove here
+          });
     }
   }
 

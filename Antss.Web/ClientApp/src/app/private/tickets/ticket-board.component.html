@@ -18,7 +18,9 @@
             </div>
             <div class="tasks-container" id="{{column.id}}" [cdkDropListConnectedTo]="['1', '2', '3']" cdkDropList
               [cdkDropListData]="column.data" (cdkDropListDropped)="drop($event)">
-              <div class="task" *ngFor="let ticket of column.data as TicketListItem" cdkDrag>
+              <div class="task" *ngFor="let ticket of column.data as TicketListItem" cdkDrag
+                  [@confirmationHighlight]="showConfirmationFor === ticket ? 'isConfirmed' : ''" >
+                  <!-- (@confirmationHighlight.done)="showConfirmationFor = null"> -->
                 <ngb-highlight [result]="ticket.description" [term]="filterElement.currentValue">{{ticket.description}}</ngb-highlight>
               </div>
             </div>
