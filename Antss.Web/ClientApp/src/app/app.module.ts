@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { PublicModule } from './public/public.module';
 import { PrivateModule } from './private/private.module';
 import { RouterModule } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     CoreModule,
     PublicModule,
-    PrivateModule
+    PrivateModule,
+    StoreModule.forRoot({}, {})
   ],
   providers: [
     { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.loginWithAccessToken() },
