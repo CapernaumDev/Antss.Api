@@ -38,7 +38,7 @@ export class TicketBoardComponent implements OnInit {
   constructor(private apiService: ApiService, private cdr: ChangeDetectorRef){}
 
   public ngOnInit(): void {
-    const board$ = this.apiService.getTicketBoard();
+    const board$ = this.apiService.getTicketBoard(false);
     this.boardDataSource.updateData(board$);
   }
 
@@ -75,6 +75,12 @@ export class TicketBoardComponent implements OnInit {
             this.cdr.detectChanges(); //onPush strategy needs a shove here
           });
     }
+  }
+
+  reload(event: Event) {
+    let target = event.target as HTMLInputElement;
+    const data = this.apiService.getTicketBoard(target.checked);
+    this.boardDataSource.updateData(data);
   }
 
   ngAfterViewInit() {

@@ -25,13 +25,19 @@ export class TicketListComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    const tickets$ = this.apiService.getTicketList();
+    const tickets$ = this.apiService.getTicketList(false);
     this.ticketsDataSource.updateData(tickets$);
   }
 
   ngAfterViewInit() {
     this.ticketsDataSource.sorter = this.sorter;
     this.ticketsDataSource.filterSource = this.filterSource;
+  }
+
+  reload(event: Event) {
+    let target = event.target as HTMLInputElement;
+    const tickets$ = this.apiService.getTicketList(target.checked);
+    this.ticketsDataSource.updateData(tickets$);
   }
 
   ngOnDestroy() {

@@ -21,12 +21,14 @@ export class ApiService {
     return this.http.get<UserListItem[]>(`${environment.apiUrl}/User/List`);
   }
 
-  getTicketList(): Observable<TicketListItem[]> {
-    return this.http.get<TicketListItem[]>(`${environment.apiUrl}/Ticket/List`);
+  getTicketList(includeClosed: boolean): Observable<TicketListItem[]> {
+    return this.http.get<TicketListItem[]>(`${environment.apiUrl}/Ticket/List`, 
+      { params: { includeClosed } });
   }
 
-  getTicketBoard(): Observable<BoardColumn<TicketListItem>[]> {
-    return this.http.get<BoardColumn<TicketListItem>[]>(`${environment.apiUrl}/Ticket/Board`);
+  getTicketBoard(includeClosed: boolean): Observable<BoardColumn<TicketListItem>[]> {
+    return this.http.get<BoardColumn<TicketListItem>[]>(`${environment.apiUrl}/Ticket/Board`, 
+    { params: { includeClosed } });
   }
 
   loadUser(userId: number): Observable<User> {

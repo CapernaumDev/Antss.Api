@@ -3,7 +3,7 @@ import { SortChangeEvent } from "../../core/interfaces/sort-change-event";
 import { TicketListItem } from "../../core/models/ticket/ticket-list-item";
 import { DataSource } from "../../core/data-source";
 import { BoardColumn } from "@app/core/models/board-column";
-import { isObservable, Observable, Subject, Subscription, take, tap } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 
 export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem>> {
   private initialDataSnapshot!: BoardColumn<TicketListItem>[]
@@ -49,26 +49,6 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
     this.subscriptions.forEach(x => x.unsubscribe());
     super.destroy();
   }
-  updateData(data: BoardColumn<TicketListItem>[] | Observable<BoardColumn<TicketListItem>[]>): void {
-    super.updateData(data);
-
-    if (!isObservable(data) && data.length === 0) return;
-
-    if (isObservable(data)) {
-      const sub = data
-        .pipe(
-          tap((res) => {
-            this.initialDataSnapshot = res;
-          })
-        )
-        .subscribe();
-      this.subscriptions.push(sub);
-    } else {
-      this.initialDataSnapshot = data;
-    }
-
-    this.setTicketCount(data);
-  }
   moveTicket(ticketId: number, fromColumnId: string, toColumnId: string, toIndex: number) {//todo: make a type
     if (fromColumnId === toColumnId) return;
     
@@ -87,21 +67,19 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
 
     super.patchInitialData(this.initialDataSnapshot);
   }
-  private setTicketCount(data: BoardColumn<TicketListItem>[] | Observable<BoardColumn<TicketListItem>[]>) {
+  protected onInitialDataUpdated(data: BoardColumn<TicketListItem>[]) {
+    this.initialDataSnapshot = data;
+  }
+  protected onDataUpdated(data: BoardColumn<TicketListItem>[]) {
+    this.setTicketCount(data);
+  }
+  private setTicketCount(data: BoardColumn<TicketListItem>[]) {
     let count = 0;
 
-    if (isObservable(data)) {
-      data.pipe(take(1))
-        .subscribe(x => {
-          x.forEach(y => count += y.data.length);
-          this.ticketCount.next(count);
-        });
-    } else {
-      data.forEach(x => {
-        count += x.data.length;
-      });
+    data.forEach(x => {
+      count += x.data.length;
+    });
 
-      this.ticketCount.next(count);
-    }
+    this.ticketCount.next(count);
   }
 }

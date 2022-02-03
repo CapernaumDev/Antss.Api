@@ -19,13 +19,13 @@ namespace Antss.Services
             _enumTransformer = enumTransformer;
         }
 
-        public async Task<List<TicketListItem>> GetList(User user)
+        public async Task<List<TicketListItem>> GetList(User user, bool includeClosed)
         {
             var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
                 .Include(x => x.AssignedTo).AsQueryable();
 
-            query = ApplySecurityRules(query, user);
+            query = ApplyCommonTicketFilters(query, user, includeClosed);
 
             return await query.Select(x => new TicketListItem
             {
@@ -38,13 +38,13 @@ namespace Antss.Services
             }).ToListAsync();
         }
 
-        public async Task<List<BoardColumn<TicketListItem>>> GetBoard(User user)
+        public async Task<List<BoardColumn<TicketListItem>>> GetBoard(User user, bool includeClosed)
         {
             var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
                 .Include(x => x.AssignedTo).AsQueryable();
 
-            query = ApplySecurityRules(query, user);
+            query = ApplyCommonTicketFilters(query, user, includeClosed);
 
             var boardColumns = await query.GroupBy(x => x.TicketStatus)
                 .Select(x => new BoardColumn<TicketListItem>
@@ -110,10 +110,13 @@ namespace Antss.Services
             return new PostResult();
         }
         
-        private IQueryable<Ticket> ApplySecurityRules(IQueryable<Ticket> query, User user)
+        private IQueryable<Ticket> ApplyCommonTicketFilters(IQueryable<Ticket> query, User user, bool includeClosed)
         {
             if (user.UserType == UserTypes.User)
                 query = query.Where(x => x.RaisedById == user.Id);
+
+            if (!includeClosed)
+                query = query.Where(x => x.TicketStatus != TicketStatuses.Completed && x.TicketStatus != TicketStatuses.Cancelled);
 
             return query;
         }

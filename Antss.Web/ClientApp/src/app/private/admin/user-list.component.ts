@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@core/api.service';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { UserListItem } from '@app/core/models/user/user-list-item';
 import { UserListDataSource } from './user-list-data-source';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
@@ -25,7 +25,7 @@ export class UserListComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    const users$ = this.apiService.getUserList();
+    const users$ = this.apiService.getUserList().pipe(shareReplay(1));
     this.usersDataSource.updateData(users$);
   }
 

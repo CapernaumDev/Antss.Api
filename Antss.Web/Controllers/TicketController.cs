@@ -20,20 +20,20 @@ namespace Antss.Web.Controllers
         }
 
         [HttpGet, Route("List")]
-        public async Task<ActionResult<IEnumerable<TicketListItem>>> Get()
+        public async Task<ActionResult<IEnumerable<TicketListItem>>> Get(bool includeClosed)
         {
             //TODO: stop repeating this in each action
             var user = (User)HttpContext.Items["User"];
             
-            return await _svc.GetList(user);
+            return await _svc.GetList(user, includeClosed);
         }
 
         [HttpGet, Route("Board")]
-        public async Task<ActionResult<IEnumerable<BoardColumn<TicketListItem>>>> Board()
+        public async Task<ActionResult<IEnumerable<BoardColumn<TicketListItem>>>> Board(bool includeClosed)
         {
             var user = (User)HttpContext.Items["User"];
 
-            return await _svc.GetBoard(user);
+            return await _svc.GetBoard(user, includeClosed);
         }
 
         [HttpPost, Route("Create")]
