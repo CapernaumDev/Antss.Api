@@ -25,7 +25,7 @@ export class UserListComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    const users$ = this.apiService.getUserList().pipe(shareReplay(1));
+    const users$ = this.apiService.getUserList();
     this.usersDataSource.updateData(users$);
   }
 
