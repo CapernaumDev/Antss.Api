@@ -37,25 +37,6 @@ export class AuthGuard implements CanActivate {
           obs.next(true);
         }
       })
-
-      // this.appStoreService.currentUser$.pipe(
-      //   take(1)
-      // ).subscribe(x => {
-      //     if (x.isLoggedIn) {
-      //       if (routeRole && routeRole.includes('Admin') && !x.isAdmin) {
-      //         obs.next(false);
-      //         this.router.navigate(['']);
-      //         return;
-      //       }
-
-      //       obs.next(true);
-      //     } else {
-      //       this.store.dispatch(setAfterLoginRedirect({ url: redirectAfterLogin }))
-      //       this.appStoreService.setRedirectAfterLogin(redirectAfterLogin);
-      //       obs.next(false);
-      //       this.router.navigate(['login']);
-      //     }
-      //   });
     });
   }
 }

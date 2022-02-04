@@ -3,7 +3,7 @@ import {  Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { of } from 'rxjs';
-import { switchMap, map, catchError, tap, withLatestFrom } from 'rxjs/operators';
+import { switchMap, map, catchError, tap, withLatestFrom, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 //import { selectAllTodos } from './todo.selectors';
 import { AppState } from './app.state';
@@ -29,7 +29,7 @@ export class Effects {
                     tap(() => this.router.navigateByUrl(afterLoginRedirect)),
                     catchError((error) => of(AppActions.loginFailure({ message: error })))
                 )
-            })
+            }), take(1)
         )
     );
 }

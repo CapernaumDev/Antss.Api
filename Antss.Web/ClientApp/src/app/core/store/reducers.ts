@@ -11,9 +11,12 @@ export const Reducers = createReducer(
 
     on(AppActions.loginSuccess, (state, { loginResult }) => ({
       ...state,
-      currentUser: Object.assign(new CurrentUser(), { ...loginResult.user, accessToken: loginResult.accessToken }),
+      currentUser: Object.assign(new CurrentUser(), { 
+        ...loginResult.user, 
+        accessToken: window.btoa(loginResult.accessToken) 
+      }),
       status: 'success'
-      //todo: appdata, token
+      //todo: appdata
     })),
 
     on(AppActions.loginFailure, (state) => ({

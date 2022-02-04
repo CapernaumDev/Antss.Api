@@ -9,7 +9,7 @@ import { AppState } from '../store/app.state';
 
 @Component({
   selector: 'app-nav-menu',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css']
 })
