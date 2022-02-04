@@ -5,7 +5,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, tap, withLatestFrom, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-//import { selectAllTodos } from './todo.selectors';
 import { AppState } from './app.state';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
@@ -26,10 +25,23 @@ export class Effects {
             switchMap(([action, afterLoginRedirect]) => {
                 return this.apiService.login(action.loginCredential).pipe(
                     map((loginResult) => AppActions.loginSuccess({ loginResult: loginResult })),
-                    tap(() => this.router.navigateByUrl(afterLoginRedirect)),
+                    tap((x) => { 
+                        this.router.navigateByUrl(afterLoginRedirect);
+                        localStorage["api-token"] = JSON.stringify(x.loginResult.accessToken);
+                    }),
                     catchError((error) => of(AppActions.loginFailure({ message: error })))
                 )
             }), take(1)
         )
+    );
+
+    logout$ = createEffect(() => 
+        this.actions$.pipe(
+            ofType(AppActions.logout),
+            tap(() => {
+                localStorage["api-token"] = JSON.stringify(null);
+                this.router.navigateByUrl('');
+            }), take(1)
+        ),
     );
 }

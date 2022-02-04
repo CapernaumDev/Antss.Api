@@ -4,7 +4,6 @@ import { BaseFormComponent } from '@app/core/components/base-form-component';
 import { AuthenticationService } from '@core/authentication.service';
 import { Store } from '@ngrx/store';
 import { loginWithCredentials } from '@core/store/actions';
-import { AppState } from '@app/core/store/app.state';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +32,5 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
     if (!super.beforeSubmit()) return;
 
     this.store.dispatch(loginWithCredentials( { loginCredential: this.form.value }));
-    //this.authenticationService.login(this.form.value);
   }
 }

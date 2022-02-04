@@ -26,3 +26,7 @@ export const setAfterLoginRedirect = createAction(
     '[Auth Guard] Set After Login Redirect',
     props<{ url: string }>()
 )
+
+export const logout = createAction(
+    '[Nav Menu] Logout'
+)

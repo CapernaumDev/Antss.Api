@@ -27,5 +27,12 @@ export const Reducers = createReducer(
     on(AppActions.setAfterLoginRedirect, (state, { url }) => ({
       ...state,
       afterLoginRedirect: url
+    })),
+
+    on(AppActions.logout, (state) => ({
+      ...state,
+      currentUser: null,
+      status: 'pending',
+      afterLoginRedirect: ''
     }))
   );
