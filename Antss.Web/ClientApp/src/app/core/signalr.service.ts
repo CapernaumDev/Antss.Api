@@ -13,7 +13,10 @@ export class SignalRService {
     public startConnection = () => {
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(`${environment.signalrUrl}/test`)
+            .withAutomaticReconnect()
+            .configureLogging(environment.production ? signalR.LogLevel.None : signalR.LogLevel.Information)
             .build();
+
         this.hubConnection
             .start()
             .then(() => console.log('Connection started'))
