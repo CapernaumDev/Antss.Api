@@ -1,29 +1,25 @@
 import { Injectable } from "@angular/core";
-import { AppStoreService } from "./app.store.service";
-import { AuthenticationService } from "./authentication.service";
+import { Store } from "@ngrx/store";
+import { AppState } from "./store/app.state";
+import { loginWithToken } from './store/actions';
 import { LoginCredential } from "./models/login-credential";
-import { CurrentUser } from "./models/user/current-user";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppStartup {
-  constructor(private authenticationService: AuthenticationService, private appStoreService: AppStoreService) {
-
+  constructor(private store: Store<AppState>) {
   }
 
-  loginWithAccessToken() {
-    let tokenStringValue = localStorage["api-token"]
+  attemptTokenLogin() {
+    let tokenStringValue = localStorage["access-token"]
     if (!tokenStringValue) return;
 
     let token = JSON.parse(tokenStringValue);
     if (!token) return;
     
-    let credential = new LoginCredential();
-    credential.accessToken = token;
-    let userWithToken = new CurrentUser();
-    userWithToken.accessToken = token;
-    this.appStoreService.setCurrentUser(userWithToken);
-    this.authenticationService.login(credential);
+    let loginCredential = new LoginCredential();
+    loginCredential.accessToken = token;
+    this.store.dispatch(loginWithToken({loginCredential: loginCredential }));
   }
 }

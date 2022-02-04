@@ -28,7 +28,6 @@ import { environment } from '../environments/environment';
     PublicModule,
     PrivateModule,
     StoreModule.forRoot({ authentication: Reducers}),
-    //StoreModule.forFeature('authentication', Reducers),
     EffectsModule.forRoot([Effects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
@@ -36,7 +35,7 @@ import { environment } from '../environments/environment';
     })
   ],
   providers: [
-    { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.loginWithAccessToken() },
+    { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.attemptTokenLogin() },
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

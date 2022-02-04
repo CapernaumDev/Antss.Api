@@ -13,7 +13,7 @@ export const Reducers = createReducer(
       ...state,
       currentUser: Object.assign(new CurrentUser(), { 
         ...loginResult.user, 
-        accessToken: window.btoa(loginResult.accessToken) 
+        accessToken: window.btoa(loginResult.accessToken || JSON.parse(localStorage["access-token"])) 
       }),
       status: 'success'
       //todo: appdata
