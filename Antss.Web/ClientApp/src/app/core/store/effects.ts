@@ -31,7 +31,7 @@ export class Effects {
                     }),
                     catchError((error) => of(AppActions.loginFailure({ message: error })))
                 )
-            }), take(1)
+            })
         )
     );
 
