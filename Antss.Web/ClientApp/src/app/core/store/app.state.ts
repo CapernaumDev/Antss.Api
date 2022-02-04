@@ -1,3 +1,4 @@
+import { OptionItem } from "../models/option-item";
 import { CurrentUser } from "../models/user/current-user";
 
 export interface AppState {
@@ -5,6 +6,11 @@ export interface AppState {
         currentUser: CurrentUser | null;
         status: 'pending' | 'loading' | 'error' | 'success';
         afterLoginRedirect: string
+    },
+    optionItems: {
+        assignableUsers: OptionItem[],
+        offices: OptionItem[],
+        userTypes: OptionItem[]
     }
 }
 
@@ -13,5 +19,10 @@ export const initialState: AppState = {
         currentUser: null,
         status: 'pending',
         afterLoginRedirect: 'xx'
+    },
+    optionItems: {
+        assignableUsers: [],
+        offices: [],
+        userTypes: []
     }
 };

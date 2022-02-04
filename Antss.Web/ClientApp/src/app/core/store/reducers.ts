@@ -15,8 +15,10 @@ export const Reducers = createReducer(
         ...loginResult.user, 
         accessToken: window.btoa(loginResult.accessToken || JSON.parse(localStorage["access-token"])) 
       }),
-      status: 'success'
-      //todo: appdata
+      status: 'success',
+      assignableUsers: loginResult.appData.assignableUsers,
+      offices: loginResult.appData.offices,
+      userTypes: loginResult.appData.userTypes
     })),
 
     on(AppActions.loginFailure, (state) => ({

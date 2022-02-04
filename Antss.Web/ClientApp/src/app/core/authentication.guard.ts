@@ -3,7 +3,6 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { Store } from '@ngrx/store';
 
 import { Observable, take } from 'rxjs';
-import { AppStoreService } from './app.store.service';
 import { setAfterLoginRedirect } from './store/actions';
 import { AppState } from './store/app.state';
 
@@ -11,7 +10,6 @@ import { AppState } from './store/app.state';
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private appStoreService: AppStoreService,
     private store: Store<AppState>
   ) { }
 

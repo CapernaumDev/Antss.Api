@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router"
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AppStoreService } from "@core/app.store.service";
 import { first } from 'rxjs/operators';
 import { ApiService } from '@core/api.service';
 import { Editor } from 'ngx-editor';
 import { BaseFormComponent } from '@app/core/components/base-form-component';
+import { AppState } from '@app/core/store/app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { CurrentUser } from '@app/core/models/user/current-user';
+import { OptionItem } from '@app/core/models/option-item';
 
 @Component({
   selector: 'create-ticket',
@@ -15,10 +19,15 @@ import { BaseFormComponent } from '@app/core/components/base-form-component';
 
 export class CreateTicketComponent extends BaseFormComponent implements OnInit {
   editor!: Editor;
+  currentUser$: Observable<CurrentUser | null>;
+  assignableUsers$: Observable<OptionItem[]>;
 
-  constructor(private formBuilder: FormBuilder, public appStoreService: AppStoreService,
+  constructor(private formBuilder: FormBuilder, private store: Store<AppState>,
     private apiService: ApiService, private router: Router) {
     super();
+
+    this.currentUser$ = store.select(x => x.authentication.currentUser);
+    this.assignableUsers$ = store.select(x => x.optionItems.assignableUsers);
   }
 
   onSubmit() {
