@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CurrentUser } from '../models/user/current-user';
 import { AppState } from '../store/app.state';
-import { logout } from '@core/store/actions';
+import { logoutUserInitiated } from '@core/store/actions';
 
 @Component({
   selector: 'app-nav-menu',
@@ -34,6 +34,6 @@ export class NavMenuComponent implements OnInit {
   }
 
   logout() {
-    this.store.dispatch(logout());
+    this.store.dispatch(logoutUserInitiated());
   }
 }

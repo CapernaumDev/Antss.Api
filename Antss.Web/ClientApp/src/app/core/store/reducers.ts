@@ -31,7 +31,7 @@ export const Reducers = createReducer(
       afterLoginRedirect: url
     })),
 
-    on(AppActions.logout, (state) => ({
+    on(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated, (state) => ({
       ...state,
       currentUser: null,
       status: 'pending',

@@ -45,10 +45,10 @@ export class Effects {
 
     logout$ = createEffect(() => 
         this.actions$.pipe(
-            ofType(AppActions.logout),
+            ofType(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated),
             tap(() => {
                 localStorage["access-token"] = JSON.stringify(null);
-                this.router.navigateByUrl('');
+                window.location.href = "/";
             }), take(1)
         ),
     );

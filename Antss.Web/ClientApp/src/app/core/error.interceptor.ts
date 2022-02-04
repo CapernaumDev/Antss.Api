@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/app.state';
-import { logout } from './store/actions';
+import { logoutOnServerUnauthorised } from './store/actions';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -15,7 +15,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(catchError(err => {
             if (err.status === 401) {
                 // auto logout if 401 response returned from api
-              this.store.dispatch(logout());
+              this.store.dispatch(logoutOnServerUnauthorised());
             }
 
             const error = err.error.message || err.statusText;

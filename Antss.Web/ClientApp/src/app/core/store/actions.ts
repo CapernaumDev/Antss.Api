@@ -27,6 +27,10 @@ export const setAfterLoginRedirect = createAction(
     props<{ url: string }>()
 )
 
-export const logout = createAction(
+export const logoutUserInitiated = createAction(
     '[Nav Menu] Logout'
+)
+
+export const logoutOnServerUnauthorised = createAction(
+    '[Error Interceptor server 401] Logout'
 )
