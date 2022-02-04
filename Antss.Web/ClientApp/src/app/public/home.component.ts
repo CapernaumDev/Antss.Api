@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AppStoreService } from "@core/app.store.service";
 import { trigger, style, animate, transition } from '@angular/animations';
 import { AppState } from '@app/core/store/app.state';
 import { Store } from '@ngrx/store';
@@ -24,7 +23,7 @@ export class HomeComponent implements OnInit {
   public isSigningIn$: Observable<boolean>;
   public currentUser$: Observable<CurrentUser | null>;
 
-  constructor(public appStoreService: AppStoreService, private store: Store<AppState>) {
+  constructor(private store: Store<AppState>) {
     this.isSigningIn$ = this.store.select(selectIsSigningIn);
     this.currentUser$ = this.store.select(x => x.authentication.currentUser);
    }

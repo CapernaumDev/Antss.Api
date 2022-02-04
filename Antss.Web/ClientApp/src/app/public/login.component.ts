@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BaseFormComponent } from '@app/core/components/base-form-component';
-import { AuthenticationService } from '@core/authentication.service';
 import { Store } from '@ngrx/store';
 import { loginWithCredentials } from '@core/store/actions';
 
@@ -16,8 +15,7 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
   emailAddress!: string;
   password!: string;
 
-  constructor(private authenticationService: AuthenticationService, private formBuilder: FormBuilder,
-              private store: Store) { 
+  constructor(private formBuilder: FormBuilder, private store: Store) { 
     super();    
   }
 
