@@ -3,10 +3,13 @@ using Antss.Model.Enums;
 using Antss.Services;
 using Antss.Services.Common;
 using Antss.Web.Authorization;
+using Antss.Web.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(jsonOptions =>
@@ -34,7 +37,11 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    app.UseCors(options => options
+        .WithOrigins("https://localhost:44469")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
 
     using (var scope = app.Services.CreateScope())
     {
@@ -55,6 +62,8 @@ app.UseRouting();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
+
+app.MapHub<TestHub>("api/test");
 
 app.MapFallbackToFile("index.html"); ;
 
