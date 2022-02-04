@@ -63,7 +63,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapHub<TestHub>("api/test");
+app.MapHub<TestHub>("signalr/test");
 
 app.MapFallbackToFile("index.html"); ;
 
