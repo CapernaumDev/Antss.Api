@@ -1,0 +1,28 @@
+import { createReducer, on } from '@ngrx/store';
+import { CurrentUser } from '../models/user/current-user';
+import * as AppActions from './actions';
+import { initialState } from './app.state';
+
+export const Reducers = createReducer(
+    initialState,
+
+    on(AppActions.loginWithCredentials, (state) => ({ ...state, status: 'loading' })),
+    on(AppActions.loginWithToken, (state) => ({ ...state, status: 'loading' })),
+
+    on(AppActions.loginSuccess, (state, { loginResult }) => ({
+      ...state,
+      currentUser: Object.assign(new CurrentUser(), { ...loginResult.user, accessToken: loginResult.accessToken }),
+      status: 'success'
+      //todo: appdata, token
+    })),
+
+    on(AppActions.loginFailure, (state) => ({
+      ...state,
+      status: 'error'
+    })),
+
+    on(AppActions.setAfterLoginRedirect, (state, { url }) => ({
+      ...state,
+      afterLoginRedirect: url
+    }))
+  );

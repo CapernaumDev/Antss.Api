@@ -1,9 +1,9 @@
 <div @fade>
-    <h1 *ngIf="appStoreService.isSigningIn$ | async; else checkIfUser">Signing in...</h1>
+    <h1 *ngIf="isSigningIn$ | async; else checkIfUser">Signing in...</h1>
 
     <ng-template #checkIfUser>
-        <ng-container *ngIf="appStoreService.currentUser$ | async as user">
-            <h1 *ngIf="user.isLoggedIn else noUser">Welcome, {{user.firstName}}</h1>
+        <ng-container *ngIf="currentUser$ | async as user; else noUser">
+            <h1>Welcome, {{user.firstName}}</h1>
         </ng-container>
     </ng-template>
 

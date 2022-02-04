@@ -11,7 +11,7 @@
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <ng-container *ngIf="appStoreService.currentUser$ | async as user">
+          <ng-container *ngIf="currentUser$ | async as user; else showLogin">
             <li class="nav-item" *ngIf="user.isAdmin" [routerLinkActive]="['link-active']">
               <a class="nav-link text-dark" [routerLink]="['user-list']">Admin</a>
             </li>
@@ -20,9 +20,6 @@
             </li>
             <li class="nav-item" *ngIf="user.isLoggedIn" [routerLinkActive]="['link-active']">
               <a class="nav-link text-dark" [routerLink]="['ticket-board']">Board</a>
-            </li>
-            <li class="nav-item" *ngIf="!user.isLoggedIn" [routerLinkActive]="['link-active']">
-              <a class="nav-link text-dark" [routerLink]="['login']">Login</a>
             </li>
             <li class="nav-item" *ngIf="user.isLoggedIn" style="padding-right: 45px;">
               <a class="nav-link text-dark" [routerLink]="['/']" (click)="logout()">Logout</a>
@@ -33,7 +30,11 @@
               </a>
             </li>
           </ng-container>
-
+          <ng-template #showLogin>
+            <li class="nav-item" [routerLinkActive]="['link-active']">
+              <a class="nav-link text-dark" [routerLink]="['login']">Login</a>
+            </li>
+          </ng-template>
         </ul>
       </div>
     </div>

@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BaseFormComponent } from '@app/core/components/base-form-component';
-
 import { AuthenticationService } from '@core/authentication.service';
+import { Store } from '@ngrx/store';
+import { loginWithCredentials } from '@core/store/actions';
+import { AppState } from '@app/core/store/app.state';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,8 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
   emailAddress!: string;
   password!: string;
 
-  constructor(private authenticationService: AuthenticationService, private formBuilder: FormBuilder) { 
+  constructor(private authenticationService: AuthenticationService, private formBuilder: FormBuilder,
+              private store: Store) { 
     super();    
   }
 
@@ -29,6 +32,7 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
   onSubmit() {
     if (!super.beforeSubmit()) return;
 
-    this.authenticationService.login(this.form.value);
+    this.store.dispatch(loginWithCredentials( { loginCredential: this.form.value }));
+    //this.authenticationService.login(this.form.value);
   }
 }

@@ -10,6 +10,11 @@ import { PublicModule } from './public/public.module';
 import { PrivateModule } from './private/private.module';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { Effects } from '@core/store/effects';
+import { Reducers } from '@core/store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,13 @@ import { StoreModule } from '@ngrx/store';
     CoreModule,
     PublicModule,
     PrivateModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({ authentication: Reducers}),
+    //StoreModule.forFeature('authentication', Reducers),
+    EffectsModule.forRoot([Effects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    })
   ],
   providers: [
     { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.loginWithAccessToken() },
