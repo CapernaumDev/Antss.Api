@@ -9,6 +9,8 @@ import { PostResult } from './models/post-result';
 import { UserListItem } from './models/user/user-list-item';
 import { BoardColumn } from './models/board-column';
 import { UpdateTicketStatus } from './models/ticket/update-ticket-status';
+import { LoginCredential } from './models/login-credential';
+import { LoginResult } from './models/login-result';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,10 @@ import { UpdateTicketStatus } from './models/ticket/update-ticket-status';
 
 export class ApiService {
   constructor(private http: HttpClient) { }
+
+  login(loginCredential: LoginCredential): Observable<LoginResult> {
+    return this.http.post<LoginResult>(`${environment.apiUrl}/Authentication/Login/`, loginCredential);
+  }
 
   getUserList(): Observable<UserListItem[]> {
     return this.http.get<UserListItem[]>(`${environment.apiUrl}/User/List`);

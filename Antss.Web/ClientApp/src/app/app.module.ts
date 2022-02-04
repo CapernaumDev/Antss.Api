@@ -9,6 +9,12 @@ import { CoreModule } from './core/core.module';
 import { PublicModule } from './public/public.module';
 import { PrivateModule } from './private/private.module';
 import { RouterModule } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { Effects } from '@core/store/effects';
+import { Reducers } from '@core/store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -20,10 +26,18 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     CoreModule,
     PublicModule,
-    PrivateModule
+    PrivateModule,
+    StoreModule.forRoot({ }),
+    StoreModule.forFeature('authentication', Reducers),
+    StoreModule.forFeature('optionItems', Reducers),
+    EffectsModule.forRoot([Effects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    })
   ],
   providers: [
-    { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.loginWithAccessToken() },
+    { provide: APP_INITIALIZER, multi: true, deps: [AppStartup], useFactory: (startupClass: AppStartup) => () => startupClass.attemptTokenLogin() },
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

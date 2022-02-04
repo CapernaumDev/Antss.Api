@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-import { AppStoreService } from "@core/app.store.service";
 import { ApiService } from '@core/api.service';
 import { FormModes } from '@app/core/enums/form-modes';
 import { User } from '@app/core/models/user/user';
 import { PostResult } from '@core/models/post-result';
 import { OptionItem } from '@core/models/option-item';
 import { BaseFormComponent } from '@app/core/components/base-form-component';
+import { Store } from '@ngrx/store';
+import { AppState } from '@app/core/store/app.state';
 
 @Component({
   selector: 'create-user',
@@ -29,9 +30,13 @@ export class UserComponent extends BaseFormComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private formBuilder: FormBuilder, private appStoreService: AppStoreService,
-    private apiService: ApiService, private router: Router, private route: ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private apiService: ApiService, 
+    private router: Router, private route: ActivatedRoute,
+    private store: Store<AppState>) {
     super();
+
+    this.offices$ = this.store.select(x => x.optionItems.offices);
+    this.userTypes$ = this.store.select(x => x.optionItems.userTypes);
   }
 
   onSubmit() {
@@ -73,9 +78,6 @@ export class UserComponent extends BaseFormComponent implements OnInit {
 
       this.formModeDescription = editing ? "Edit" : "Create";
     }));
-
-    this.offices$ = this.appStoreService.offices$;
-    this.userTypes$ = this.appStoreService.userTypes$;
   }
   createUser(user: User) {
     this.apiService.createUser(user)
