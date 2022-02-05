@@ -15,10 +15,7 @@ export const Reducers = createReducer(
         ...loginResult.user, 
         accessToken: window.btoa(loginResult.accessToken || JSON.parse(localStorage["access-token"])) 
       }),
-      status: 'success',
-      assignableUsers: loginResult.appData.assignableUsers,
-      offices: loginResult.appData.offices,
-      userTypes: loginResult.appData.userTypes
+      status: 'success'
     })),
 
     on(AppActions.loginFailure, (state) => ({
@@ -29,6 +26,13 @@ export const Reducers = createReducer(
     on(AppActions.setAfterLoginRedirect, (state, { url }) => ({
       ...state,
       afterLoginRedirect: url
+    })),
+
+    on(AppActions.setInitialAppData, (state, { appData }) => ({
+      ...state,
+      assignableUsers: appData.assignableUsers,
+      offices: appData.offices,
+      userTypes: appData.userTypes
     })),
 
     on(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated, (state) => ({

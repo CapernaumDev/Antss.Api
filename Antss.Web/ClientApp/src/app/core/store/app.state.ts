@@ -1,4 +1,5 @@
 import { OptionItem } from "../models/option-item";
+import { TicketListItem } from "../models/ticket/ticket-list-item";
 import { CurrentUser } from "../models/user/current-user";
 
 export interface AppState {
@@ -7,7 +8,8 @@ export interface AppState {
     afterLoginRedirect: string
     assignableUsers: OptionItem[],
     offices: OptionItem[],
-    userTypes: OptionItem[]
+    userTypes: OptionItem[],
+    ticketListItems: TicketListItem[]
 }
 
 export const initialState: AppState = {
@@ -16,5 +18,6 @@ export const initialState: AppState = {
     afterLoginRedirect: '',
     assignableUsers: [],
     offices: [],
-    userTypes: []
+    userTypes: [],
+    ticketListItems: []
 };

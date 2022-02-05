@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { AppData } from '../models/app-data';
 import { LoginCredential } from '../models/login-credential';
 import { LoginResult } from '../models/login-result';
 import { OptionItem } from '../models/option-item';
@@ -39,4 +40,9 @@ export const logoutOnServerUnauthorised = createAction(
 export const updateAssignableUsers = createAction(
     '[Server Push] Update Assignable User Options',
     props<{ options: OptionItem[] }>()
+)
+
+export const setInitialAppData = createAction(
+    '[Server Push] Initial App Data',
+    props<{ appData: AppData }>()
 )

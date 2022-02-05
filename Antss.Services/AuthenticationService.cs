@@ -1,28 +1,24 @@
 ﻿using Antss.Data;
-using Antss.Model;
 using Antss.Model.Entities;
 using Antss.Model.Enums;
 using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
-using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services
 {
     public class AuthenticationService
     {
         private readonly AntssContext _db;
-        private readonly EnumTransformer _enumTransformer;
         private readonly Encryptor _encryptor;
         
         private bool _loggedIn;
         private LoginResult _loginResult = new LoginResult();
         private User _user;
 
-        public AuthenticationService(AntssContext db, EnumTransformer enumTransformer, Encryptor encryptor)
+        public AuthenticationService(AntssContext db, Encryptor encryptor)
         {
             _db = db;
-            _enumTransformer = enumTransformer;
             _encryptor = encryptor;
         }
 
@@ -35,22 +31,6 @@ namespace Antss.Services
 
             if (!_loggedIn) return _loginResult;
 
-            var appData = new AppData
-            {
-                AssignableUsers = _db.Users
-                    .Where(x => x.UserType == UserTypes.Support || x.UserType == UserTypes.Admin)
-                    .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
-                    .Select(x => new OptionItem(x.Id, x.DisplayName))
-            };
-
-            if (_user.UserType == UserTypes.Admin)
-            {
-                appData.Offices = _db.Offices.AsNoTracking()
-                    .Select(x => new OptionItem(x.Id, x.Name)).ToList();
-
-                appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
-            }
-
             _loginResult.User = new UserDto
             {
                 Id = _user.Id,
@@ -62,8 +42,6 @@ namespace Antss.Services
                 UserTypeId = (int)_user.UserType,
                 UserType = _user.UserType.ToString(),
             };
-
-            _loginResult.AppData = appData;
 
             return _loginResult;
         }

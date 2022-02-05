@@ -1,7 +1,7 @@
-﻿using Antss.Model;
-using Antss.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Antss.Services;
+using Antss.Web.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace Antss.Web.Hubs
 {
@@ -17,27 +17,26 @@ namespace Antss.Web.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            var groupName = GetGroupNameForUser();
+            var groupName = Context.User.Identity.ToUserIdentity().UserType.ToString();
 
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
             await Clients.Caller.SendAsync("joinedGroup", groupName);
+
+            var appData = await _userService.GetAppData(Context.User.Identity.ToUserIdentity());
+
+            await Clients.Caller.SendAsync("initialAppData", appData);
 
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var groupName = GetGroupNameForUser();
+            var groupName = Context.User.Identity.ToUserIdentity().UserType.ToString();
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
 
             await base.OnDisconnectedAsync(exception);
-        }
-
-        private string GetGroupNameForUser()
-        {
-            return ((UserTypes)int.Parse(Context.User.Claims.Single(x => x.Type == "UserTypeId").Value)).ToString();
         }
     }
 }

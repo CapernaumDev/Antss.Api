@@ -1,6 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Model;
 using Antss.Model.Entities;
+using Antss.Model.Enums;
 using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
@@ -12,11 +13,13 @@ namespace Antss.Services
     {
         private readonly AntssContext _db;
         private readonly Encryptor _encryptor;
+        private readonly EnumTransformer _enumTransformer;
 
-        public UserService(AntssContext db, Encryptor encryptor)
+        public UserService(AntssContext db, Encryptor encryptor, EnumTransformer enumTransformer)
         {
             _db = db;
             _encryptor = encryptor;
+            _enumTransformer = enumTransformer;
         }
 
         public async Task<List<UserListItem>> GetList()
@@ -40,9 +43,9 @@ namespace Antss.Services
                 {
                     Id = id,
                     ContactNumber = x.ContactNumber,
-                    EmailAddress = x.EmailAddress,  
-                    FirstName = x.FirstName,    
-                    LastName= x.LastName,   
+                    EmailAddress = x.EmailAddress,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
                     OfficeId = x.OfficeId,
                     UserTypeId = (int)x.UserType
                 }).FirstAsync();
@@ -102,6 +105,28 @@ namespace Antss.Services
                 .Where(x => x.UserType == UserTypes.Support || x.UserType == UserTypes.Admin)
                 .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
                 .Select(x => new OptionItem(x.Id, x.DisplayName)).ToListAsync();
+        }
+
+        public async Task<AppData> GetAppData(IUserIdentity user)
+        {
+            var appData = new AppData
+            {
+                AssignableUsers = await _db.Users
+                    .Where(x => x.UserType == UserTypes.Support || x.UserType == UserTypes.Admin)
+                    .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
+                    .Select(x => new OptionItem(x.Id, x.DisplayName))
+                    .ToListAsync()
+            };
+
+            if (user.UserType == UserTypes.Admin)
+            {
+                appData.Offices = await _db.Offices.AsNoTracking()
+                    .Select(x => new OptionItem(x.Id, x.Name)).ToListAsync();
+
+                appData.UserTypes = _enumTransformer.ToFormattedCollection<UserTypes>();
+            }
+
+            return appData;
         }
     }
 }
