@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CurrentUser } from '@app/core/models/user/current-user';
 import { OptionItem } from '@app/core/models/option-item';
+import { selectAssignableUsers, selectCurrentUser } from '@app/core/store/selectors';
 
 @Component({
   selector: 'create-ticket',
@@ -26,8 +27,8 @@ export class CreateTicketComponent extends BaseFormComponent implements OnInit {
     private apiService: ApiService, private router: Router) {
     super();
 
-    this.currentUser$ = store.select(x => x.authentication.currentUser);
-    this.assignableUsers$ = store.select(x => x.optionItems.assignableUsers);
+    this.currentUser$ = store.select(selectCurrentUser);
+    this.assignableUsers$ = store.select(selectAssignableUsers);
   }
 
   onSubmit() {

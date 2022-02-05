@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, take } from 'rxjs';
 import { setAfterLoginRedirect } from './store/actions';
 import { AppState } from './store/app.state';
+import { selectCurrentUser } from './store/selectors';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -18,7 +19,7 @@ export class AuthGuard implements CanActivate {
       let routeRole = route.data["role"] as string;
       let redirectAfterLogin = route.url.toString();
 
-      this.store.select(x => x.authentication.currentUser).pipe(
+      this.store.select(selectCurrentUser).pipe(
         take(1)
       ).subscribe(user => {
         if (!user) {

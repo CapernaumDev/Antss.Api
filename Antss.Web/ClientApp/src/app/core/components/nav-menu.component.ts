@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CurrentUser } from '../models/user/current-user';
 import { AppState } from '../store/app.state';
 import { logoutUserInitiated } from '@core/store/actions';
+import { selectCurrentUser } from '../store/selectors';
 
 @Component({
   selector: 'app-nav-menu',
@@ -19,7 +20,7 @@ export class NavMenuComponent implements OnInit {
   isExpanded = false;
 
   constructor(private store: Store<AppState>) {
-    this.currentUser$ = this.store.select(x => x.authentication.currentUser);
+    this.currentUser$ = this.store.select(selectCurrentUser);
   }
 
   ngOnInit(): void {

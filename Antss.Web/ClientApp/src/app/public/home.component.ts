@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { AppState } from '@app/core/store/app.state';
 import { Store } from '@ngrx/store';
-import { selectIsSigningIn } from '@app/core/store/selectors';
+import { selectCurrentUser, selectIsSigningIn } from '@app/core/store/selectors';
 import { Observable } from 'rxjs';
 import { CurrentUser } from '@app/core/models/user/current-user';
 import { HttpClient } from '@angular/common/http';
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private store: Store<AppState>, private http: HttpClient) {
     this.isSigningIn$ = this.store.select(selectIsSigningIn);
-    this.currentUser$ = this.store.select(x => x.authentication.currentUser);
+    this.currentUser$ = this.store.select(selectCurrentUser);
    }
 
   ngOnInit() {

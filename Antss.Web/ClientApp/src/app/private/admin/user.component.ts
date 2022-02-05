@@ -12,6 +12,7 @@ import { OptionItem } from '@core/models/option-item';
 import { BaseFormComponent } from '@app/core/components/base-form-component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@app/core/store/app.state';
+import { selectOffices, selectUserTypes } from '@app/core/store/selectors';
 
 @Component({
   selector: 'create-user',
@@ -35,8 +36,8 @@ export class UserComponent extends BaseFormComponent implements OnInit {
     private store: Store<AppState>) {
     super();
 
-    this.offices$ = this.store.select(x => x.optionItems.offices);
-    this.userTypes$ = this.store.select(x => x.optionItems.userTypes);
+    this.offices$ = this.store.select(selectOffices);
+    this.userTypes$ = this.store.select(selectUserTypes);
   }
 
   onSubmit() {

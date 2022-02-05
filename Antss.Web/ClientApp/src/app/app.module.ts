@@ -28,8 +28,7 @@ import { environment } from '../environments/environment';
     PublicModule,
     PrivateModule,
     StoreModule.forRoot({ }),
-    StoreModule.forFeature('authentication', Reducers),
-    StoreModule.forFeature('optionItems', Reducers),
+    StoreModule.forFeature('app', Reducers),
     EffectsModule.forRoot([Effects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
