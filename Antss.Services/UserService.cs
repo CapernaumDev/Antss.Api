@@ -95,5 +95,13 @@ namespace Antss.Services
             await _db.SaveChangesAsync();
             return result;
         }
+
+        public async Task<IEnumerable<OptionItem>> GetAssignableUserOptions()
+        {
+            return await _db.Users.AsNoTracking()
+                .Where(x => x.UserType == UserTypes.Support || x.UserType == UserTypes.Admin)
+                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
+                .Select(x => new OptionItem(x.Id, x.DisplayName)).ToListAsync();
+        }
     }
 }

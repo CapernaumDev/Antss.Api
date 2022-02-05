@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Antss.Services.Contracts.CommonContracts;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Antss.Web.Hubs
 {
@@ -11,5 +12,6 @@ namespace Antss.Web.Hubs
     // -- David Fowler (creator of signalR)
     public partial class MainHub : Hub
     {
+
     }
 }

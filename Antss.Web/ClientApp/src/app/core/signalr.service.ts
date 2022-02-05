@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import * as signalR from "@microsoft/signalr";
+import { Store } from '@ngrx/store';
+import { updateAssignableUsers } from './store/actions';
+import { AppState } from './store/app.state';
 
 @Injectable({
     providedIn: 'root'
@@ -8,7 +11,10 @@ import * as signalR from "@microsoft/signalr";
 
 export class SignalRService {
     public message?: string;
-    private hubConnection?: signalR.HubConnection
+    private hubConnection?: signalR.HubConnection;
+
+    constructor(private store: Store<AppState>) {
+    }
 
     public startConnection = () => {
         this.hubConnection = new signalR.HubConnectionBuilder()
@@ -22,6 +28,12 @@ export class SignalRService {
         this.hubConnection?.on('joinedGroup', (data) => {
             this.message = data;
             console.log('joined group: ' + this.message);
+        });
+
+        this.hubConnection?.on('updateAssignableUsers', (data) => {
+            console.log('updateAssignableUsers: ');
+            console.log(data);
+            this.store.dispatch(updateAssignableUsers({ options: data }));
         });
 
         this.hubConnection

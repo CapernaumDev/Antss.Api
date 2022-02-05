@@ -12,6 +12,7 @@ public class AdminAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
         base.OnAuthorization(context);
 
         if (context.HttpContext.User.Identity == null || 
+            !context.HttpContext.User.Claims.Any() ||
             context.HttpContext.User.Identity.UserType() != UserTypes.Admin)
         {
             // not logged in - return 401 unauthorized

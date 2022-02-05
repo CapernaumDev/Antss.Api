@@ -1,4 +1,5 @@
 ﻿using Antss.Model;
+using Antss.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -7,6 +8,13 @@ namespace Antss.Web.Hubs
     [Authorize]
     public partial class MainHub : Hub
     {
+        private readonly UserService _userService;
+        
+        public MainHub(UserService userService) 
+        {
+            _userService = userService;
+        }
+
         public override async Task OnConnectedAsync()
         {
             var groupName = GetGroupNameForUser();

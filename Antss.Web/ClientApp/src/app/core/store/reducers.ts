@@ -36,5 +36,10 @@ export const Reducers = createReducer(
       currentUser: null,
       status: 'pending',
       afterLoginRedirect: ''
+    })),
+
+    on(AppActions.updateAssignableUsers, (state, { options }) => ({
+        ...state,
+        assignableUsers: options
     }))
   );

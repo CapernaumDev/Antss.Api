@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { LoginCredential } from '../models/login-credential';
 import { LoginResult } from '../models/login-result';
+import { OptionItem } from '../models/option-item';
 
 export const loginWithCredentials = createAction(
     '[Login Page] Login',
@@ -33,4 +34,9 @@ export const logoutUserInitiated = createAction(
 
 export const logoutOnServerUnauthorised = createAction(
     '[Error Interceptor server 401] Logout'
+)
+
+export const updateAssignableUsers = createAction(
+    '[Server Push] Update Assignable User Options',
+    props<{ options: OptionItem[] }>()
 )

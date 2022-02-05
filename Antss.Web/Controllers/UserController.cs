@@ -1,8 +1,11 @@
-﻿using Antss.Services;
+﻿using Antss.Model;
+using Antss.Services;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
 using Antss.Web.Authorization;
+using Antss.Web.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Antss.Web.Controllers
 {
@@ -11,10 +14,12 @@ namespace Antss.Web.Controllers
     [AdminAuthorize]
     public class UserController : ControllerBase
     {
+        private readonly IHubContext<MainHub> _hub;
         private readonly UserService _svc;
 
-        public UserController(UserService svc)
+        public UserController(UserService svc, IHubContext<MainHub> hub)
         {
+            _hub = hub;
             _svc = svc;
         }
 
@@ -33,13 +38,27 @@ namespace Antss.Web.Controllers
         [HttpPost, Route("Create")]
         public async Task<PostResult> Create(UserDto user)
         {
-            return await _svc.Create(user);
+            var result = await _svc.Create(user);
+
+            var assignableUsers = await _svc.GetAssignableUserOptions();
+
+            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
+                .SendAsync("updateAssignableUsers", assignableUsers);
+
+            return result;
         }
 
         [HttpPost, Route("Update")]
         public async Task<PostResult> Update(UserDto user)
         {
-            return await _svc.Update(user);
+            var result = await _svc.Update(user);
+
+            var assignableUsers = await _svc.GetAssignableUserOptions();
+
+            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
+                .SendAsync("updateAssignableUsers", assignableUsers);
+
+            return result;
         }
     }
 }
