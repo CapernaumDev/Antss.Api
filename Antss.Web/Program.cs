@@ -11,6 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalR();
 
+builder.Services.AddAuthentication(
+    options => options.DefaultScheme = "BasicToken")
+    .AddScheme<BasicTokenAuthSchemeOptions, BasicTokenAuthHandler>(
+        "BasicToken", options => { });
+
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(jsonOptions =>
     {
@@ -54,16 +59,17 @@ else
     app.UseHsts();
 }
 
-app.UseMiddleware<BasicAuthMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapHub<TestHub>("signalr/test");
+app.MapHub<MainHub>("signalr");
 
 app.MapFallbackToFile("index.html"); ;
 

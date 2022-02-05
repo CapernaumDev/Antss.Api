@@ -1,6 +1,5 @@
 ﻿namespace Antss.Web.Authorization;
 
-using Antss.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -14,8 +13,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         if (allowAnonymous)
             return;
 
-        var user = (User?)context.HttpContext.Items["User"];
-        if (user == null)
+        if (context.HttpContext.User.Identity == null || !context.HttpContext.User.Identity.IsAuthenticated)
         {
             // not logged in - return 401 unauthorized
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

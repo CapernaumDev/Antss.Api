@@ -8,9 +8,9 @@ namespace Antss.Web.Controllers
     [Route("api/[controller]")]
     public class HubController : Controller
     {
-        private IHubContext<TestHub> _hub;
+        private IHubContext<MainHub> _hub;
 
-        public HubController(IHubContext<TestHub> hub)
+        public HubController(IHubContext<MainHub> hub)
         {
             _hub = hub;
         }

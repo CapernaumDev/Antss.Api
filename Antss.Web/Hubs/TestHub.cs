@@ -2,7 +2,8 @@
 
 namespace Antss.Web.Hubs
 {
-    public class TestHub : Hub
+    public partial class MainHub : Hub
     {
+
     }
 }

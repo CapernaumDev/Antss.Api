@@ -12,18 +12,27 @@ export class SignalRService {
 
     public startConnection = () => {
         this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`${environment.signalrUrl}/test`)
+            .withUrl(environment.signalrUrl, { 
+                accessTokenFactory: () => window.btoa(JSON.parse(localStorage["access-token"]))
+            },)
             .withAutomaticReconnect()
-            .configureLogging(environment.production ? signalR.LogLevel.None : signalR.LogLevel.Information)
+            .configureLogging(environment.production ? signalR.LogLevel.None : signalR.LogLevel.Debug)
             .build();
+
+        this.hubConnection?.on('joinedGroup', (data) => {
+            this.message = data;
+            console.log('joined group: ' + this.message);
+        });
 
         this.hubConnection
             .start()
-            .then(() => console.log('Connection started'))
-            .catch(err => console.log('Error while starting connection: ' + err))
+            .then(() => { 
+                console.log('Connection started') ;
+            })
+            .catch(err => console.log('Error while starting connection: ' + err));
     }
 
-    public addTestDataListener = () => {
+    public addDataListener = () => {
         this.hubConnection?.on('test', (data) => {
             this.message = data;
             console.log(this.message);

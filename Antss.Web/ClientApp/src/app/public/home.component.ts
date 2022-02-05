@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectIsSigningIn } from '@app/core/store/selectors';
 import { Observable } from 'rxjs';
 import { CurrentUser } from '@app/core/models/user/current-user';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -23,11 +24,18 @@ export class HomeComponent implements OnInit {
   public isSigningIn$: Observable<boolean>;
   public currentUser$: Observable<CurrentUser | null>;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private http: HttpClient) {
     this.isSigningIn$ = this.store.select(selectIsSigningIn);
     this.currentUser$ = this.store.select(x => x.authentication.currentUser);
    }
 
   ngOnInit() {
+  }
+  
+  sendMessage() {
+    this.http.get('https://localhost:7210/api/hub')
+    .subscribe(res => {
+      console.log(res);
+    })
   }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Antss.Web.Authorization;
 
-using Antss.Model.Entities;
+using Antss.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -11,8 +11,8 @@ public class AdminAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         base.OnAuthorization(context);
 
-        var user = (User?)context.HttpContext.Items["User"];
-        if (user == null || user.UserType != Model.UserTypes.Admin)
+        if (context.HttpContext.User.Identity == null || 
+            context.HttpContext.User.Identity.UserType() != UserTypes.Admin)
         {
             // not logged in - return 401 unauthorized
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

@@ -1,5 +1,4 @@
-﻿using Antss.Model.Entities;
-using Antss.Services;
+﻿using Antss.Services;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
 using Antss.Web.Authorization;
@@ -22,26 +21,19 @@ namespace Antss.Web.Controllers
         [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<TicketListItem>>> Get(bool includeClosed)
         {
-            //TODO: stop repeating this in each action
-            var user = (User)HttpContext.Items["User"];
-            
-            return await _svc.GetList(user, includeClosed);
+            return await _svc.GetList(HttpContext.User.Identity.ToUserIdentity(), includeClosed);
         }
 
         [HttpGet, Route("Board")]
         public async Task<ActionResult<IEnumerable<BoardColumn<TicketListItem>>>> Board(bool includeClosed)
         {
-            var user = (User)HttpContext.Items["User"];
-
-            return await _svc.GetBoard(user, includeClosed);
+            return await _svc.GetBoard(HttpContext.User.Identity.ToUserIdentity(), includeClosed);
         }
 
         [HttpPost, Route("Create")]
         public async Task<int> Create(CreateTicketDto ticketDto)
         {
-            var user = (User)HttpContext.Items["User"];
-
-            return await _svc.Create(ticketDto, user);
+            return await _svc.Create(ticketDto, HttpContext.User.Identity.ToUserIdentity());
         }
 
         [HttpPost, Route("UpdateStatus")]

@@ -2,6 +2,7 @@
 using Antss.Model;
 using Antss.Model.Entities;
 using Antss.Model.Enums;
+using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace Antss.Services
             _enumTransformer = enumTransformer;
         }
 
-        public async Task<List<TicketListItem>> GetList(User user, bool includeClosed)
+        public async Task<List<TicketListItem>> GetList(IUserIdentity user, bool includeClosed)
         {
             var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
@@ -38,7 +39,7 @@ namespace Antss.Services
             }).ToListAsync();
         }
 
-        public async Task<List<BoardColumn<TicketListItem>>> GetBoard(User user, bool includeClosed)
+        public async Task<List<BoardColumn<TicketListItem>>> GetBoard(IUserIdentity user, bool includeClosed)
         {
             var query = _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
@@ -81,14 +82,14 @@ namespace Antss.Services
             return boardColumns.OrderBy(x => x.Id).ToList();
         }
 
-        public async Task<int> Create(CreateTicketDto ticketDto, User raisedBy)
+        public async Task<int> Create(CreateTicketDto ticketDto, IUserIdentity raisedBy)
         {
             //TODO: permissions based authorization
             var canAssignOnCreation = raisedBy.UserType == UserTypes.Admin || raisedBy.UserType == UserTypes.Support;
 
             var newTicket = new Ticket
             {
-                RaisedById = raisedBy.Id,
+                RaisedById = raisedBy.UserId,
                 AssignedToId = canAssignOnCreation ? ticketDto.AssignedToId : null,
                 TicketStatus = TicketStatuses.Raised,
                 Description = ticketDto.Description
@@ -110,10 +111,10 @@ namespace Antss.Services
             return new PostResult();
         }
         
-        private IQueryable<Ticket> ApplyCommonTicketFilters(IQueryable<Ticket> query, User user, bool includeClosed)
+        private IQueryable<Ticket> ApplyCommonTicketFilters(IQueryable<Ticket> query, IUserIdentity user, bool includeClosed)
         {
             if (user.UserType == UserTypes.User)
-                query = query.Where(x => x.RaisedById == user.Id);
+                query = query.Where(x => x.RaisedById == user.UserId);
 
             if (!includeClosed)
                 query = query.Where(x => x.TicketStatus != TicketStatuses.Completed && x.TicketStatus != TicketStatuses.Cancelled);

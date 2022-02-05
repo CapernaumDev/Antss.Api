@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from './app.state';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
+import { SignalRService } from '../signalr.service';
 
 @Injectable()
 export class Effects {
@@ -15,7 +16,8 @@ export class Effects {
         private actions$: Actions,
         private store: Store<AppState>,
         private apiService: ApiService,
-        private router: Router
+        private router: Router,
+        public signalRService: SignalRService
     ) { }
 
     login$ = createEffect(() =>
@@ -37,6 +39,9 @@ export class Effects {
             tap(([action, afterLoginRedirect]) => {
                 if (action.loginResult.accessToken)
                     localStorage["access-token"] = JSON.stringify(action.loginResult.accessToken);
+
+                this.signalRService.startConnection();
+                this.signalRService.addDataListener();   
 
                 this.router.navigateByUrl(afterLoginRedirect);
             })
