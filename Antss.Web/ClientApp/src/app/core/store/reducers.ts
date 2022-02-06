@@ -45,5 +45,10 @@ export const Reducers = createReducer(
     on(AppActions.updateAssignableUsers, (state, { options }) => ({
         ...state,
         assignableUsers: options
+    })),
+
+    on(AppActions.loadTicketsSuccess, (state, { tickets }) => ({
+      ...state,
+      ticketListItems: tickets
     }))
   );

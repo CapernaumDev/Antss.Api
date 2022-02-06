@@ -1,5 +1,5 @@
 import * as AppActions from './actions';
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { of } from 'rxjs';
@@ -33,7 +33,7 @@ export class Effects {
         )
     );
 
-    loginSuccess = createEffect(() => 
+    loginSuccess = createEffect(() =>
         this.actions$.pipe(
             ofType(AppActions.loginSuccess),
             withLatestFrom(this.store.select(selectAfterLoginRedirect)),
@@ -42,14 +42,14 @@ export class Effects {
                     localStorage["access-token"] = JSON.stringify(action.loginResult.accessToken);
 
                 this.signalRService.startConnection();
-                this.signalRService.addDataListener();   
+                this.signalRService.addDataListener();
 
                 this.router.navigateByUrl(afterLoginRedirect);
             })
         ), { dispatch: false }
     );
 
-    logout$ = createEffect(() => 
+    logout$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated),
             tap(() => {
@@ -58,4 +58,23 @@ export class Effects {
             }), take(1)
         ),
     );
+
+    loadTickets$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AppActions.loadTicketsRequested),
+            switchMap((action) => {
+                return this.apiService.getTicketList(action.includeClosed).pipe(
+                    map((tickets) => AppActions.loadTicketsSuccess({ tickets: tickets })),
+                    catchError(() => of(AppActions.loadTicketsFailure()))
+                )
+            })
+        )
+    );
+
+    loadTicketFailure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AppActions.loadTicketsFailure),
+            tap(() => alert('There was a problem loading tickets from the server'))
+        )
+    )
 }

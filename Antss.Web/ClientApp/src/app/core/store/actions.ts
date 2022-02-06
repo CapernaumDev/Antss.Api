@@ -3,6 +3,7 @@ import { AppData } from '../models/app-data';
 import { LoginCredential } from '../models/login-credential';
 import { LoginResult } from '../models/login-result';
 import { OptionItem } from '../models/option-item';
+import { TicketListItem } from '../models/ticket/ticket-list-item';
 
 export const loginWithCredentials = createAction(
     '[Login Page] Login',
@@ -46,3 +47,17 @@ export const setInitialAppData = createAction(
     '[Server Push] Initial App Data',
     props<{ appData: AppData }>()
 )
+
+export const loadTicketsRequested = createAction(
+    '[Ticket List] Load Tickets Requested',
+    props<{ includeClosed: boolean }>()
+);
+
+export const loadTicketsSuccess = createAction(
+    '[Ticket List] Load Tickets Success',
+    props<{ tickets: TicketListItem[] }>()
+);
+
+export const loadTicketsFailure = createAction(
+    '[Ticket List] Load Tickets Failure'
+);
