@@ -45,7 +45,9 @@ namespace Antss.Web.Controllers
             await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
                 .SendAsync("updateAssignableUsers", assignableUsers);
 
-            return result;
+            await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userCreated", result.User);
+
+            return result.PostResult;
         }
 
         [HttpPost, Route("Update")]
@@ -58,7 +60,9 @@ namespace Antss.Web.Controllers
             await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
                 .SendAsync("updateAssignableUsers", assignableUsers);
 
-            return result;
+            await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userUpdated", result.User);
+
+            return result.PostResult;
         }
     }
 }

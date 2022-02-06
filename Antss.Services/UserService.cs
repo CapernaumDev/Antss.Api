@@ -51,7 +51,7 @@ namespace Antss.Services
                 }).FirstAsync();
         }
 
-        public async Task<PostResult> Create(UserDto userDto)
+        public async Task<(PostResult PostResult, UserListItem User)> Create(UserDto userDto)
         {
             var userToSave = new User
             {
@@ -66,14 +66,26 @@ namespace Antss.Services
 
             _db.Users.Add(userToSave);
             await _db.SaveChangesAsync();
+            await _db.Entry(userToSave).ReloadAsync();
 
-            return new PostResult();
+            var returnUser = new UserListItem
+            {
+                Id = userToSave.Id,
+                FirstName = userToSave.FirstName,
+                LastName = userToSave.LastName,
+                OfficeName = userToSave.Office == null ? "" : userToSave.Office.Name,
+                UserType = userToSave.UserType.ToString()
+            };
+
+            return (new PostResult(), returnUser);
         }
 
-        public async Task<PostResult> Update(UserDto userDto)
+        public async Task<(PostResult PostResult, UserListItem? User)> Update(UserDto userDto)
         {
             var result = new PostResult();
-            var existingUser = _db.Users.Include(x => x.AssignedTickets)
+            var existingUser = _db.Users
+                .Include(x => x.AssignedTickets)
+                .Include(x => x.Office)
                 .Single(x => x.Id == userDto.Id);
 
             if ((UserTypes)userDto.UserTypeId == UserTypes.User &&
@@ -84,7 +96,7 @@ namespace Antss.Services
                     //user was changed from support/admin to user UserType but they have tickets assigned
                     //which is not valid for a UserType of user
                     result.ErrorMessage = "User Type cannot be changed to 'User' because the user has tickets assigned.";
-                    return result;
+                    return (result, null);
                 }
             }
 
@@ -96,7 +108,18 @@ namespace Antss.Services
             existingUser.OfficeId = userDto.OfficeId;
 
             await _db.SaveChangesAsync();
-            return result;
+            var updatedUser = await _db.Users.AsNoTracking().Include(x => x.Office).FirstAsync(x => x.Id == existingUser.Id);
+
+            var returnUser = new UserListItem
+            {
+                Id = updatedUser.Id,
+                FirstName = updatedUser.FirstName,
+                LastName = updatedUser.LastName,
+                OfficeName = updatedUser.Office == null ? "" : updatedUser.Office.Name,
+                UserType = updatedUser.UserType.ToString()
+            };
+            
+            return (result, returnUser);
         }
 
         public async Task<IEnumerable<OptionItem>> GetAssignableUserOptions()

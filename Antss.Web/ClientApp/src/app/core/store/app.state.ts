@@ -2,6 +2,7 @@ import { BoardColumn } from "../models/board-column";
 import { OptionItem } from "../models/option-item";
 import { TicketListItem } from "../models/ticket/ticket-list-item";
 import { CurrentUser } from "../models/user/current-user";
+import { UserListItem } from "../models/user/user-list-item";
 
 export interface AppState {
     currentUser: CurrentUser | null;
@@ -11,7 +12,8 @@ export interface AppState {
     offices: OptionItem[],
     userTypes: OptionItem[],
     ticketListItems: TicketListItem[],
-    ticketBoard: BoardColumn<TicketListItem>[]
+    ticketBoard: BoardColumn<TicketListItem>[],
+    userListItems: UserListItem[]
 }
 
 export const initialState: AppState = {
@@ -22,5 +24,6 @@ export const initialState: AppState = {
     offices: [],
     userTypes: [],
     ticketListItems: [],
-    ticketBoard: []
+    ticketBoard: [],
+    userListItems: []
 };

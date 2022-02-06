@@ -86,5 +86,24 @@ export class Effects {
             ofType(AppActions.loadTicketsFailure, AppActions.loadTicketBoardFailure),
             tap(() => alert('There was a problem loading tickets from the server'))
         )
-    )
+    );
+
+    loadUsers$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AppActions.loadUserListRequested),
+            switchMap((action) => {
+                return this.apiService.getUserList().pipe(
+                    map((users) => AppActions.loadUserListSuccess({ users: users })),
+                    catchError(() => of(AppActions.loadTicketsFailure()))
+                )
+            })
+        )
+    );
+
+    loadUsersFailure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AppActions.loadUserListFailure),
+            tap(() => alert('There was a problem loading users from the server'))
+        )
+    );
 }

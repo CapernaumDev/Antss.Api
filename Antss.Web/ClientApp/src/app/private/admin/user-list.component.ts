@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
-import { ApiService } from '@core/api.service';
-import { Observable, shareReplay } from 'rxjs';
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
 import { UserListItem } from '@app/core/models/user/user-list-item';
 import { UserListDataSource } from './user-list-data-source';
 import { SortableDirective } from '@app/core/directives/sortable.directive';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
+import { Store } from '@ngrx/store';
+import { AppState } from '@app/core/store/app.state';
+import { loadUserListRequested } from '@app/core/store/actions';
+import { selectUserList } from '@app/core/store/selectors';
 
 @Component({
   selector: 'user-list',
@@ -13,7 +16,7 @@ import { FilterInputComponent } from '@app/core/components/filter-input.componen
   templateUrl: './user-list.component.html',
 })
 
-export class UserListComponent implements OnInit {
+export class UserListComponent {
   usersDataSource = new UserListDataSource([]);
   users$: Observable<UserListItem[]> = this.usersDataSource.data$;
   recordCount$: Observable<number> = this.usersDataSource.recordCount$;
@@ -22,11 +25,9 @@ export class UserListComponent implements OnInit {
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
-  constructor(private apiService: ApiService) { }
-
-  ngOnInit() {
-    const users$ = this.apiService.getUserList();
-    this.usersDataSource.setDataSource(users$);
+  constructor(private store: Store<AppState>) { 
+    this.store.dispatch(loadUserListRequested()); 
+    this.usersDataSource.setDataSource(this.store.select(selectUserList)); 
   }
 
   ngAfterViewInit() {

@@ -83,4 +83,20 @@ export const Reducers = createReducer(
       ...state,
       ticketBoard: board
     })),
+
+    on(AppActions.userCreated, (state, { user }) => produce(state, draft => {
+      draft.userListItems.push(user);
+    })),
+
+    on(AppActions.userUpdated, (state, { user }) => produce(state, draft => {
+      let userIndex = draft.userListItems.findIndex(x => x.id === user.id);
+      if (userIndex > -1) {
+        draft.userListItems.splice(userIndex, 1, user);
+      }
+    })),
+
+    on(AppActions.loadUserListSuccess, (state, { users }) => ({
+      ...state,
+      userListItems: users
+    })),
   );

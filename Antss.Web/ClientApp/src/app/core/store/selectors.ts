@@ -44,3 +44,8 @@ export const selectTicketBoard = createSelector(
   getAppState,
   (state) => state.ticketBoard
 );
+
+export const selectUserList = createSelector(
+  getAppState,
+  (state) => state.userListItems
+);

@@ -7,7 +7,9 @@ import {
     setInitialAppData, 
     ticketCreated,
     ticketStatusUpdated, 
-    updateAssignableUsers 
+    updateAssignableUsers, 
+    userCreated,
+    userUpdated
 } from './store/actions';
 
 @Injectable({
@@ -49,6 +51,14 @@ export class SignalRService {
 
         this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex) => {
             this.store.dispatch(ticketStatusUpdated({ ticket: ticket, boardColumnIndex: boardColumnIndex }));          
+        });
+
+        this.hubConnection?.on('userCreated', (user) => {
+            this.store.dispatch(userCreated({ user: user }));          
+        });
+
+        this.hubConnection?.on('userUpdated', (user) => {
+            this.store.dispatch(userUpdated({ user: user }));          
         });
 
         this.hubConnection
