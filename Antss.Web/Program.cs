@@ -4,6 +4,7 @@ using Antss.Services;
 using Antss.Services.Common;
 using Antss.Web.Authorization;
 using Antss.Web.Hubs;
+using Antss.Web.Push;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 
@@ -37,6 +38,7 @@ builder.Services.AddTransient<Encryptor, Encryptor>();
 builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<AuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<TicketService, TicketService>();
+builder.Services.AddScoped<PushService, PushService>();
 
 var app = builder.Build();
 

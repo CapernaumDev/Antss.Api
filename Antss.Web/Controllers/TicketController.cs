@@ -1,11 +1,9 @@
-﻿using Antss.Model;
-using Antss.Services;
+﻿using Antss.Services;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
 using Antss.Web.Authorization;
-using Antss.Web.Hubs;
+using Antss.Web.Push;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Antss.Web.Controllers
 {
@@ -15,12 +13,12 @@ namespace Antss.Web.Controllers
     public class TicketController : ControllerBase
     {
         private readonly TicketService _svc;
-        private readonly IHubContext<MainHub> _hub;
+        private readonly PushService _pushService;
 
-        public TicketController(TicketService svc, IHubContext<MainHub> hub)
+        public TicketController(TicketService svc, PushService pushService)
         {
             _svc = svc;
-            _hub = hub;
+            _pushService = pushService;
         }
 
         [HttpGet, Route("List")]
@@ -40,10 +38,7 @@ namespace Antss.Web.Controllers
         {
             var ticket = await _svc.Create(ticketDto, HttpContext.User.Identity.ToUserIdentity());
 
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("ticketCreated", ticket);
-
-            //todo: also send back to user who created the ticket (need to associate connections with users)
+            _pushService.TicketCreated(ticket);
 
             return ticket.Id;
         }
@@ -53,10 +48,7 @@ namespace Antss.Web.Controllers
         {
             var result = await _svc.UpdateStatus(model);
 
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("ticketStatusUpdated", result.TicketListItem, model.BoardColumnIndex);
-
-            //todo: also send back to user who created the ticket (need to associate connections with users)
+            _pushService.TicketStatusUpdated(result.TicketListItem, model.BoardColumnIndex);
 
             return result.PostResult;
         }

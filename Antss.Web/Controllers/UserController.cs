@@ -1,11 +1,9 @@
-﻿using Antss.Model;
-using Antss.Services;
+﻿using Antss.Services;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
 using Antss.Web.Authorization;
-using Antss.Web.Hubs;
+using Antss.Web.Push;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Antss.Web.Controllers
 {
@@ -14,53 +12,44 @@ namespace Antss.Web.Controllers
     [AdminAuthorize]
     public class UserController : ControllerBase
     {
-        private readonly IHubContext<MainHub> _hub;
-        private readonly UserService _svc;
+        private readonly UserService _userService;
+        private readonly PushService _pushService;
 
-        public UserController(UserService svc, IHubContext<MainHub> hub)
+        public UserController(UserService userService, PushService pushService)
         {
-            _hub = hub;
-            _svc = svc;
+            _pushService = pushService;
+            _userService = userService;
         }
 
         [HttpGet, Route("List")]
         public async Task<ActionResult<IEnumerable<UserListItem>>> Get()
         {
-             return await _svc.GetList();
+             return await _userService.GetList();
         }
 
         [HttpGet, Route("Get")]
         public async Task<UserDto> Get(int id)
         {
-            return await _svc.GetById(id);
+            return await _userService.GetById(id);
         }
 
         [HttpPost, Route("Create")]
         public async Task<PostResult> Create(UserDto user)
         {
-            var result = await _svc.Create(user);
+            var result = await _userService.Create(user);
 
-            var assignableUsers = await _svc.GetAssignableUserOptions();
-
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("updateAssignableUsers", assignableUsers);
-
-            await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userCreated", result.User);
-
+            _pushService.UserCreated(result.User);
+            
             return result.PostResult;
         }
 
         [HttpPost, Route("Update")]
         public async Task<PostResult> Update(UserDto user)
         {
-            var result = await _svc.Update(user);
+            var result = await _userService.Update(user);
 
-            var assignableUsers = await _svc.GetAssignableUserOptions();
-
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("updateAssignableUsers", assignableUsers);
-
-            await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userUpdated", result.User);
+            if (result.User != null)
+                _pushService.UserUpdated(result.User);
 
             return result.PostResult;
         }
