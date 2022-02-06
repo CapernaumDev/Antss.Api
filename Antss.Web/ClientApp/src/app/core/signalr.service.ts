@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import * as signalR from "@microsoft/signalr";
 import { Store } from '@ngrx/store';
-import { setInitialAppData, updateAssignableUsers } from './store/actions';
 import { AppState } from './store/app.state';
+import { 
+    setInitialAppData, 
+    ticketCreated,
+    ticketStatusUpdated, 
+    updateAssignableUsers 
+} from './store/actions';
 
 @Injectable({
     providedIn: 'root'
@@ -36,6 +41,14 @@ export class SignalRService {
 
         this.hubConnection?.on('initialAppData', (data) => {
             this.store.dispatch(setInitialAppData({ appData: data }));          
+        });
+
+        this.hubConnection?.on('ticketCreated', (ticket) => {
+            this.store.dispatch(ticketCreated({ ticket: ticket }));          
+        });
+
+        this.hubConnection?.on('ticketStatusUpdated', (ticket) => {
+            this.store.dispatch(ticketStatusUpdated({ ticket: ticket }));          
         });
 
         this.hubConnection

@@ -27,7 +27,7 @@ export class TicketListComponent {
 
   constructor(private store: Store<AppState>) { 
     this.store.dispatch(loadTicketsRequested({ includeClosed: false })); 
-    this.ticketsDataSource.updateData(this.store.select(selectTicketList));  
+    this.ticketsDataSource.setDataSource(this.store.select(selectTicketList));  
   }
 
   ngAfterViewInit() {

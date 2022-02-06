@@ -38,7 +38,7 @@ export abstract class DataSource<T> {
     this.subs.forEach(x => x.unsubscribe());
   }
 
-  updateData(data: T[] | Observable<T[]>) {
+  setDataSource(data: T[] | Observable<T[]>) {
     if (isObservable(data)) {
       const sub = data
         .pipe(

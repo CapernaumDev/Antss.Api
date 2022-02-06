@@ -2,11 +2,13 @@ import { createReducer, on } from '@ngrx/store';
 import { CurrentUser } from '../models/user/current-user';
 import * as AppActions from './actions';
 import { initialState } from './app.state';
+import produce from "immer";
 
 export const Reducers = createReducer(
     initialState,
 
     on(AppActions.loginWithCredentials, (state) => ({ ...state, status: 'loading' })),
+    
     on(AppActions.loginWithToken, (state) => ({ ...state, status: 'loading' })),
 
     on(AppActions.loginSuccess, (state, { loginResult }) => ({
@@ -50,5 +52,15 @@ export const Reducers = createReducer(
     on(AppActions.loadTicketsSuccess, (state, { tickets }) => ({
       ...state,
       ticketListItems: tickets
+    })),
+
+    on(AppActions.ticketCreated, (state, { ticket }) => produce(state, draft => {
+      draft.ticketListItems.push(ticket);
+    })),
+
+    on(AppActions.ticketStatusUpdated, (state, { ticket }) => produce(state, draft => {
+      let ticketInStateCollection = draft.ticketListItems.find(x => x.id === ticket.id);
+      if (ticketInStateCollection)
+        ticketInStateCollection.ticketStatus = ticket.ticketStatus;
     }))
   );

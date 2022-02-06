@@ -39,7 +39,7 @@ export class TicketBoardComponent implements OnInit {
 
   public ngOnInit(): void {
     const board$ = this.apiService.getTicketBoard(false);
-    this.boardDataSource.updateData(board$);
+    this.boardDataSource.setDataSource(board$);
   }
 
   public drop(event: CdkDragDrop<TicketListItem[]>): void {
@@ -80,7 +80,7 @@ export class TicketBoardComponent implements OnInit {
   reload(event: Event) {
     let target = event.target as HTMLInputElement;
     const data = this.apiService.getTicketBoard(target.checked);
-    this.boardDataSource.updateData(data);
+    this.boardDataSource.setDataSource(data);
   }
 
   ngAfterViewInit() {

@@ -26,7 +26,7 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     const users$ = this.apiService.getUserList();
-    this.usersDataSource.updateData(users$);
+    this.usersDataSource.setDataSource(users$);
   }
 
   ngAfterViewInit() {
