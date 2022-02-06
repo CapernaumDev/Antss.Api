@@ -69,7 +69,7 @@ export const Reducers = createReducer(
           let foundTicketIndex = draft.ticketBoard[i].data.findIndex(x => x.id === ticket.id);
           if (foundTicketIndex > -1) {
             draft.ticketBoard[i].data.splice(foundTicketIndex, 1);
-            if (boardColumnIndex && destinationBoardColumn.data.length >= boardColumnIndex)
+            if (boardColumnIndex != null && boardColumnIndex > -1 && destinationBoardColumn.data.length >= boardColumnIndex)
               destinationBoardColumn.data.splice(boardColumnIndex, 0, ticket);
             else
               destinationBoardColumn.data.push(ticket);
