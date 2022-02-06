@@ -58,11 +58,4 @@ export class SignalRService {
             })
             .catch(err => console.log('Error while starting connection: ' + err));
     }
-
-    public addDataListener = () => {
-        this.hubConnection?.on('test', (data) => {
-            this.message = data;
-            console.log(this.message);
-        });
-    }
 }

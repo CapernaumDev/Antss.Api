@@ -42,8 +42,6 @@ export class Effects {
                     localStorage["access-token"] = JSON.stringify(action.loginResult.accessToken);
 
                 this.signalRService.startConnection();
-                this.signalRService.addDataListener();
-
                 this.router.navigateByUrl(afterLoginRedirect);
             })
         ), { dispatch: false }
@@ -54,7 +52,7 @@ export class Effects {
             ofType(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated),
             tap(() => {
                 localStorage["access-token"] = JSON.stringify(null);
-                window.location.href = "/";
+                window.location.href = "/"; //TODO: clear the state instead
             }), take(1)
         ),
     );
