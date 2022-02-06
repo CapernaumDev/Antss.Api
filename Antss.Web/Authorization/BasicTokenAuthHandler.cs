@@ -1,7 +1,6 @@
 ﻿using Antss.Data;
 using Antss.Services.Common;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
@@ -16,16 +15,19 @@ namespace Antss.Web.Authorization
     {
         private const string InvalidTokenFormatMessage = "Access token not valid format.";
         private readonly IConfiguration _configuration;
+        private readonly AntssContext _db;
 
         public BasicTokenAuthHandler(
             IOptionsMonitor<BasicTokenAuthSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            AntssContext db)
             : base(options, logger, encoder, clock)
         {
             _configuration = configuration;
+            _db = db;
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -59,28 +61,21 @@ namespace Antss.Web.Authorization
             {
                 return Task.FromResult(AuthenticateResult.Fail(InvalidTokenFormatMessage));
             }
+    
+            var user = _db.Users.SingleOrDefault(x => x.AccessToken == accessToken);
 
-            var connectionstring = _configuration.GetConnectionString("DefaultConnection");
-            var optionsBuilder = new DbContextOptionsBuilder<AntssContext>();
-            optionsBuilder.UseSqlServer(connectionstring);
-
-            using (var db = new AntssContext(optionsBuilder.Options))
+            if (user != null && user.AccessTokenExpiryUtc > DateTime.UtcNow)
             {
-                var user = db.Users.SingleOrDefault(x => x.AccessToken == accessToken);
-
-                if (user != null && user.AccessTokenExpiryUtc > DateTime.UtcNow)
+                var identity = new ClaimsIdentity(new List<Claim>
                 {
-                    var identity = new ClaimsIdentity(new List<Claim>
-                    {
-                        new Claim("UserTypeId", ((int)user.UserType).ToString()),
-                        new Claim("UserId", user.Id.ToString())
-                    }, nameof(BasicTokenAuthHandler));
+                    new Claim("UserTypeId", ((int)user.UserType).ToString()),
+                    new Claim("UserId", user.Id.ToString())
+                }, nameof(BasicTokenAuthHandler));
 
-                    var principal = new ClaimsPrincipal(identity);
-                    var ticket = new AuthenticationTicket(principal, Scheme.Name);
+                var principal = new ClaimsPrincipal(identity);
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-                    return Task.FromResult(AuthenticateResult.Success(ticket));
-                }
+                return Task.FromResult(AuthenticateResult.Success(ticket));
             }
 
             return Task.FromResult(AuthenticateResult.Fail("Access token not valid"));
