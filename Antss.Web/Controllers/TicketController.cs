@@ -36,11 +36,11 @@ namespace Antss.Web.Controllers
         [HttpPost, Route("Create")]
         public async Task<int> Create(CreateTicketDto ticketDto)
         {
-            var ticket = await _svc.Create(ticketDto, HttpContext.User.Identity.ToUserIdentity());
+            var ticketId = await _svc.Create(ticketDto, HttpContext.User.Identity.ToUserIdentity());
 
-            await _pushService.TicketCreated(ticket);
+            _pushService.TicketCreated(ticketId);
 
-            return ticket.Id;
+            return ticketId;
         }
 
         [HttpPost, Route("UpdateStatus")]
@@ -48,9 +48,9 @@ namespace Antss.Web.Controllers
         {
             var result = await _svc.UpdateStatus(model);
 
-            await _pushService.TicketStatusUpdated(result.TicketListItem, model.BoardColumnIndex);
+            _pushService.TicketStatusUpdated(model.TicketId, model.BoardColumnIndex);
 
-            return result.PostResult;
+            return result;
         }
     }
 }

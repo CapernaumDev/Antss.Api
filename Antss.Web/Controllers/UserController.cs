@@ -34,13 +34,11 @@ namespace Antss.Web.Controllers
         }
 
         [HttpPost, Route("Create")]
-        public async Task<PostResult> Create(UserDto user)
+        public async Task Create(UserDto user)
         {
-            var result = await _userService.Create(user);
+            var userId = await _userService.Create(user);
 
-            await _pushService.UserCreated(result.User);
-            
-            return result.PostResult;
+            _pushService.UserCreated(userId);
         }
 
         [HttpPost, Route("Update")]
@@ -48,10 +46,10 @@ namespace Antss.Web.Controllers
         {
             var result = await _userService.Update(user);
 
-            if (result.User != null)
-                await _pushService.UserUpdated(result.User);
+            if (result.IsValid)
+                _pushService.UserUpdated(user.Id);
 
-            return result.PostResult;
+            return result;
         }
     }
 }

@@ -5,6 +5,7 @@ using Antss.Services.Common;
 using Antss.Web.Authorization;
 using Antss.Web.Hubs;
 using Antss.Web.Push;
+using Coravel;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 
@@ -39,6 +40,12 @@ builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<AuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<TicketService, TicketService>();
 builder.Services.AddScoped<PushService, PushService>();
+
+builder.Services.AddQueue();
+builder.Services.AddTransient<TicketCreatedInvokable>();
+builder.Services.AddTransient<TicketUpdatedInvokable>();
+builder.Services.AddTransient<UserCreatedInvokable>();
+builder.Services.AddTransient<UserUpdatedInvokable>();
 
 var app = builder.Build();
 

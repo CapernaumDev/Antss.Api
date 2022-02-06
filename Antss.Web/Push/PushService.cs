@@ -1,57 +1,35 @@
-﻿using Antss.Model;
-using Antss.Services;
-using Antss.Services.Contracts.TicketContracts;
-using Antss.Services.Contracts.UserContracts;
-using Antss.Web.Hubs;
-using Microsoft.AspNetCore.SignalR;
+﻿using Coravel.Queuing.Interfaces;
 
 namespace Antss.Web.Push
 {
     public class PushService
     {
-        private readonly IHubContext<MainHub> _hub;
-        private readonly UserService _userService;
+        private readonly IQueue _queue;
 
-        public PushService(IHubContext<MainHub> hub, UserService userService)
+        public PushService(IQueue queue)
         {
-            _hub = hub;
-            _userService = userService;
+            _queue = queue;
         }
 
-        public async Task TicketCreated(TicketListItem ticket)
+        public void TicketCreated(int ticketId)
         {
-            //todo: also send back to user who created the ticket (need to associate connections with users)
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("ticketCreated", ticket);
+            _queue.QueueInvocableWithPayload<TicketCreatedInvokable, int>(ticketId);
         }
 
-        public async Task TicketStatusUpdated(TicketListItem ticket, int? boardColumnIndex)
+        public void TicketStatusUpdated(int ticketId, int? boardColumnIndex)
         {
-            //todo: also send back to user who created the ticket (need to associate connections with users)
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("ticketStatusUpdated", ticket, boardColumnIndex);
+            var model = new TicketBoardUpdateModel { TicketId = ticketId, BoardColumnIndex = boardColumnIndex };
+            _queue.QueueInvocableWithPayload<TicketUpdatedInvokable, TicketBoardUpdateModel>(model);
         }
 
-        public async Task UserCreated(UserListItem user)
+        public void UserCreated(int userId)
         {
-            await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userCreated", user);
-
-            await UpdateAssignableUsers();
+            _queue.QueueInvocableWithPayload<UserCreatedInvokable, int>(userId);
         }
 
-        public async Task UserUpdated(UserListItem user)
+        public void UserUpdated(int userId)
         {
-            await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userUpdated", user);
-
-            await UpdateAssignableUsers();
-        }
-
-        private async Task UpdateAssignableUsers()
-        {
-            var assignableUsers = await _userService.GetAssignableUserOptions();
-
-            await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                    .SendAsync("updateAssignableUsers", assignableUsers);
+            _queue.QueueInvocableWithPayload<UserUpdatedInvokable, int>(userId);
         }
     }
 }

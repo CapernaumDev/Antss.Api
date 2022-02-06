@@ -35,6 +35,20 @@ namespace Antss.Services
                 }).ToListAsync();
         }
 
+        public async Task<UserListItem> GetListItem(int id)
+        {
+            var user = await _db.Users.AsNoTracking().Include(x => x.Office).FirstAsync(x => x.Id == id);
+
+            return new UserListItem
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                OfficeName = user.Office == null ? "" : user.Office.Name,
+                UserType = user.UserType.ToString()
+            };
+        }
+
         public async Task<UserDto> GetById(int id)
         {
             return await _db.Users
@@ -51,7 +65,7 @@ namespace Antss.Services
                 }).FirstAsync();
         }
 
-        public async Task<(PostResult PostResult, UserListItem User)> Create(UserDto userDto)
+        public async Task<int> Create(UserDto userDto)
         {
             var userToSave = new User
             {
@@ -66,21 +80,11 @@ namespace Antss.Services
 
             _db.Users.Add(userToSave);
             await _db.SaveChangesAsync();
-            await _db.Entry(userToSave).ReloadAsync();
 
-            var returnUser = new UserListItem
-            {
-                Id = userToSave.Id,
-                FirstName = userToSave.FirstName,
-                LastName = userToSave.LastName,
-                OfficeName = userToSave.Office == null ? "" : userToSave.Office.Name,
-                UserType = userToSave.UserType.ToString()
-            };
-
-            return (new PostResult(), returnUser);
+            return userToSave.Id;
         }
 
-        public async Task<(PostResult PostResult, UserListItem? User)> Update(UserDto userDto)
+        public async Task<PostResult> Update(UserDto userDto)
         {
             var result = new PostResult();
             var existingUser = _db.Users
@@ -96,7 +100,7 @@ namespace Antss.Services
                     //user was changed from support/admin to user UserType but they have tickets assigned
                     //which is not valid for a UserType of user
                     result.ErrorMessage = "User Type cannot be changed to 'User' because the user has tickets assigned.";
-                    return (result, null);
+                    return result;
                 }
             }
 
@@ -108,18 +112,8 @@ namespace Antss.Services
             existingUser.OfficeId = userDto.OfficeId;
 
             await _db.SaveChangesAsync();
-            var updatedUser = await _db.Users.AsNoTracking().Include(x => x.Office).FirstAsync(x => x.Id == existingUser.Id);
 
-            var returnUser = new UserListItem
-            {
-                Id = updatedUser.Id,
-                FirstName = updatedUser.FirstName,
-                LastName = updatedUser.LastName,
-                OfficeName = updatedUser.Office == null ? "" : updatedUser.Office.Name,
-                UserType = updatedUser.UserType.ToString()
-            };
-            
-            return (result, returnUser);
+            return result;
         }
 
         public async Task<IEnumerable<OptionItem>> GetAssignableUserOptions()

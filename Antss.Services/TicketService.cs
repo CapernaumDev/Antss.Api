@@ -39,6 +39,24 @@ namespace Antss.Services
             }).ToListAsync();
         }
 
+        public async Task<TicketListItem> GetListItem(int id)
+        {
+            var ticket = await _db.Tickets.AsNoTracking()
+                .Include(x => x.RaisedBy)
+                .Include(x => x.AssignedTo).AsQueryable()
+                .FirstAsync(x => x.Id == id);
+
+            return new TicketListItem
+            {
+                Id = ticket.Id,
+                AssignedTo = ticket.AssignedTo?.DisplayName,
+                Description = ticket.Description,
+                RaisedBy = ticket.RaisedBy.DisplayName,
+                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(ticket.TicketStatus),
+                TicketStatusId = (int)ticket.TicketStatus
+            };
+        }
+
         public async Task<List<BoardColumn<TicketListItem>>> GetBoard(IUserIdentity user, bool includeClosed)
         {
             var query = _db.Tickets.AsNoTracking()
@@ -82,7 +100,7 @@ namespace Antss.Services
             return boardColumns.OrderBy(x => x.Id).ToList();
         }
 
-        public async Task<TicketListItem> Create(CreateTicketDto ticketDto, IUserIdentity raisedBy)
+        public async Task<int> Create(CreateTicketDto ticketDto, IUserIdentity raisedBy)
         {
             //TODO: permissions based authorization
             var canAssignOnCreation = raisedBy.UserType == UserTypes.Admin || raisedBy.UserType == UserTypes.Support;
@@ -98,21 +116,10 @@ namespace Antss.Services
             _db.Tickets.Add(newTicket);
             await _db.SaveChangesAsync();
 
-            await _db.Entry(newTicket).ReloadAsync();
-
-            //TODO: automapper or some mapper for these entity to dto conversions
-            return new TicketListItem
-            {
-                Id = newTicket.Id,
-                AssignedTo = newTicket.AssignedTo?.DisplayName,
-                Description = newTicket.Description,
-                RaisedBy = newTicket.RaisedBy.DisplayName,
-                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(newTicket.TicketStatus),
-                TicketStatusId = (int)newTicket.TicketStatus
-            };
+            return newTicket.Id;
         }
 
-        public async Task<(PostResult PostResult, TicketListItem TicketListItem)> UpdateStatus(UpdateTicketStatus model)
+        public async Task<PostResult> UpdateStatus(UpdateTicketStatus model)
         {
             var ticket = await _db.Tickets.Include(x => x.RaisedBy)
                                           .Include(x => x.AssignedTo)
@@ -122,18 +129,7 @@ namespace Antss.Services
 
             await _db.SaveChangesAsync();
 
-            //TODO: automapper or some mapper for these entity to dto conversions
-            var ticketListItem = new TicketListItem
-            {
-                Id = ticket.Id,
-                AssignedTo = ticket.AssignedTo?.DisplayName,
-                Description = ticket.Description,
-                RaisedBy = ticket.RaisedBy.DisplayName,
-                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(ticket.TicketStatus),
-                TicketStatusId = (int)ticket.TicketStatus
-            };
-
-            return (new PostResult(), ticketListItem);
+            return new PostResult();
         }
         
         private IQueryable<Ticket> ApplyCommonTicketFilters(IQueryable<Ticket> query, IUserIdentity user, bool includeClosed)
