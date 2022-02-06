@@ -38,7 +38,7 @@ namespace Antss.Web.Controllers
         {
             var ticket = await _svc.Create(ticketDto, HttpContext.User.Identity.ToUserIdentity());
 
-            _pushService.TicketCreated(ticket);
+            await _pushService.TicketCreated(ticket);
 
             return ticket.Id;
         }
@@ -48,7 +48,7 @@ namespace Antss.Web.Controllers
         {
             var result = await _svc.UpdateStatus(model);
 
-            _pushService.TicketStatusUpdated(result.TicketListItem, model.BoardColumnIndex);
+            await _pushService.TicketStatusUpdated(result.TicketListItem, model.BoardColumnIndex);
 
             return result.PostResult;
         }

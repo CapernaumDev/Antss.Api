@@ -18,35 +18,35 @@ namespace Antss.Web.Push
             _userService = userService;
         }
 
-        public async void TicketCreated(TicketListItem ticket)
+        public async Task TicketCreated(TicketListItem ticket)
         {
             //todo: also send back to user who created the ticket (need to associate connections with users)
             await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
                 .SendAsync("ticketCreated", ticket);
         }
 
-        public async void TicketStatusUpdated(TicketListItem ticket, int? boardColumnIndex)
+        public async Task TicketStatusUpdated(TicketListItem ticket, int? boardColumnIndex)
         {
             //todo: also send back to user who created the ticket (need to associate connections with users)
             await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
                 .SendAsync("ticketStatusUpdated", ticket, boardColumnIndex);
         }
 
-        public async void UserCreated(UserListItem user)
+        public async Task UserCreated(UserListItem user)
         {
             await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userCreated", user);
 
-            UpdateAssignableUsers();
+            await UpdateAssignableUsers();
         }
 
-        public async void UserUpdated(UserListItem user)
+        public async Task UserUpdated(UserListItem user)
         {
             await _hub.Clients.Groups(UserTypes.Admin.ToString()).SendAsync("userUpdated", user);
 
-            UpdateAssignableUsers();
+            await UpdateAssignableUsers();
         }
 
-        private async void UpdateAssignableUsers()
+        private async Task UpdateAssignableUsers()
         {
             var assignableUsers = await _userService.GetAssignableUserOptions();
 

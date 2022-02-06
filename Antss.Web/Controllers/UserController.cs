@@ -38,7 +38,7 @@ namespace Antss.Web.Controllers
         {
             var result = await _userService.Create(user);
 
-            _pushService.UserCreated(result.User);
+            await _pushService.UserCreated(result.User);
             
             return result.PostResult;
         }
@@ -49,7 +49,7 @@ namespace Antss.Web.Controllers
             var result = await _userService.Update(user);
 
             if (result.User != null)
-                _pushService.UserUpdated(result.User);
+                await _pushService.UserUpdated(result.User);
 
             return result.PostResult;
         }
