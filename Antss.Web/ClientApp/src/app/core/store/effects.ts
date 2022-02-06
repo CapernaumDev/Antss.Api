@@ -71,9 +71,21 @@ export class Effects {
         )
     );
 
+    loadTicketBoard$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AppActions.loadTicketBoardRequested),
+            switchMap((action) => {
+                return this.apiService.getTicketBoard(action.includeClosed).pipe(
+                    map((board) => AppActions.loadTicketBoardSuccess({ board: board })),
+                    catchError(() => of(AppActions.loadTicketBoardFailure()))
+                )
+            })
+        )
+    );
+
     loadTicketFailure = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loadTicketsFailure),
+            ofType(AppActions.loadTicketsFailure, AppActions.loadTicketBoardFailure),
             tap(() => alert('There was a problem loading tickets from the server'))
         )
     )

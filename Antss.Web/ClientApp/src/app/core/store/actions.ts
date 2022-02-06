@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { AppData } from '../models/app-data';
+import { BoardColumn } from '../models/board-column';
 import { LoginCredential } from '../models/login-credential';
 import { LoginResult } from '../models/login-result';
 import { OptionItem } from '../models/option-item';
@@ -69,5 +70,19 @@ export const ticketCreated = createAction(
 
 export const ticketStatusUpdated = createAction(
     '[Server Push] Ticket Status Updated',
-    props<{ ticket: TicketListItem }>()
+    props<{ ticket: TicketListItem, boardColumnIndex: number | null }>()
+);
+
+export const loadTicketBoardRequested = createAction(
+    '[Ticket Board] Load Ticket Board Requested',
+    props<{ includeClosed: boolean }>()
+);
+
+export const loadTicketBoardSuccess = createAction(
+    '[Ticket Board] Load Ticket Board Success',
+    props<{ board: BoardColumn<TicketListItem>[] }>()
+);
+
+export const loadTicketBoardFailure = createAction(
+    '[Ticket Board] Load Ticket Board Failure'
 );

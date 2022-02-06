@@ -47,8 +47,8 @@ export class SignalRService {
             this.store.dispatch(ticketCreated({ ticket: ticket }));          
         });
 
-        this.hubConnection?.on('ticketStatusUpdated', (ticket) => {
-            this.store.dispatch(ticketStatusUpdated({ ticket: ticket }));          
+        this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex) => {
+            this.store.dispatch(ticketStatusUpdated({ ticket: ticket, boardColumnIndex: boardColumnIndex }));          
         });
 
         this.hubConnection

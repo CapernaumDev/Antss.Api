@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {animate, keyframes, style, transition, trigger} from "@angular/animations";
+import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
@@ -10,6 +11,9 @@ import { TicketBoardDataSource } from './ticket-board-data-source';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
+import { AppState } from '@app/core/store/app.state';
+import { loadTicketBoardRequested } from '@app/core/store/actions';
+import { selectTicketBoard } from '@app/core/store/selectors';
 
 @Component({
   selector: 'app-ticket-board',
@@ -26,7 +30,8 @@ import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status
     ])
   ]
 })
-export class TicketBoardComponent implements OnInit {
+
+export class TicketBoardComponent {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
@@ -35,11 +40,9 @@ export class TicketBoardComponent implements OnInit {
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
-  constructor(private apiService: ApiService, private cdr: ChangeDetectorRef){}
-
-  public ngOnInit(): void {
-    const board$ = this.apiService.getTicketBoard(false);
-    this.boardDataSource.setDataSource(board$);
+  constructor(private apiService: ApiService, private cdr: ChangeDetectorRef, private store: Store<AppState>){
+    this.store.dispatch(loadTicketBoardRequested({ includeClosed: false })); 
+    this.boardDataSource.setDataSource(this.store.select(selectTicketBoard));  
   }
 
   public drop(event: CdkDragDrop<TicketListItem[]>): void {
@@ -47,40 +50,26 @@ export class TicketBoardComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       let ticketStatusId = parseInt(event.container.id);
-      let ticketId = event.previousContainer.data[event.previousIndex].id;
+      let ticket = event.previousContainer.data[event.previousIndex];
 
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-
-      this.boardDataSource.moveTicket(ticketId, event.previousContainer.id, event.container.id, event.currentIndex);
-
-      this.apiService.updateTicketStatus(new UpdateTicketStatus(ticketId, ticketStatusId))
+      this.apiService.updateTicketStatus(new UpdateTicketStatus(ticket.id, ticketStatusId, event.currentIndex))
         .pipe(
           take(1),
           catchError(err => {
             alert('There was a problem updating the ticket status');
-            transferArrayItem(event.container.data,
-              event.previousContainer.data,
-              event.currentIndex,
-              event.previousIndex);
-            
-            this.boardDataSource.moveTicket(ticketId, event.container.id, event.previousContainer.id, event.previousIndex);
-            this.cdr.markForCheck(); //onPush strategy needs a nudge here
             throw err;
           }))
           .subscribe(() => {
-            this.showConfirmationFor = event.container.data[event.currentIndex];
-            this.cdr.detectChanges(); //onPush strategy needs a shove here
+            //TODO: need to show confirmation when ticket status update is received from server push
+            // this.showConfirmationFor = ticket;
+            // this.cdr.detectChanges(); //onPush strategy needs a shove here
           });
     }
   }
 
   reload(event: Event) {
     let target = event.target as HTMLInputElement;
-    const data = this.apiService.getTicketBoard(target.checked);
-    this.boardDataSource.setDataSource(data);
+    this.store.dispatch(loadTicketBoardRequested({ includeClosed: target.checked }))
   }
 
   ngAfterViewInit() {

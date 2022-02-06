@@ -54,7 +54,7 @@ namespace Antss.Web.Controllers
             var result = await _svc.UpdateStatus(model);
 
             await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-                .SendAsync("ticketStatusUpdated", result.TicketListItem);
+                .SendAsync("ticketStatusUpdated", result.TicketListItem, model.BoardColumnIndex);
 
             //todo: also send back to user who created the ticket (need to associate connections with users)
 

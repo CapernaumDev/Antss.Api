@@ -58,9 +58,29 @@ export const Reducers = createReducer(
       draft.ticketListItems.push(ticket);
     })),
 
-    on(AppActions.ticketStatusUpdated, (state, { ticket }) => produce(state, draft => {
-      let ticketInStateCollection = draft.ticketListItems.find(x => x.id === ticket.id);
-      if (ticketInStateCollection)
-        ticketInStateCollection.ticketStatus = ticket.ticketStatus;
-    }))
+    on(AppActions.ticketStatusUpdated, (state, { ticket, boardColumnIndex }) => produce(state, draft => {
+      let ticketInTicketListStateCollection = draft.ticketListItems.find(x => x.id === ticket.id);
+      if (ticketInTicketListStateCollection)
+        ticketInTicketListStateCollection.ticketStatus = ticket.ticketStatus;
+
+      let destinationBoardColumn = draft.ticketBoard.find(x => x.title === ticket.ticketStatus);
+      if (destinationBoardColumn) {
+        for (let i = 0; i < draft.ticketBoard.length; i++) {
+          let foundTicketIndex = draft.ticketBoard[i].data.findIndex(x => x.id === ticket.id);
+          if (foundTicketIndex > -1) {
+            draft.ticketBoard[i].data.splice(foundTicketIndex, 1);
+            if (boardColumnIndex && destinationBoardColumn.data.length >= boardColumnIndex)
+              destinationBoardColumn.data.splice(boardColumnIndex, 0, ticket);
+            else
+              destinationBoardColumn.data.push(ticket);
+            break;
+          }
+        }
+      }
+    })),
+
+    on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({
+      ...state,
+      ticketBoard: board
+    })),
   );
