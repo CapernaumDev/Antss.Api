@@ -6,6 +6,7 @@ using Antss.Web.Authorization;
 using Antss.Web.Hubs;
 using Antss.Web.Push;
 using Coravel;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 
@@ -33,6 +34,8 @@ else
 
 
 //TODO: Automatically register services according to some selector
+builder.Services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
+
 builder.Services.AddTransient<EnumTransformer, EnumTransformer>();
 builder.Services.AddTransient<Encryptor, Encryptor>();
 

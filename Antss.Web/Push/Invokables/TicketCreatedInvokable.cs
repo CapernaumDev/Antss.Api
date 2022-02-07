@@ -10,6 +10,7 @@ public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<int>
 
     private readonly IHubContext<MainHub> _hub;
     private readonly TicketService _svc;
+    private const string ClientCommand = "ticketCreated";
 
     public TicketCreatedInvokable(TicketService svc, IHubContext<MainHub> hub)
     {
@@ -21,8 +22,10 @@ public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<int>
     {
         var ticket = await _svc.GetListItem(Payload);
 
-        //todo: also send back to user who created the ticket (need to associate connections with users)
+        await _hub.Clients.User(ticket.RaisedById.ToString())
+            .SendAsync(ClientCommand, ticket);
+
         await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-            .SendAsync("ticketCreated", ticket);
+            .SendAsync(ClientCommand, ticket);
     }
 }

@@ -11,6 +11,7 @@ public class TicketUpdatedInvokable : IInvocable, IInvocableWithPayload<TicketBo
 
     private readonly IHubContext<MainHub> _hub;
     private readonly TicketService _svc;
+    private const string ClientCommand = "ticketStatusUpdated";
 
     public TicketUpdatedInvokable(TicketService svc, IHubContext<MainHub> hub)
     {
@@ -22,8 +23,10 @@ public class TicketUpdatedInvokable : IInvocable, IInvocableWithPayload<TicketBo
     {
         var ticket = await _svc.GetListItem(Payload.TicketId);
 
-        //todo: also send back to user who Updated the ticket (need to associate connections with users)
+        await _hub.Clients.User(ticket.RaisedById.ToString())
+            .SendAsync(ClientCommand, ticket);
+
         await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-            .SendAsync("ticketStatusUpdated", ticket, Payload.BoardColumnIndex);
+            .SendAsync(ClientCommand, ticket, Payload.BoardColumnIndex);
     }
 }

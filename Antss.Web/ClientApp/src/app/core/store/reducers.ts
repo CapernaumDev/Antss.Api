@@ -55,7 +55,8 @@ export const Reducers = createReducer(
     })),
 
     on(AppActions.ticketCreated, (state, { ticket }) => produce(state, draft => {
-      draft.ticketListItems.push(ticket);
+      if (!draft.ticketListItems.find(x => x.id === ticket.id))
+        draft.ticketListItems.push(ticket);
     })),
 
     on(AppActions.ticketStatusUpdatedByServer, AppActions.ticketStatusUpdatedByUser,

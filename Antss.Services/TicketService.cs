@@ -34,6 +34,7 @@ namespace Antss.Services
                 AssignedTo = x.AssignedTo.DisplayName,
                 Description = x.Description,
                 RaisedBy = x.RaisedBy.DisplayName,
+                RaisedById = x.RaisedById,
                 TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus),
                 TicketStatusId = (int)x.TicketStatus
             }).ToListAsync();
@@ -52,6 +53,7 @@ namespace Antss.Services
                 AssignedTo = ticket.AssignedTo?.DisplayName,
                 Description = ticket.Description,
                 RaisedBy = ticket.RaisedBy.DisplayName,
+                RaisedById = ticket.RaisedById,
                 TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(ticket.TicketStatus),
                 TicketStatusId = (int)ticket.TicketStatus
             };
@@ -76,6 +78,7 @@ namespace Antss.Services
                         AssignedTo = y.AssignedTo.DisplayName,
                         Description = y.Description,
                         RaisedBy = y.RaisedBy.DisplayName,
+                        RaisedById = y.RaisedById,
                         TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(y.TicketStatus),
                         TicketStatusId = (int)y.TicketStatus
                     })
