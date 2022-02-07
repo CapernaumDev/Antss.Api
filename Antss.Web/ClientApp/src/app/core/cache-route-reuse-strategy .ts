@@ -17,7 +17,12 @@ export class CacheRouteReuseStrategy implements RouteReuseStrategy {
     }
 
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        return true;
+        let shouldDetach = false;
+        if (route.routeConfig?.data) {
+            shouldDetach = route.routeConfig.data.reuse;
+        }
+
+        return shouldDetach;
     }
 
     store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void {

@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {animate, keyframes, style, transition, trigger} from "@angular/animations";
 import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
-import { catchError, debounceTime, distinctUntilChanged, Observable, ObservedValueOf, Subscription, take, throttleTime } from 'rxjs';
+import { catchError, Observable, Subscription, take } from 'rxjs';
 import { ApiService } from '@app/core/api.service';
 import { TicketBoardDataSource } from './ticket-board-data-source';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
 import { AppState } from '@app/core/store/app.state';
-import { loadTicketBoardRequested, ticketStatusUpdatedByServer, ticketStatusUpdatedByUser } from '@app/core/store/actions';
+import { loadTicketBoardRequested, ticketStatusUpdatedByUser } from '@app/core/store/actions';
 import { selectShowSuccessForTicket, selectTicketBoard } from '@app/core/store/selectors';
 import { TicketStatuses } from '@app/core/models/ticket/ticket-statuses';
 

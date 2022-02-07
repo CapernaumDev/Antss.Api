@@ -34,11 +34,13 @@ namespace Antss.Web.Controllers
         }
 
         [HttpPost, Route("Create")]
-        public async Task Create(UserDto user)
+        public async Task<PostResult> Create(UserDto user)
         {
             var userId = await _userService.Create(user);
 
             _pushService.UserCreated(userId);
+
+            return new PostResult();
         }
 
         [HttpPost, Route("Update")]
