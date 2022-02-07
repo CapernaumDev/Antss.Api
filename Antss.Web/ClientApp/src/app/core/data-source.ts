@@ -53,10 +53,6 @@ export abstract class DataSource<T> {
     }
   }
 
-  patchInitialData(data: T[]) {
-    this.inititalDataSubject.next(data);
-  }
-
   sort(data: any[], column: string, direction: SortDirection) {
     let sorted = [...data].sort((a, b) => {
       const order = direction === "asc" ? 1 : -1;

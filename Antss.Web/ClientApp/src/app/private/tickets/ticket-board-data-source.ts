@@ -49,24 +49,6 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
     this.subscriptions.forEach(x => x.unsubscribe());
     super.destroy();
   }
-  moveTicket(ticketId: number, fromColumnId: string, toColumnId: string, toIndex: number) {//todo: make a type
-    if (fromColumnId === toColumnId) return;
-    
-    let fromColumn = this.initialDataSnapshot.find(x => x.id == parseInt(fromColumnId));
-    let toColumn = this.initialDataSnapshot.find(x => x.id == parseInt(toColumnId));
-
-    if (!fromColumn || !toColumn) return;
-
-    let ticketIndex = fromColumn.data.findIndex(x => x.id === ticketId);
-    let ticket = fromColumn.data[ticketIndex];
-
-    if (ticketIndex < 0) return;
-
-    fromColumn.data.splice(ticketIndex, 1);
-    toColumn.data.splice(toIndex, 0, ticket);
-
-    super.patchInitialData(this.initialDataSnapshot);
-  }
   protected onInitialDataUpdated(data: BoardColumn<TicketListItem>[]) {
     this.initialDataSnapshot = data;
   }

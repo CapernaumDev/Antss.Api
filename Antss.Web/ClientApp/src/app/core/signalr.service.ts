@@ -34,7 +34,6 @@ export class SignalRService {
 
         this.hubConnection?.on('joinedGroup', (data) => {
             this.message = data;
-            console.log('joined group: ' + this.message);
         });
 
         this.hubConnection?.on('updateAssignableUsers', (data) => {
