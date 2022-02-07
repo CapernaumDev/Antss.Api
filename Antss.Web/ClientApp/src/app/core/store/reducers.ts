@@ -58,7 +58,8 @@ export const Reducers = createReducer(
       draft.ticketListItems.push(ticket);
     })),
 
-    on(AppActions.ticketStatusUpdated, (state, { ticket, boardColumnIndex }) => produce(state, draft => {
+    on(AppActions.ticketStatusUpdatedByServer, AppActions.ticketStatusUpdatedByUser,
+      (state, { ticket, boardColumnIndex }) => produce(state, draft => {
       let ticketInTicketListStateCollection = draft.ticketListItems.find(x => x.id === ticket.id);
       if (ticketInTicketListStateCollection)
         ticketInTicketListStateCollection.ticketStatus = ticket.ticketStatus;
@@ -77,6 +78,11 @@ export const Reducers = createReducer(
           }
         }
       }
+    })),
+
+    on(AppActions.ticketStatusUpdatedByServer, (state, { ticket, boardColumnIndex }) => ({
+      ...state,
+      showSuccessForTicket: { id: ticket.id }
     })),
 
     on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({

@@ -6,7 +6,7 @@ import { AppState } from './store/app.state';
 import { 
     setInitialAppData, 
     ticketCreated,
-    ticketStatusUpdated, 
+    ticketStatusUpdatedByServer, 
     updateAssignableUsers, 
     userCreated,
     userUpdated
@@ -50,7 +50,7 @@ export class SignalRService {
         });
 
         this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex) => {
-            this.store.dispatch(ticketStatusUpdated({ ticket: ticket, boardColumnIndex: boardColumnIndex }));          
+            this.store.dispatch(ticketStatusUpdatedByServer({ ticket: ticket, boardColumnIndex: boardColumnIndex }));          
         });
 
         this.hubConnection?.on('userCreated', (user) => {

@@ -5,15 +5,16 @@ import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
-import { catchError, Observable, take } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, Observable, ObservedValueOf, Subscription, take, throttleTime } from 'rxjs';
 import { ApiService } from '@app/core/api.service';
 import { TicketBoardDataSource } from './ticket-board-data-source';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
 import { AppState } from '@app/core/store/app.state';
-import { loadTicketBoardRequested } from '@app/core/store/actions';
-import { selectTicketBoard } from '@app/core/store/selectors';
+import { loadTicketBoardRequested, ticketStatusUpdatedByServer, ticketStatusUpdatedByUser } from '@app/core/store/actions';
+import { selectShowSuccessForTicket, selectTicketBoard } from '@app/core/store/selectors';
+import { TicketStatuses } from '@app/core/models/ticket/ticket-statuses';
 
 @Component({
   selector: 'app-ticket-board',
@@ -31,11 +32,13 @@ import { selectTicketBoard } from '@app/core/store/selectors';
   ]
 })
 
-export class TicketBoardComponent {
+export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
-  showConfirmationFor!: TicketListItem | null;
+  showConfirmationFor$: Observable<{ id: number | null }> = this.store.select(selectShowSuccessForTicket)
+  showConfirmationFor!: number | null;
+  private subscription!: Subscription;
 
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
@@ -45,23 +48,41 @@ export class TicketBoardComponent {
     this.boardDataSource.setDataSource(this.store.select(selectTicketBoard));  
   }
 
+  ngOnInit(): void {
+    this.subscription = this.showConfirmationFor$
+    .subscribe((ticket) => {
+      this.showConfirmationFor = ticket.id;
+      this.cdr.detectChanges();
+      this.showConfirmationFor = null;
+    });
+  }
+
   public drop(event: CdkDragDrop<TicketListItem[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       let ticketStatusId = parseInt(event.container.id);
       let ticket = event.previousContainer.data[event.previousIndex];
+      let newTicketStatus = TicketStatuses[ticketStatusId].replace('_', ' '); //TODO: sort this out
+
+      this.store.dispatch(ticketStatusUpdatedByUser({ 
+        ticket: {...ticket, ticketStatus: newTicketStatus}, 
+        boardColumnIndex: event.currentIndex 
+      }));
 
       this.apiService.updateTicketStatus(new UpdateTicketStatus(ticket.id, ticketStatusId, event.currentIndex))
         .pipe(
           take(1),
           catchError(err => {
             alert('There was a problem updating the ticket status');
+            this.store.dispatch(ticketStatusUpdatedByUser({ 
+              ticket: ticket, 
+              boardColumnIndex: event.previousIndex 
+            }));
             throw err;
           }))
           .subscribe(() => {
-            //TODO: need to show confirmation when ticket status update is received from server push
-            // this.showConfirmationFor = ticket;
+            // this.showConfirmationFor = ticket.id;
             // this.cdr.detectChanges(); //onPush strategy needs a shove here
           });
     }
@@ -78,5 +99,6 @@ export class TicketBoardComponent {
 
   ngOnDestroy() {
     this.boardDataSource.destroy();
+    this.subscription.unsubscribe();
   }
 }

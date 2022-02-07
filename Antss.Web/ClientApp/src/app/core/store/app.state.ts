@@ -13,6 +13,7 @@ export interface AppState {
     userTypes: OptionItem[],
     ticketListItems: TicketListItem[],
     ticketBoard: BoardColumn<TicketListItem>[],
+    showSuccessForTicket: { id: number | null },
     userListItems: UserListItem[]
 }
 
@@ -25,5 +26,6 @@ export const initialState: AppState = {
     userTypes: [],
     ticketListItems: [],
     ticketBoard: [],
+    showSuccessForTicket: { id: null },
     userListItems: []
 };
