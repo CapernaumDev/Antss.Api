@@ -32,7 +32,6 @@ else
     builder.Services.AddDbContext<AntssContext>(options =>
          options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 //TODO: Automatically register services according to some selector
 builder.Services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
 
@@ -49,6 +48,8 @@ builder.Services.AddTransient<TicketCreatedInvokable>();
 builder.Services.AddTransient<TicketUpdatedInvokable>();
 builder.Services.AddTransient<UserCreatedInvokable>();
 builder.Services.AddTransient<UserUpdatedInvokable>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

@@ -5,6 +5,7 @@ using Antss.Model.Enums;
 using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services
@@ -13,11 +14,13 @@ namespace Antss.Services
     {
         private readonly AntssContext _db;
         private readonly EnumTransformer _enumTransformer;
+        private readonly IMapper _mapper;
 
-        public TicketService(AntssContext db, EnumTransformer enumTransformer)
+        public TicketService(AntssContext db, EnumTransformer enumTransformer, IMapper mapper)
         {
             _db = db;
             _enumTransformer = enumTransformer;
+            _mapper = mapper;
         }
 
         public async Task<List<TicketListItem>> GetList(IUserIdentity user, bool includeClosed)
@@ -28,35 +31,16 @@ namespace Antss.Services
 
             query = ApplyCommonTicketFilters(query, user, includeClosed);
 
-            return await query.Select(x => new TicketListItem
-            {
-                Id = x.Id,
-                AssignedTo = x.AssignedTo.DisplayName,
-                Description = x.Description,
-                RaisedBy = x.RaisedBy.DisplayName,
-                RaisedById = x.RaisedById,
-                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(x.TicketStatus),
-                TicketStatusId = (int)x.TicketStatus
-            }).ToListAsync();
+            return await _mapper.ProjectTo<TicketListItem>(query).ToListAsync();
         }
 
         public async Task<TicketListItem> GetListItem(int id)
         {
-            var ticket = await _db.Tickets.AsNoTracking()
+            return await _mapper.ProjectTo<TicketListItem>(
+                _db.Tickets.AsNoTracking()
                 .Include(x => x.RaisedBy)
-                .Include(x => x.AssignedTo).AsQueryable()
+                .Include(x => x.AssignedTo).AsQueryable())
                 .FirstAsync(x => x.Id == id);
-
-            return new TicketListItem
-            {
-                Id = ticket.Id,
-                AssignedTo = ticket.AssignedTo?.DisplayName,
-                Description = ticket.Description,
-                RaisedBy = ticket.RaisedBy.DisplayName,
-                RaisedById = ticket.RaisedById,
-                TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(ticket.TicketStatus),
-                TicketStatusId = (int)ticket.TicketStatus
-            };
         }
 
         public async Task<List<BoardColumn<TicketListItem>>> GetBoard(IUserIdentity user, bool includeClosed)

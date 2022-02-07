@@ -5,6 +5,7 @@ using Antss.Model.Enums;
 using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services
@@ -14,55 +15,32 @@ namespace Antss.Services
         private readonly AntssContext _db;
         private readonly Encryptor _encryptor;
         private readonly EnumTransformer _enumTransformer;
+        private readonly IMapper _mapper;
 
-        public UserService(AntssContext db, Encryptor encryptor, EnumTransformer enumTransformer)
+        public UserService(AntssContext db, Encryptor encryptor, EnumTransformer enumTransformer, IMapper mapper)
         {
             _db = db;
             _encryptor = encryptor;
             _enumTransformer = enumTransformer;
+            _mapper = mapper;
         }
 
         public async Task<List<UserListItem>> GetList()
         {
-            return await _db.Users.AsNoTracking().Include(x => x.Office)
-                .Select(x => new UserListItem
-                {
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    OfficeName = x.Office == null ? "" : x.Office.Name,
-                    UserType = x.UserType.ToString()
-                }).ToListAsync();
+            return await _mapper.ProjectTo<UserListItem>(
+                _db.Users.AsNoTracking().Include(x => x.Office)).ToListAsync();
         }
 
         public async Task<UserListItem> GetListItem(int id)
         {
-            var user = await _db.Users.AsNoTracking().Include(x => x.Office).FirstAsync(x => x.Id == id);
-
-            return new UserListItem
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                OfficeName = user.Office == null ? "" : user.Office.Name,
-                UserType = user.UserType.ToString()
-            };
+            return await _mapper.ProjectTo<UserListItem>(
+                _db.Users.AsNoTracking().Include(x => x.Office)).FirstAsync(x => x.Id == id);
         }
 
         public async Task<UserDto> GetById(int id)
         {
-            return await _db.Users
-                .Where(x => x.Id == id)
-                .Select(x => new UserDto
-                {
-                    Id = id,
-                    ContactNumber = x.ContactNumber,
-                    EmailAddress = x.EmailAddress,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    OfficeId = x.OfficeId,
-                    UserTypeId = (int)x.UserType
-                }).FirstAsync();
+            return await _mapper.ProjectTo<UserDto>(
+                _db.Users.AsNoTracking()).FirstAsync(x => x.Id == id);
         }
 
         public async Task<int> Create(UserDto userDto)
