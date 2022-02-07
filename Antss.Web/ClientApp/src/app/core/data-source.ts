@@ -20,7 +20,6 @@ export abstract class DataSource<T> {
   private lastFilterEvent?: SetFilterEvent;
 
   protected onDataUpdated?(data: T[]): void;
-  protected onInitialDataUpdated?(data: T[]): void;
 
   constructor(data: T[] = []) {
     this.setInitialData(data, true);
@@ -124,9 +123,6 @@ export abstract class DataSource<T> {
   private setInitialData(data: T[], firstInitialisation: boolean | null) {
     this.inititalDataSubject.next(data);
     
-    if (this.onInitialDataUpdated && !firstInitialisation)
-      this.onInitialDataUpdated(data);
-
     if (this.lastFilterEvent && this.lastFilterEvent.filterTerm) {
       data = this.filterLogic(this.lastFilterEvent, data);
     }

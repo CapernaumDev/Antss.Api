@@ -3,10 +3,9 @@ import { SortChangeEvent } from "../../core/interfaces/sort-change-event";
 import { TicketListItem } from "../../core/models/ticket/ticket-list-item";
 import { DataSource } from "../../core/data-source";
 import { BoardColumn } from "@app/core/models/board-column";
-import { Observable, Subject, Subscription } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 
 export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem>> {
-  private initialDataSnapshot!: BoardColumn<TicketListItem>[]
   private ticketCount = new Subject<number>();
   private subscriptions: Subscription[] = [];
   recordCount$ = this.ticketCount.asObservable();
@@ -22,6 +21,7 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
         return super.sort(data, column, direction);
     }
   }
+
   filterLogic({ filterTerm }: SetFilterEvent, data: BoardColumn<TicketListItem>[]) {
     let filterTermAsNumber = parseInt(filterTerm);
     let result: BoardColumn<TicketListItem>[] = [];
@@ -45,16 +45,16 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
     this.setTicketCount(result);
     return result;
   }
+
   destroy() {
     this.subscriptions.forEach(x => x.unsubscribe());
     super.destroy();
   }
-  protected onInitialDataUpdated(data: BoardColumn<TicketListItem>[]) {
-    this.initialDataSnapshot = data;
-  }
+
   protected onDataUpdated(data: BoardColumn<TicketListItem>[]) {
     this.setTicketCount(data);
   }
+
   private setTicketCount(data: BoardColumn<TicketListItem>[]) {
     let count = 0;
 
