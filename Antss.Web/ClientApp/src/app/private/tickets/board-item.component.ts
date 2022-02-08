@@ -21,8 +21,20 @@ import { FilterInputComponent } from '@app/core/components/filter-input.componen
       ]))),
       transition('*=>othersActionConfirmed', animate('1500ms', keyframes([
         style({ backgroundColor: 'initial', boxShadow: 'none', offset: 0, opacity: 0 }),
-        style({ backgroundColor: '#6699ff', boxShadow: '0 0 10px ##6699ff', opacity: 0.1, offset: 0.01 }),
+        style({ backgroundColor: '#6699ff', boxShadow: '0 0 10px #6699ff', opacity: 0.5, offset: 0.5 }),
         style({ backgroundColor: 'initial', boxShadow: 'none', opacity: 1, offset: 1 }),
+      ]))),
+      transition('*=>addedByOther', animate('1500ms', keyframes([
+        style({ backgroundColor: 'initial', boxShadow: 'none', offset: 0, opacity: 0, transform: 'translateX(-100%)' }),
+        style({ backgroundColor: '#6699ff', boxShadow: '0 0 10px #6699ff', opacity: 0.5, offset: 0.5, transform: 'translateX(5%)' }),
+        style({ offset: 0.6, transform: 'translateX(0%)' }),
+        style({ backgroundColor: 'initial', boxShadow: 'none', opacity: 1, offset: 1, transform: 'translateX(0%)' })
+      ]))),
+      transition('*=>addedByMe', animate('1500ms', keyframes([
+        style({ backgroundColor: 'initial', boxShadow: 'none', offset: 0, opacity: 0, transform: 'translateX(-100%)' }),
+        style({ backgroundColor: '#5cff4c', boxShadow: '0 0 10px #5cff4c', opacity: 0.5, offset: 0.5, transform: 'translateX(5%)' }),
+        style({ offset: 0.6, transform: 'translateX(0%)' }),
+        style({ backgroundColor: 'initial', boxShadow: 'none', opacity: 1, offset: 1, transform: 'translateX(0%)' })
       ])))
     ])
   ]
@@ -46,11 +58,10 @@ export class TicketBoardItemComponent implements OnInit {
   getAnimationName(showConfirmationFor: ServerConfirmationEvent | null | undefined) : string  {
     if (!showConfirmationFor || showConfirmationFor.id != this.ticket.id) return '';
 
-    if (showConfirmationFor.initiatedByMe) {
-      console.log('initated by me');
-      return 'myActionConfirmed';
-    } 
-    console.log('initated by other');
-    return 'othersActionConfirmed';
+    if (showConfirmationFor.isNew) {
+      return showConfirmationFor.initiatedByMe ? 'addedByMe' : 'addedByOther';
+    }
+
+    return showConfirmationFor.initiatedByMe ? 'myActionConfirmed' : 'othersActionConfirmed';
   }
 }

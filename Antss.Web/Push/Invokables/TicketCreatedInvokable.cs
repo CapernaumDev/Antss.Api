@@ -1,12 +1,13 @@
 ﻿using Antss.Model;
 using Antss.Services;
 using Antss.Web.Hubs;
+using Antss.Web.Push;
 using Coravel.Invocable;
 using Microsoft.AspNetCore.SignalR;
 
-public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<int>
+public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<TicketBoardUpdateModel>
 {
-    public int Payload { get; set; }
+    public TicketBoardUpdateModel Payload { get; set; }
 
     private readonly IHubContext<MainHub> _hub;
     private readonly TicketService _svc;
@@ -20,12 +21,12 @@ public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<int>
 
     public async Task Invoke()
     {
-        var ticket = await _svc.GetListItem(Payload);
+        var ticket = await _svc.GetListItem(Payload.TicketId);
 
         await _hub.Clients.User(ticket.RaisedById.ToString())
-            .SendAsync(ClientCommand, ticket);
+            .SendAsync(ClientCommand, ticket, Payload.InitiatedByUser.UserId);
 
         await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-            .SendAsync(ClientCommand, ticket);
+            .SendAsync(ClientCommand, ticket, Payload.InitiatedByUser.UserId);
     }
 }

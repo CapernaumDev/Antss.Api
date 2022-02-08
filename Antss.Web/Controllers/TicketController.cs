@@ -38,7 +38,7 @@ namespace Antss.Web.Controllers
         {
             var ticketId = await _svc.Create(ticketDto, HttpContext.User.Identity.ToUserIdentity());
 
-            _pushService.TicketCreated(ticketId);
+            _pushService.TicketCreated(ticketId, HttpContext.User.Identity.ToUserIdentity());
 
             return ticketId;
         }

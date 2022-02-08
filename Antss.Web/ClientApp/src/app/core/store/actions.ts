@@ -66,7 +66,11 @@ export const loadTicketsFailure = createAction(
 
 export const ticketCreated = createAction(
     '[Server Push] Ticket Created',
-    props<{ ticket: TicketListItem }>()
+    props<{ 
+        ticket: TicketListItem,
+        boardColumnIndex: number | null,
+        initiatedByUserId: number
+    }>()
 );
 
 export const ticketStatusUpdatedByServer = createAction(

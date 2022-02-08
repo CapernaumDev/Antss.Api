@@ -54,12 +54,19 @@ export const Reducers = createReducer(
     ticketListItems: tickets
   })),
 
-  on(AppActions.ticketCreated, (state, { ticket }) => produce(state, draft => {
-    if (!draft.ticketListItems.find(x => x.id === ticket.id))
-      draft.ticketListItems.push(ticket);
+  on(AppActions.ticketCreated, (state, { ticket, boardColumnIndex, initiatedByUserId }) => 
+    produce(state, draft => {
+      if (!draft.ticketListItems.find(x => x.id === ticket.id))
+        draft.ticketListItems.push(ticket);
 
-    if (!draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
-      draft.ticketBoard[0].data.splice(0, 0, ticket)
+      if (!draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
+        draft.ticketBoard[0].data.splice(0, 0, ticket)
+      }
+
+      draft.showSuccessForTicket = { 
+        id: ticket.id,
+        initiatedByMe: initiatedByUserId == state.currentUser?.id,
+        isNew: true
     }
   })),
 
@@ -93,7 +100,8 @@ export const Reducers = createReducer(
     ...state,
     showSuccessForTicket: { 
       id: ticket.id,
-      initiatedByMe: initiatedByUserId == state.currentUser?.id 
+      initiatedByMe: initiatedByUserId == state.currentUser?.id,
+      isNew: false
     }
   })),
 

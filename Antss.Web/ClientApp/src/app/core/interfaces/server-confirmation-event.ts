@@ -1,4 +1,5 @@
 export interface ServerConfirmationEvent {
     id: number, 
-    initiatedByMe: boolean 
+    initiatedByMe: boolean,
+    isNew: boolean
 }
