@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '@app/core/store/app.state';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
 import { ServerConfirmationEvent } from '@app/core/interfaces/server-confirmation-event';
+import { FilterInputComponent } from '@app/core/components/filter-input.component';
 
 @Component({
   selector: 'div[board-item]',
@@ -31,8 +32,9 @@ export class TicketBoardItemComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private store: Store<AppState>) {
   }
 
-  @Input() ticket!: TicketListItem
-  @Input() showConfirmationFor?: ServerConfirmationEvent| null
+  @Input() ticket!: TicketListItem;
+  @Input() showConfirmationFor?: ServerConfirmationEvent| null;
+  @Input() filterElement!: FilterInputComponent;
 
   ngOnInit(): void {
 
