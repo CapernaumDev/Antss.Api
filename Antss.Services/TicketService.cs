@@ -108,9 +108,7 @@ namespace Antss.Services
 
         public async Task<PostResult> UpdateStatus(UpdateTicketStatus model)
         {
-            var ticket = await _db.Tickets.Include(x => x.RaisedBy)
-                                          .Include(x => x.AssignedTo)
-                                          .FirstAsync(x => x.Id == model.TicketId);
+            var ticket = await _db.Tickets.FirstAsync(x => x.Id == model.TicketId);
 
             ticket.TicketStatus = (TicketStatuses)model.TicketStatusId;
 

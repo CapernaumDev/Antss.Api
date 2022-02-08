@@ -1,4 +1,5 @@
-﻿using Coravel.Queuing.Interfaces;
+﻿using Antss.Services.Common;
+using Coravel.Queuing.Interfaces;
 
 namespace Antss.Web.Push
 {
@@ -16,9 +17,15 @@ namespace Antss.Web.Push
             _queue.QueueInvocableWithPayload<TicketCreatedInvokable, int>(ticketId);
         }
 
-        public void TicketStatusUpdated(int ticketId, int? boardColumnIndex)
+        public void TicketStatusUpdated(int ticketId, int? boardColumnIndex, IUserIdentity initiatingUser)
         {
-            var model = new TicketBoardUpdateModel { TicketId = ticketId, BoardColumnIndex = boardColumnIndex };
+            var model = new TicketBoardUpdateModel 
+            { 
+                TicketId = ticketId, 
+                BoardColumnIndex = boardColumnIndex ,
+                InitiatedByUser = initiatingUser
+            };
+
             _queue.QueueInvocableWithPayload<TicketUpdatedInvokable, TicketBoardUpdateModel>(model);
         }
 

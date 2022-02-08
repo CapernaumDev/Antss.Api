@@ -13,7 +13,8 @@ import { UserListComponent } from './admin/user-list.component';
 import { TicketListComponent } from './tickets/ticket-list.component';
 import { MyProfileComponent } from '@app/private/my-profile/my-profile.component';
 import { CreateTicketComponent } from './tickets/create-ticket.component';
-import { TicketBoardComponent } from './tickets/ticket-board.component';
+import { TicketBoardComponent } from './tickets/board.component';
+import { TicketBoardItemComponent } from './tickets/board-item.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
@@ -23,7 +24,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     TicketListComponent,
     CreateTicketComponent,
     MyProfileComponent,
-    TicketBoardComponent
+    TicketBoardComponent,
+    TicketBoardItemComponent
   ],
   imports: [
     CommonModule,

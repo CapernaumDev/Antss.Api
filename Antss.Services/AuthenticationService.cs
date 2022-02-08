@@ -1,6 +1,5 @@
 ﻿using Antss.Data;
 using Antss.Model.Entities;
-using Antss.Model.Enums;
 using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;

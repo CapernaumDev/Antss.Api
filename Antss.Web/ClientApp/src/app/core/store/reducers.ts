@@ -5,62 +5,66 @@ import { initialState } from './app.state';
 import produce from "immer";
 
 export const Reducers = createReducer(
-    initialState,
+  initialState,
 
-    on(AppActions.loginWithCredentials, (state) => ({ ...state, status: 'loading' })),
-    
-    on(AppActions.loginWithToken, (state) => ({ ...state, status: 'loading' })),
+  on(AppActions.loginWithCredentials, (state) => ({ ...state, status: 'loading' })),
 
-    on(AppActions.loginSuccess, (state, { loginResult }) => ({
-      ...state,
-      currentUser: Object.assign(new CurrentUser(), { 
-        ...loginResult.user, 
-        accessToken: window.btoa(loginResult.accessToken || JSON.parse(localStorage["access-token"])) 
-      }),
-      status: 'success'
-    })),
+  on(AppActions.loginWithToken, (state) => ({ ...state, status: 'loading' })),
 
-    on(AppActions.loginFailure, (state) => ({
-      ...state,
-      status: 'error'
-    })),
+  on(AppActions.loginSuccess, (state, { loginResult }) => ({
+    ...state,
+    currentUser: Object.assign(new CurrentUser(), {
+      ...loginResult.user,
+      accessToken: window.btoa(loginResult.accessToken || JSON.parse(localStorage["access-token"]))
+    }),
+    status: 'success'
+  })),
 
-    on(AppActions.setAfterLoginRedirect, (state, { url }) => ({
-      ...state,
-      afterLoginRedirect: url
-    })),
+  on(AppActions.loginFailure, (state) => ({
+    ...state,
+    status: 'error'
+  })),
 
-    on(AppActions.setInitialAppData, (state, { appData }) => ({
-      ...state,
-      assignableUsers: appData.assignableUsers,
-      offices: appData.offices,
-      userTypes: appData.userTypes
-    })),
+  on(AppActions.setAfterLoginRedirect, (state, { url }) => ({
+    ...state,
+    afterLoginRedirect: url
+  })),
 
-    on(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated, (state) => ({
-      ...state,
-      currentUser: null,
-      status: 'pending',
-      afterLoginRedirect: ''
-    })),
+  on(AppActions.setInitialAppData, (state, { appData }) => ({
+    ...state,
+    assignableUsers: appData.assignableUsers,
+    offices: appData.offices,
+    userTypes: appData.userTypes
+  })),
 
-    on(AppActions.updateAssignableUsers, (state, { options }) => ({
-        ...state,
-        assignableUsers: options
-    })),
+  on(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated, (state) => ({
+    ...state,
+    currentUser: null,
+    status: 'pending',
+    afterLoginRedirect: ''
+  })),
 
-    on(AppActions.loadTicketsSuccess, (state, { tickets }) => ({
-      ...state,
-      ticketListItems: tickets
-    })),
+  on(AppActions.updateAssignableUsers, (state, { options }) => ({
+    ...state,
+    assignableUsers: options
+  })),
 
-    on(AppActions.ticketCreated, (state, { ticket }) => produce(state, draft => {
-      if (!draft.ticketListItems.find(x => x.id === ticket.id))
-        draft.ticketListItems.push(ticket);
-    })),
+  on(AppActions.loadTicketsSuccess, (state, { tickets }) => ({
+    ...state,
+    ticketListItems: tickets
+  })),
 
-    on(AppActions.ticketStatusUpdatedByServer, AppActions.ticketStatusUpdatedByUser,
-      (state, { ticket, boardColumnIndex }) => produce(state, draft => {
+  on(AppActions.ticketCreated, (state, { ticket }) => produce(state, draft => {
+    if (!draft.ticketListItems.find(x => x.id === ticket.id))
+      draft.ticketListItems.push(ticket);
+
+    if (!draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
+      draft.ticketBoard[0].data.splice(0, 0, ticket)
+    }
+  })),
+
+  on(AppActions.ticketStatusUpdatedByServer, AppActions.ticketStatusUpdatedByUser,
+    (state, { ticket, boardColumnIndex }) => produce(state, draft => {
       let ticketInTicketListStateCollection = draft.ticketListItems.find(x => x.id === ticket.id);
       if (ticketInTicketListStateCollection)
         ticketInTicketListStateCollection.ticketStatus = ticket.ticketStatus;
@@ -81,29 +85,36 @@ export const Reducers = createReducer(
       }
     })),
 
-    on(AppActions.ticketStatusUpdatedByServer, (state, { ticket, boardColumnIndex }) => ({
-      ...state,
-      showSuccessForTicket: { id: ticket.id }
-    })),
+  on(AppActions.ticketStatusUpdatedByServer, (state, {
+    ticket,
+    boardColumnIndex,
+    initiatedByUserId 
+  }) => ({
+    ...state,
+    showSuccessForTicket: { 
+      id: ticket.id,
+      initiatedByMe: initiatedByUserId == state.currentUser?.id 
+    }
+  })),
 
-    on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({
-      ...state,
-      ticketBoard: board
-    })),
+  on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({
+    ...state,
+    ticketBoard: board
+  })),
 
-    on(AppActions.userCreated, (state, { user }) => produce(state, draft => {
-      draft.userListItems.push(user);
-    })),
+  on(AppActions.userCreated, (state, { user }) => produce(state, draft => {
+    draft.userListItems.push(user);
+  })),
 
-    on(AppActions.userUpdated, (state, { user }) => produce(state, draft => {
-      let userIndex = draft.userListItems.findIndex(x => x.id === user.id);
-      if (userIndex > -1) {
-        draft.userListItems.splice(userIndex, 1, user);
-      }
-    })),
+  on(AppActions.userUpdated, (state, { user }) => produce(state, draft => {
+    let userIndex = draft.userListItems.findIndex(x => x.id === user.id);
+    if (userIndex > -1) {
+      draft.userListItems.splice(userIndex, 1, user);
+    }
+  })),
 
-    on(AppActions.loadUserListSuccess, (state, { users }) => ({
-      ...state,
-      userListItems: users
-    })),
-  );
+  on(AppActions.loadUserListSuccess, (state, { users }) => ({
+    ...state,
+    userListItems: users
+  })),
+);

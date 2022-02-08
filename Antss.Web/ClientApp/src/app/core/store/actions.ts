@@ -71,7 +71,11 @@ export const ticketCreated = createAction(
 
 export const ticketStatusUpdatedByServer = createAction(
     '[Server Push] Ticket Status Updated',
-    props<{ ticket: TicketListItem, boardColumnIndex: number | null }>()
+    props<{ 
+        ticket: TicketListItem, 
+        boardColumnIndex: number | null,
+        initiatedByUserId: number
+    }>()
 );
 
 export const ticketStatusUpdatedByUser = createAction(

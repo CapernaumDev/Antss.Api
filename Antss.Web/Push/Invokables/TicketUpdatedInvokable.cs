@@ -24,9 +24,9 @@ public class TicketUpdatedInvokable : IInvocable, IInvocableWithPayload<TicketBo
         var ticket = await _svc.GetListItem(Payload.TicketId);
 
         await _hub.Clients.User(ticket.RaisedById.ToString())
-            .SendAsync(ClientCommand, ticket);
+            .SendAsync(ClientCommand, ticket, Payload.BoardColumnIndex, Payload.InitiatedByUser.UserId);
 
         await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-            .SendAsync(ClientCommand, ticket, Payload.BoardColumnIndex);
+            .SendAsync(ClientCommand, ticket, Payload.BoardColumnIndex, Payload.InitiatedByUser.UserId);
     }
 }

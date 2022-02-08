@@ -48,8 +48,12 @@ export class SignalRService {
             this.store.dispatch(ticketCreated({ ticket: ticket }));          
         });
 
-        this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex) => {
-            this.store.dispatch(ticketStatusUpdatedByServer({ ticket: ticket, boardColumnIndex: boardColumnIndex }));          
+        this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex, initiatedByUserId) => {
+            this.store.dispatch(ticketStatusUpdatedByServer({ 
+                ticket: ticket, 
+                boardColumnIndex: boardColumnIndex,
+                initiatedByUserId: initiatedByUserId
+            }));          
         });
 
         this.hubConnection?.on('userCreated', (user) => {

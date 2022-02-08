@@ -48,7 +48,7 @@ namespace Antss.Web.Controllers
         {
             var result = await _svc.UpdateStatus(model);
 
-            _pushService.TicketStatusUpdated(model.TicketId, model.BoardColumnIndex);
+            _pushService.TicketStatusUpdated(model.TicketId, model.BoardColumnIndex, HttpContext.User.Identity.ToUserIdentity());
 
             return result;
         }

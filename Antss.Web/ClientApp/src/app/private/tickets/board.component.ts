@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import {animate, keyframes, style, transition, trigger} from "@angular/animations";
 import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
 import { catchError, Observable, Subscription, take } from 'rxjs';
 import { ApiService } from '@app/core/api.service';
-import { TicketBoardDataSource } from './ticket-board-data-source';
+import { TicketBoardDataSource } from './board-data-source';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
@@ -15,29 +14,21 @@ import { AppState } from '@app/core/store/app.state';
 import { loadTicketBoardRequested, ticketStatusUpdatedByUser } from '@app/core/store/actions';
 import { selectShowSuccessForTicket, selectTicketBoard } from '@app/core/store/selectors';
 import { TicketStatuses } from '@app/core/models/ticket/ticket-statuses';
+import { ServerConfirmationEvent } from '@app/core/interfaces/server-confirmation-event';
 
 @Component({
   selector: 'app-ticket-board',
-  templateUrl: './ticket-board.component.html',
-  styleUrls: ['./ticket-board.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('confirmationHighlight', [
-      transition('*=>isConfirmed', animate('600ms', keyframes([
-        style({backgroundColor: 'initial', boxShadow: 'none', offset: 0} ),
-        style({backgroundColor: '#5cff4c', boxShadow: '0 0 5px #5cff4c', offset: 0.01} ),
-        style({backgroundColor: 'initial', boxShadow: 'none', offset: 1} ),
-      ])))
-    ])
-  ]
+  templateUrl: './board.component.html',
+  styleUrls: ['./board.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
-  showConfirmationFor$: Observable<{ id: number | null }> = this.store.select(selectShowSuccessForTicket)
-  showConfirmationFor!: number | null;
+  showConfirmationFor$: Observable<ServerConfirmationEvent | null> = this.store.select(selectShowSuccessForTicket)
+  showConfirmationFor?: ServerConfirmationEvent | null;
   private subscription!: Subscription;
 
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
@@ -50,19 +41,19 @@ export class TicketBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription = this.showConfirmationFor$
-    .subscribe((ticket) => {
-      this.showConfirmationFor = ticket.id;
-      this.cdr.detectChanges();
-      this.showConfirmationFor = null;
-    });
+      .subscribe((ticket) => {
+        this.showConfirmationFor = ticket;
+        this.cdr.detectChanges();
+        this.showConfirmationFor = null;
+      });
   }
 
   public drop(event: CdkDragDrop<TicketListItem[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      let ticketStatusId = parseInt(event.container.id);
       let ticket = event.previousContainer.data[event.previousIndex];
+      let ticketStatusId = parseInt(event.container.id);
       let newTicketStatus = TicketStatuses[ticketStatusId].replace('_', ' '); //TODO: sort this out
 
       this.store.dispatch(ticketStatusUpdatedByUser({ 
