@@ -16,6 +16,7 @@ import { Reducers } from '@core/store/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { CacheRouteReuseStrategy } from './core/cache-route-reuse-strategy ';
+import { metaReducers } from './core/store/logger-metareducer';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { CacheRouteReuseStrategy } from './core/cache-route-reuse-strategy ';
     PublicModule,
     PrivateModule,
     StoreModule.forRoot({ }),
-    StoreModule.forFeature('app', Reducers),
+    StoreModule.forFeature('app', Reducers, { metaReducers }),
     EffectsModule.forRoot([Effects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,

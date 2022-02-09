@@ -12,9 +12,8 @@ import { FilterInputComponent } from '@app/core/components/filter-input.componen
 import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
 import { AppState } from '@app/core/store/app.state';
 import { loadTicketBoardRequested, ticketStatusUpdatedByUser } from '@app/core/store/actions';
-import { selectShowSuccessForTicket, selectTicketBoard } from '@app/core/store/selectors';
 import { TicketStatuses } from '@app/core/models/ticket/ticket-statuses';
-import { ServerConfirmationEvent } from '@app/core/interfaces/server-confirmation-event';
+import { selectTicketBoard } from '@app/core/store/selectors';
 
 @Component({
   selector: 'app-ticket-board',
@@ -27,8 +26,6 @@ export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
-  showConfirmationFor$: Observable<ServerConfirmationEvent | null> = this.store.select(selectShowSuccessForTicket)
-  showConfirmationFor?: ServerConfirmationEvent | null;
   private subscription!: Subscription;
 
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
@@ -40,12 +37,7 @@ export class TicketBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.subscription = this.showConfirmationFor$
-      .subscribe((ticket) => {
-        this.showConfirmationFor = ticket;
-        this.cdr.detectChanges();
-        this.showConfirmationFor = null;
-      });
+
   }
 
   public drop(event: CdkDragDrop<TicketListItem[]>): void {
@@ -73,8 +65,6 @@ export class TicketBoardComponent implements OnInit {
             throw err;
           }))
           .subscribe(() => {
-            // this.showConfirmationFor = ticket.id;
-            // this.cdr.detectChanges(); //onPush strategy needs a shove here
           });
     }
   }

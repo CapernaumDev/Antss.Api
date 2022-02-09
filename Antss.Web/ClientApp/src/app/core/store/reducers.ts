@@ -59,7 +59,7 @@ export const Reducers = createReducer(
       if (!draft.ticketListItems.find(x => x.id === ticket.id))
         draft.ticketListItems.push(ticket);
 
-      if (!draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
+      if (draft.ticketBoard.length && !draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
         draft.ticketBoard[0].data.splice(0, 0, ticket)
       }
 
@@ -103,6 +103,14 @@ export const Reducers = createReducer(
       initiatedByMe: initiatedByUserId == state.currentUser?.id,
       isNew: false
     }
+  })),
+
+  on(AppActions.ticketStatusUpdatedByUser, (state, {
+    ticket,
+    boardColumnIndex
+  }) => ({
+    ...state,
+    showSuccessForTicket: null
   })),
 
   on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({

@@ -49,7 +49,7 @@ export class SignalRService {
                 ticket: ticket,
                 boardColumnIndex: 0,
                 initiatedByUserId: initiatedByUserId
-             }));          
+             }));                        
         });
 
         this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex, initiatedByUserId) => {
