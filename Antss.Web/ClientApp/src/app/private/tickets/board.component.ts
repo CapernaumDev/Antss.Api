@@ -71,7 +71,7 @@ export class TicketBoardComponent implements OnInit {
   }
 
   trackColumnBy(index: number, boardColumn: BoardColumn<TicketListItem>) {
-
+    return boardColumn.id;
   }
 
   reload(event: Event) {
