@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
@@ -40,32 +40,38 @@ export class TicketBoardComponent implements OnInit {
   }
 
   public drop(event: CdkDragDrop<TicketListItem[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      let ticket = event.previousContainer.data[event.previousIndex];
-      let ticketStatusId = parseInt(event.container.id);
-      let newTicketStatus = TicketStatuses[ticketStatusId].replace('_', ' '); //TODO: sort this out
+    if (event.previousContainer === event.container) return;
 
-      this.store.dispatch(ticketStatusUpdatedByUser({ 
-        ticket: {...ticket, ticketStatus: newTicketStatus}, 
-        boardColumnIndex: event.currentIndex 
-      }));
+    let ticket = event.previousContainer.data[event.previousIndex];
+    let ticketStatusId = parseInt(event.container.id);
+    let newTicketStatus = TicketStatuses[ticketStatusId].replace('_', ' '); //TODO: sort this out
 
-      this.apiService.updateTicketStatus(new UpdateTicketStatus(ticket.id, ticketStatusId, event.currentIndex))
-        .pipe(
-          take(1),
-          catchError(err => {
-            alert('There was a problem updating the ticket status');
-            this.store.dispatch(ticketStatusUpdatedByUser({ 
-              ticket: ticket, 
-              boardColumnIndex: event.previousIndex 
-            }));
-            throw err;
-          }))
-          .subscribe(() => {
-          });
-    }
+    this.store.dispatch(ticketStatusUpdatedByUser({ 
+      ticket: {...ticket, ticketStatus: newTicketStatus}, 
+      boardColumnIndex: event.currentIndex 
+    }));
+
+    this.apiService.updateTicketStatus(new UpdateTicketStatus(ticket.id, ticketStatusId, event.currentIndex))
+      .pipe(
+        take(1),
+        catchError(err => {
+          alert('There was a problem updating the ticket status');
+          this.store.dispatch(ticketStatusUpdatedByUser({ 
+            ticket: ticket, 
+            boardColumnIndex: event.previousIndex 
+          }));
+          throw err;
+        }))
+        .subscribe(() => {
+        });
+  }
+
+  trackTicketBy(index: number, ticket: TicketListItem) {
+    return ticket.id;
+  }
+
+  trackColumnBy(index: number, boardColumn: BoardColumn<TicketListItem>) {
+
   }
 
   reload(event: Event) {
