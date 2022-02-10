@@ -17,27 +17,22 @@
   </div>
   <div class="board">
     <div class="board-wrapper">
-      <div class="board-columns">
-
-        <div cdkDropList cdkDropListOrientation="horizontal" class="board-columns">
-          <div cdkDragLockAxis="x" class="board-column" 
+      <div cdkDropList cdkDropListOrientation="horizontal" class="board-columns">
+        <div cdkDragLockAxis="x" class="board-column"
           *ngFor="let column of board$ | async; index as i; trackBy: trackColumnBy" cdkDrag>
-            <div class="column-title" cdkDragHandle>
-              {{ column.title }}
-            </div>
-            <div class="tasks-container" id="{{column.id}}" [cdkDropListConnectedTo]="['1', '2', '3']" cdkDropList
-              [cdkDropListData]="column.data" (cdkDropListDropped)="drop($event)">
-              <div board-item *ngFor="let ticket of column.data as TicketListItem; index as i; trackBy: trackTicketBy" 
-                  [ticket]="ticket" 
-                  [filterElement]="filterElement" cdkDrag>
-              </div>
-            </div>
-
+          <div class="column-title" cdkDragHandle>
+            {{ column.title }}
           </div>
+          <div class="tasks-container" id="{{column.id}}" [cdkDropListConnectedTo]="['1', '2', '3']" cdkDropList
+            [cdkDropListData]="column.data" (cdkDropListDropped)="drop($event)">
+            <div board-item *ngFor="let ticket of column.data as TicketListItem; index as i; trackBy: trackTicketBy"
+              [ticket]="ticket" [filterElement]="filterElement" cdkDrag>
+            </div>
+          </div>
+
         </div>
-
-
       </div>
+
     </div>
   </div>
 </div>

@@ -16,9 +16,22 @@
     flex-grow: 1;
     overflow-x: auto;
   }
+
   .board-columns {
     display: flex;
     flex-grow: 1;
+  }
+
+  .board-columns > :nth-child(1) {
+    background-color: #FFECD8;
+  }
+
+  .board-columns > :nth-child(2) {
+    background-color: #cffafe;
+  }
+
+  .board-columns > :nth-child(3) {
+    background-color: #def1d1;
   }
   
   .board-column {
@@ -26,10 +39,8 @@
     flex-direction: column;
     flex-grow: 1;
     flex-basis: 0;
-  
-    max-width: 300px;
-    margin: 50px;
-    padding: 25px;
+    margin: 15px;
+    padding: 15px;
   
     border-radius: 4px;
     background: #f6f8f9;
