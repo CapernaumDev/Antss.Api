@@ -1,4 +1,3 @@
-import { ServerConfirmationEvent } from "../interfaces/server-confirmation-event";
 import { BoardColumn } from "../models/board-column";
 import { OptionItem } from "../models/option-item";
 import { TicketListItem } from "../models/ticket/ticket-list-item";
@@ -14,7 +13,6 @@ export interface AppState {
     userTypes: OptionItem[],
     ticketListItems: TicketListItem[],
     ticketBoard: BoardColumn<TicketListItem>[],
-    showSuccessForTicket: ServerConfirmationEvent | null,
     userListItems: UserListItem[]
 }
 
@@ -27,6 +25,5 @@ export const initialState: AppState = {
     userTypes: [],
     ticketListItems: [],
     ticketBoard: [],
-    showSuccessForTicket: null,
     userListItems: []
 };

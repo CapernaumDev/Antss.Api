@@ -62,12 +62,6 @@ export const Reducers = createReducer(
       if (draft.ticketBoard.length && !draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
         draft.ticketBoard[0].data.splice(0, 0, ticket)
       }
-
-      draft.showSuccessForTicket = { 
-        id: ticket.id,
-        initiatedByMe: initiatedByUserId == state.currentUser?.id,
-        isNew: true
-    }
   })),
 
   on(AppActions.ticketStatusUpdatedByServer, AppActions.ticketStatusUpdatedByUser,
@@ -92,25 +86,14 @@ export const Reducers = createReducer(
       }
     })),
 
-  on(AppActions.ticketStatusUpdatedByServer, (state, {
-    ticket,
-    boardColumnIndex,
-    initiatedByUserId 
-  }) => ({
-    ...state,
-    showSuccessForTicket: { 
-      id: ticket.id,
-      initiatedByMe: initiatedByUserId == state.currentUser?.id,
-      isNew: false
-    }
-  })),
-
-  on(AppActions.ticketStatusUpdatedByUser, (state, {
-    ticket,
-    boardColumnIndex
-  }) => ({
-    ...state,
-    showSuccessForTicket: null
+  on(AppActions.ticketAnimationPlayed, (state, { ticketId }) => produce(state, draft => {
+      for (let i = 0; i < draft.ticketBoard.length; i++) {
+        let foundTicket = draft.ticketBoard[i].data.find(x => x.id === ticketId);
+        if (foundTicket)  {
+          foundTicket.animation = null;
+          break;
+        }
+      }
   })),
 
   on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({

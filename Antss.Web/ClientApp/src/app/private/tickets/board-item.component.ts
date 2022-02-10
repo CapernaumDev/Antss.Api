@@ -1,13 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { animate, keyframes, style, transition, trigger } from "@angular/animations";
-import { Store } from '@ngrx/store';
 
-import { AppState } from '@app/core/store/app.state';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
-import { ServerConfirmationEvent } from '@app/core/interfaces/server-confirmation-event';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
-import { filter, Observable, Subscription } from 'rxjs';
-import { selectShowSuccessForTicket } from '@app/core/store/selectors';
+import { Store } from '@ngrx/store';
+import { ticketAnimationPlayed } from '@app/core/store/actions';
 
 @Component({
   selector: 'div[board-item]',
@@ -43,36 +40,20 @@ import { selectShowSuccessForTicket } from '@app/core/store/selectors';
 })
 
 export class TicketBoardItemComponent implements OnInit {
-  constructor(private store: Store<AppState>) {
-
+  constructor(private store: Store) {
   }
 
   @Input() ticket!: TicketListItem;
   @Input() filterElement!: FilterInputComponent;
-  private showConfirmationFor$: Observable<ServerConfirmationEvent | null> = this.store.select(selectShowSuccessForTicket);
-  private subscription!: Subscription;
-  animationName = '';
 
   ngOnInit(): void {
-    this.subscription = this.showConfirmationFor$
-      .pipe(filter(x => x != null && x.id == this.ticket.id))
-      .subscribe(x => {
-        this.animationName = this.getAnimationName(x);
-      })
+  }
+
+  animationComplete(animation: string | null) {
+    if (animation)
+      this.store.dispatch(ticketAnimationPlayed({ ticketId: this.ticket.id }));
   }
 
   ngOnDestroy() {
-    if (this.subscription)
-      this.subscription.unsubscribe();
-  }
-
-  getAnimationName(showConfirmationFor: ServerConfirmationEvent | null | undefined) : string  {
-    if (!showConfirmationFor || showConfirmationFor.id != this.ticket.id) return '';
-
-    if (showConfirmationFor.isNew) {
-      return showConfirmationFor.initiatedByMe ? 'addedByMe' : 'addedByOther';
-    }
-
-    return showConfirmationFor.initiatedByMe ? 'myActionConfirmed' : 'othersActionConfirmed';
   }
 }

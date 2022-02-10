@@ -123,3 +123,8 @@ export const loadUserListSuccess = createAction(
 export const loadUserListFailure = createAction(
     '[User List] Load User List Failure'
 );
+
+export const ticketAnimationPlayed = createAction(
+    '[UI Update on Server Push] Ticket Animation Finished Playing',
+    props<{ ticketId: number }>()
+)

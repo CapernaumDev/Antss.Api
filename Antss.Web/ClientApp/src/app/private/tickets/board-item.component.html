@@ -1,5 +1,5 @@
 <div class="task" 
-[@confirmationHighlight]="animationName">
+[@confirmationHighlight]="ticket.animation" (@confirmationHighlight.done)="animationComplete(ticket.animation)">
   <ngb-highlight [result]="ticket.description" [term]="filterElement.currentValue">
     {{ticket.description}}
   </ngb-highlight>

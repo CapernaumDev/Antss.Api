@@ -49,8 +49,3 @@ export const selectUserList = createSelector(
   getAppState,
   (state) => state.userListItems
 );
-
-export const selectShowSuccessForTicket = createSelector(
-  getAppState,
-  (state) => state.showSuccessForTicket
-);

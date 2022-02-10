@@ -11,6 +11,7 @@ import {
     userCreated,
     userUpdated
 } from './store/actions';
+import { TicketListItem } from './models/ticket/ticket-list-item';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +24,12 @@ export class SignalRService {
     constructor(private store: Store<AppState>) {
     }
 
-    public startConnection = () => {
+    public startConnection = (userId: number | null | undefined) => {
+        if (!userId) {
+            console.log('signalR received no userid on startConnection');
+            return;
+        }
+
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(environment.signalrUrl, { 
                 accessTokenFactory: () => window.btoa(JSON.parse(localStorage["access-token"]))
@@ -44,17 +50,19 @@ export class SignalRService {
             this.store.dispatch(setInitialAppData({ appData: data }));          
         });
 
-        this.hubConnection?.on('ticketCreated', (ticket, initiatedByUserId) => {
+        this.hubConnection?.on('ticketCreated', (ticket: TicketListItem, initiatedByUserId) => {
+            let animation = initiatedByUserId == userId ? 'addedByMe' : 'addedByOther';
             this.store.dispatch(ticketCreated({ 
-                ticket: ticket,
+                ticket: { ...ticket, animation: animation },
                 boardColumnIndex: 0,
                 initiatedByUserId: initiatedByUserId
              }));                        
         });
 
-        this.hubConnection?.on('ticketStatusUpdated', (ticket, boardColumnIndex, initiatedByUserId) => {
+        this.hubConnection?.on('ticketStatusUpdated', (ticket: TicketListItem, boardColumnIndex, initiatedByUserId) => {
+            let animation = initiatedByUserId == userId ? 'myActionConfirmed' : 'othersActionConfirmed';
             this.store.dispatch(ticketStatusUpdatedByServer({ 
-                ticket: ticket, 
+                ticket: { ...ticket, animation: animation }, 
                 boardColumnIndex: boardColumnIndex,
                 initiatedByUserId: initiatedByUserId
             }));          

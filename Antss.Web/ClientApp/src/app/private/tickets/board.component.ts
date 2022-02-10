@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
-import { catchError, Observable, Subscription, take } from 'rxjs';
+import { catchError, Observable, take } from 'rxjs';
 import { ApiService } from '@app/core/api.service';
 import { TicketBoardDataSource } from './board-data-source';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
@@ -26,12 +26,11 @@ export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
-  private subscription!: Subscription;
 
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
 
-  constructor(private apiService: ApiService, private cdr: ChangeDetectorRef, private store: Store<AppState>){
+  constructor(private apiService: ApiService, private store: Store<AppState>){
     this.store.dispatch(loadTicketBoardRequested({ includeClosed: false })); 
     this.boardDataSource.setDataSource(this.store.select(selectTicketBoard));  
   }
@@ -80,6 +79,5 @@ export class TicketBoardComponent implements OnInit {
 
   ngOnDestroy() {
     this.boardDataSource.destroy();
-    this.subscription.unsubscribe();
   }
 }

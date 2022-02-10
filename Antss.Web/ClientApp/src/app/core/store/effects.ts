@@ -9,7 +9,7 @@ import { AppState } from './app.state';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { SignalRService } from '../signalr.service';
-import { selectAfterLoginRedirect } from './selectors';
+import { selectAfterLoginRedirect, selectCurrentUser } from './selectors';
 
 @Injectable()
 export class Effects {
@@ -36,12 +36,12 @@ export class Effects {
     loginSuccess = createEffect(() =>
         this.actions$.pipe(
             ofType(AppActions.loginSuccess),
-            withLatestFrom(this.store.select(selectAfterLoginRedirect)),
-            tap(([action, afterLoginRedirect]) => {
+            withLatestFrom(this.store.select(selectAfterLoginRedirect), this.store.select(selectCurrentUser)),
+            tap(([action, afterLoginRedirect, currentUser]) => {
                 if (action.loginResult.accessToken)
                     localStorage["access-token"] = JSON.stringify(action.loginResult.accessToken);
 
-                this.signalRService.startConnection();
+                this.signalRService.startConnection(currentUser?.id);
                 this.router.navigateByUrl(afterLoginRedirect);
             })
         ), { dispatch: false }
