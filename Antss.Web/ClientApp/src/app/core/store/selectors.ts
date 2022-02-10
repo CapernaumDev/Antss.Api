@@ -49,3 +49,8 @@ export const selectUserList = createSelector(
   getAppState,
   (state) => state.userListItems
 );
+
+export const selectLoadedUser = createSelector(
+  getAppState,
+  (state) => state.editingUser
+)

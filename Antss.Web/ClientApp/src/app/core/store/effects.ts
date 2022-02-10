@@ -115,7 +115,7 @@ export class Effects {
             ofType(UiActions.createTicketRequested),
             switchMap((action) => {
                 return this.apiService.createTicket(action.ticket).pipe(
-                    map((loginResult) => ApiActions.createTicketSuccess()),
+                    map((result) => ApiActions.createTicketSuccess()),
                     catchError((error) => of(ApiActions.createTicketFailure()))
                 )
             })
@@ -135,6 +135,65 @@ export class Effects {
         this.actions$.pipe(
             ofType(ApiActions.createTicketFailure),
             tap(() => alert('There was a problem creating the ticket'))
+        ), { dispatch: false }
+    );
+
+    loadUserRequested$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(UiActions.loadUserRequested),
+            switchMap((action) => {
+                return this.apiService.loadUser(action.userId).pipe(
+                    map((user) => ApiActions.loadUserSuccess({ user: user })),
+                    catchError((error) => of(ApiActions.loadUserFailure()))
+                )
+            })
+        )
+    );
+
+    loadUserFailure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ApiActions.loadUserFailure),
+            tap(() => alert('There was a problem getting the user'))
+        ), { dispatch: false }
+    );
+
+    createUserRequested$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(UiActions.createUserRequested),
+            switchMap((action) => {
+                return this.apiService.createUser(action.user).pipe(
+                    map((result) => ApiActions.createUserSuccess()),
+                    catchError((error) => of(ApiActions.createUserFailure()))
+                )
+            })
+        )
+    );
+
+    updateUserRequested$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(UiActions.updateUserRequested),
+            switchMap((action) => {
+                return this.apiService.updateUser(action.user).pipe(
+                    map((result) => ApiActions.updateUserSuccess()),
+                    catchError((error) => of(ApiActions.updateUserFailure()))
+                )
+            })
+        )
+    );
+
+    createOrUpdateUserSuccess$ = createEffect(() => 
+        this.actions$.pipe(
+            ofType(ApiActions.createUserSuccess, ApiActions.updateUserSuccess),
+            tap(() => {
+                this.router.navigateByUrl('user-list');
+            })
+        ), { dispatch: false }
+    );
+
+    createOrUpdateUserFailure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ApiActions.createUserFailure, ApiActions.updateUserFailure),
+            tap(() => alert('There was a problem saving the user'))
         ), { dispatch: false }
     );
 }

@@ -119,4 +119,9 @@ export const Reducers = createReducer(
     ...state,
     userListItems: users
   })),
+
+  on(ApiActions.loadUserSuccess, (state, { user }) => ({
+    ...state,
+    editingUser: user
+  })),
 );

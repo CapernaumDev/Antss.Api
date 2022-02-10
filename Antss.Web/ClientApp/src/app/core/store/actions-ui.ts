@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { LoginCredential } from '../models/login-credential';
 import { CreateTicket } from '../models/ticket/create-ticket';
 import { TicketListItem } from '../models/ticket/ticket-list-item';
+import { User } from '../models/user/user';
 
 export const loginWithCredentials = createAction(
     '[Login Page] Login',
@@ -34,4 +35,19 @@ export const loadUserListRequested = createAction(
 export const createTicketRequested = createAction(
     '[Create Ticket Form] Create Ticket Requested',
     props<{ ticket: CreateTicket }>()
-)
+);
+
+export const loadUserRequested = createAction(
+    '[User Form] Load User Requested',
+    props<{ userId: number }>()
+);
+
+export const createUserRequested = createAction(
+    '[User Form] Create User Requested',
+    props<{ user: User }>()
+);
+
+export const updateUserRequested = createAction(
+    '[User Form] Update User Requested',
+    props<{ user: User }>()
+);

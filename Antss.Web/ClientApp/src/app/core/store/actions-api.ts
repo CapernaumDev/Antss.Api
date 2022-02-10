@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { BoardColumn } from '../models/board-column';
 import { LoginResult } from '../models/login-result';
 import { TicketListItem } from '../models/ticket/ticket-list-item';
+import { User } from '../models/user/user';
 import { UserListItem } from '../models/user/user-list-item';
 
 export const loginSuccess = createAction(
@@ -48,3 +49,28 @@ export const createTicketSuccess = createAction(
 export const createTicketFailure = createAction(
     '[Ticket API] Create Ticket Failure'
 )
+
+export const loadUserSuccess = createAction(
+    '[User API] Load User Success',
+    props<{ user: User }>()
+);
+
+export const loadUserFailure = createAction(
+    '[User API] Load User Failed'
+);
+
+export const createUserSuccess = createAction(
+    '[User API] Create User Success',
+);
+
+export const createUserFailure = createAction(
+    '[User API] Create User Failed'
+);
+
+export const updateUserSuccess = createAction(
+    '[User API] Update User Success',
+);
+
+export const updateUserFailure = createAction(
+    '[User API] Update User Failed'
+);
