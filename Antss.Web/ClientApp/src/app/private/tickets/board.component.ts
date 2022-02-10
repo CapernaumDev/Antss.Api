@@ -66,11 +66,11 @@ export class TicketBoardComponent implements OnInit {
         });
   }
 
-  trackTicketBy(index: number, ticket: TicketListItem) {
+  trackTicketBy(index: number, ticket: TicketListItem): number {
     return ticket.id;
   }
 
-  trackColumnBy(index: number, boardColumn: BoardColumn<TicketListItem>) {
+  trackColumnBy(index: number, boardColumn: BoardColumn<TicketListItem>): number {
     return boardColumn.id;
   }
 

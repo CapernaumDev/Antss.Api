@@ -35,6 +35,10 @@ export class UserListComponent {
     this.usersDataSource.filterSource = this.filterSource;
   }
 
+  trackUserBy(index: number, user: UserListItem): number {
+    return user.id;
+  }
+
   ngOnDestroy() {
     this.usersDataSource.destroy();
   }

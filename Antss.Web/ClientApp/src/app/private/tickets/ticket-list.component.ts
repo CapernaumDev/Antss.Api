@@ -35,6 +35,10 @@ export class TicketListComponent {
     this.ticketsDataSource.filterSource = this.filterSource;
   }
 
+  trackTicketBy(index: number, ticket: TicketListItem): number {
+    return ticket.id;
+  }
+
   reload(event: Event) {
     let target = event.target as HTMLInputElement;
     this.store.dispatch(loadTicketsRequested({ includeClosed: target.checked }))

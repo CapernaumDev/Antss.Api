@@ -29,7 +29,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let x of tickets$ | async">
+      <tr *ngFor="let x of tickets$ | async; index as i; trackBy: trackTicketBy">
         <td><ngb-highlight [result]="x.id.toString()" [term]="filterElement.currentValue">{{x.id}}</ngb-highlight></td>
         <td><ngb-highlight [result]="x.raisedBy" [term]="filterElement.currentValue">{{x.raisedBy}}</ngb-highlight></td>
         <td><ngb-highlight [result]="x.assignedTo" [term]="filterElement.currentValue">{{x.assignedTo}}</ngb-highlight></td>

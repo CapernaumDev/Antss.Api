@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let x of users$ | async">
+      <tr *ngFor="let x of users$ | async; index as i; trackBy: trackUserBy">
         <td><ngb-highlight [result]="x.firstName" [term]="filterElement.currentValue">{{x.firstName}}</ngb-highlight></td>
         <td><ngb-highlight [result]="x.lastName" [term]="filterElement.currentValue">{{x.lastName}}</ngb-highlight></td>
         <td><ngb-highlight [result]="x.userType" [term]="filterElement.currentValue">{{x.userType}}</ngb-highlight></td>
