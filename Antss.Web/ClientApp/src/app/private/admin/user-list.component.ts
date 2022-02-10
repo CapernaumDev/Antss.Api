@@ -7,7 +7,7 @@ import { FilterSourceDirective } from '@app/core/directives/filter-source.direct
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@app/core/store/app.state';
-import { loadUserListRequested } from '@app/core/store/actions';
+import { loadUserListRequested } from '@app/core/store/actions-ui';
 import { selectUserList } from '@app/core/store/selectors';
 
 @Component({

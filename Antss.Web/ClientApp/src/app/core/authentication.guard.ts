@@ -3,7 +3,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { Store } from '@ngrx/store';
 
 import { Observable, take } from 'rxjs';
-import { setAfterLoginRedirect } from './store/actions';
+import { setAfterLoginRedirect } from './store/actions-system';
 import { AppState } from './store/app.state';
 import { selectCurrentUser } from './store/selectors';
 

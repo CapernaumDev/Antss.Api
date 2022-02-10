@@ -10,7 +10,7 @@ import {
     updateAssignableUsers, 
     userCreated,
     userUpdated
-} from './store/actions';
+} from './store/actions-push';
 import { TicketListItem } from './models/ticket/ticket-list-item';
 
 @Injectable({

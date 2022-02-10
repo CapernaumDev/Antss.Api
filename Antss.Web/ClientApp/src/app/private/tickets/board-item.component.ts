@@ -4,7 +4,7 @@ import { animate, keyframes, style, transition, trigger } from "@angular/animati
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { Store } from '@ngrx/store';
-import { ticketAnimationPlayed } from '@app/core/store/actions';
+import { ticketAnimationPlayed } from '@app/core/store/actions-system';
 
 @Component({
   selector: 'div[board-item]',

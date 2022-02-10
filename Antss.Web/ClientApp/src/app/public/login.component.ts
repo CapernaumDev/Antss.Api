@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BaseFormComponent } from '@app/core/components/base-form-component';
 import { Store } from '@ngrx/store';
-import { loginWithCredentials } from '@core/store/actions';
+import { loginWithCredentials } from '@core/store/actions-ui';
 
 @Component({
   selector: 'app-login',

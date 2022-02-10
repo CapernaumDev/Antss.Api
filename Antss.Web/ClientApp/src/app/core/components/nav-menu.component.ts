@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CurrentUser } from '../models/user/current-user';
 import { AppState } from '../store/app.state';
-import { logoutUserInitiated } from '@core/store/actions';
+import { logoutUserInitiated } from '@core/store/actions-ui';
 import { selectCurrentUser } from '../store/selectors';
 
 @Component({

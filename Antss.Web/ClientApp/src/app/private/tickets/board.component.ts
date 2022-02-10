@@ -11,7 +11,7 @@ import { FilterSourceDirective } from '@app/core/directives/filter-source.direct
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
 import { AppState } from '@app/core/store/app.state';
-import { loadTicketBoardRequested, ticketStatusUpdatedByUser } from '@app/core/store/actions';
+import { loadTicketBoardRequested, ticketStatusUpdatedByUser } from '@app/core/store/actions-ui';
 import { TicketStatuses } from '@app/core/models/ticket/ticket-statuses';
 import { selectTicketBoard } from '@app/core/store/selectors';
 

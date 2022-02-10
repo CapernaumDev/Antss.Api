@@ -1,4 +1,7 @@
-import * as AppActions from './actions';
+import * as ApiActions from './actions-api';
+import * as PushActions from './actions-push';
+import * as SystemActions from './actions-system';
+import * as UiActions from './actions-ui';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
@@ -23,11 +26,11 @@ export class Effects {
 
     login$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loginWithCredentials, AppActions.loginWithToken),
+            ofType(UiActions.loginWithCredentials, SystemActions.loginWithToken),
             switchMap((action) => {
                 return this.apiService.login(action.loginCredential).pipe(
-                    map((loginResult) => AppActions.loginSuccess({ loginResult: loginResult })),
-                    catchError((error) => of(AppActions.loginFailure({ message: error })))
+                    map((loginResult) => ApiActions.loginSuccess({ loginResult: loginResult })),
+                    catchError((error) => of(ApiActions.loginFailure({ message: error })))
                 )
             })
         )
@@ -35,7 +38,7 @@ export class Effects {
 
     loginSuccess = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loginSuccess),
+            ofType(ApiActions.loginSuccess),
             withLatestFrom(this.store.select(selectAfterLoginRedirect), this.store.select(selectCurrentUser)),
             tap(([action, afterLoginRedirect, currentUser]) => {
                 if (action.loginResult.accessToken)
@@ -49,7 +52,7 @@ export class Effects {
 
     logout$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated),
+            ofType(SystemActions.logoutOnServerUnauthorised, UiActions.logoutUserInitiated),
             tap(() => {
                 localStorage["access-token"] = JSON.stringify(null);
                 window.location.href = "/"; //TODO: clear the state instead
@@ -59,11 +62,11 @@ export class Effects {
 
     loadTickets$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loadTicketsRequested),
+            ofType(UiActions.loadTicketsRequested),
             switchMap((action) => {
                 return this.apiService.getTicketList(action.includeClosed).pipe(
-                    map((tickets) => AppActions.loadTicketsSuccess({ tickets: tickets })),
-                    catchError(() => of(AppActions.loadTicketsFailure()))
+                    map((tickets) => ApiActions.loadTicketsSuccess({ tickets: tickets })),
+                    catchError(() => of(ApiActions.loadTicketsFailure()))
                 )
             })
         )
@@ -71,11 +74,11 @@ export class Effects {
 
     loadTicketBoard$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loadTicketBoardRequested),
+            ofType(UiActions.loadTicketBoardRequested),
             switchMap((action) => {
                 return this.apiService.getTicketBoard(action.includeClosed).pipe(
-                    map((board) => AppActions.loadTicketBoardSuccess({ board: board })),
-                    catchError(() => of(AppActions.loadTicketBoardFailure()))
+                    map((board) => ApiActions.loadTicketBoardSuccess({ board: board })),
+                    catchError(() => of(ApiActions.loadTicketBoardFailure()))
                 )
             })
         )
@@ -83,18 +86,18 @@ export class Effects {
 
     loadTicketFailure = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loadTicketsFailure, AppActions.loadTicketBoardFailure),
+            ofType(ApiActions.loadTicketsFailure, ApiActions.loadTicketBoardFailure),
             tap(() => alert('There was a problem loading tickets from the server'))
         )
     );
 
     loadUsers$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loadUserListRequested),
+            ofType(UiActions.loadUserListRequested),
             switchMap((action) => {
                 return this.apiService.getUserList().pipe(
-                    map((users) => AppActions.loadUserListSuccess({ users: users })),
-                    catchError(() => of(AppActions.loadTicketsFailure()))
+                    map((users) => ApiActions.loadUserListSuccess({ users: users })),
+                    catchError(() => of(ApiActions.loadUserListFailure()))
                 )
             })
         )
@@ -102,7 +105,7 @@ export class Effects {
 
     loadUsersFailure = createEffect(() =>
         this.actions$.pipe(
-            ofType(AppActions.loadUserListFailure),
+            ofType(ApiActions.loadUserListFailure),
             tap(() => alert('There was a problem loading users from the server'))
         )
     );

@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/app.state';
-import { logoutOnServerUnauthorised } from './store/actions';
+import { logoutOnServerUnauthorised } from './store/actions-system';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

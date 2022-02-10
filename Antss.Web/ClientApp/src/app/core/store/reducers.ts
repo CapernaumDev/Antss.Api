@@ -1,17 +1,20 @@
 import { createReducer, on } from '@ngrx/store';
 import { CurrentUser } from '../models/user/current-user';
-import * as AppActions from './actions';
+import * as ApiActions from './actions-api';
+import * as PushActions from './actions-push';
+import * as SystemActions from './actions-system';
+import * as UiActions from './actions-ui';
 import { initialState } from './app.state';
 import produce from "immer";
 
 export const Reducers = createReducer(
   initialState,
 
-  on(AppActions.loginWithCredentials, (state) => ({ ...state, status: 'loading' })),
+  on(UiActions.loginWithCredentials, (state) => ({ ...state, status: 'loading' })),
 
-  on(AppActions.loginWithToken, (state) => ({ ...state, status: 'loading' })),
+  on(SystemActions.loginWithToken, (state) => ({ ...state, status: 'loading' })),
 
-  on(AppActions.loginSuccess, (state, { loginResult }) => ({
+  on(ApiActions.loginSuccess, (state, { loginResult }) => ({
     ...state,
     currentUser: Object.assign(new CurrentUser(), {
       ...loginResult.user,
@@ -20,41 +23,41 @@ export const Reducers = createReducer(
     status: 'success'
   })),
 
-  on(AppActions.loginFailure, (state) => ({
+  on(ApiActions.loginFailure, (state) => ({
     ...state,
     status: 'error'
   })),
 
-  on(AppActions.setAfterLoginRedirect, (state, { url }) => ({
+  on(SystemActions.setAfterLoginRedirect, (state, { url }) => ({
     ...state,
     afterLoginRedirect: url
   })),
 
-  on(AppActions.setInitialAppData, (state, { appData }) => ({
+  on(PushActions.setInitialAppData, (state, { appData }) => ({
     ...state,
     assignableUsers: appData.assignableUsers,
     offices: appData.offices,
     userTypes: appData.userTypes
   })),
 
-  on(AppActions.logoutOnServerUnauthorised, AppActions.logoutUserInitiated, (state) => ({
+  on(SystemActions.logoutOnServerUnauthorised, UiActions.logoutUserInitiated, (state) => ({
     ...state,
     currentUser: null,
     status: 'pending',
     afterLoginRedirect: ''
   })),
 
-  on(AppActions.updateAssignableUsers, (state, { options }) => ({
+  on(PushActions.updateAssignableUsers, (state, { options }) => ({
     ...state,
     assignableUsers: options
   })),
 
-  on(AppActions.loadTicketsSuccess, (state, { tickets }) => ({
+  on(ApiActions.loadTicketsSuccess, (state, { tickets }) => ({
     ...state,
     ticketListItems: tickets
   })),
 
-  on(AppActions.ticketCreated, (state, { ticket, boardColumnIndex, initiatedByUserId }) => 
+  on(PushActions.ticketCreated, (state, { ticket, boardColumnIndex, initiatedByUserId }) => 
     produce(state, draft => {
       if (!draft.ticketListItems.find(x => x.id === ticket.id))
         draft.ticketListItems.push(ticket);
@@ -64,7 +67,7 @@ export const Reducers = createReducer(
       }
   })),
 
-  on(AppActions.ticketStatusUpdatedByServer, AppActions.ticketStatusUpdatedByUser,
+  on(PushActions.ticketStatusUpdatedByServer, UiActions.ticketStatusUpdatedByUser,
     (state, { ticket, boardColumnIndex }) => produce(state, draft => {
       let ticketInTicketListStateCollection = draft.ticketListItems.find(x => x.id === ticket.id);
       if (ticketInTicketListStateCollection)
@@ -86,7 +89,7 @@ export const Reducers = createReducer(
       }
     })),
 
-  on(AppActions.ticketAnimationPlayed, (state, { ticketId }) => produce(state, draft => {
+  on(SystemActions.ticketAnimationPlayed, (state, { ticketId }) => produce(state, draft => {
       for (let i = 0; i < draft.ticketBoard.length; i++) {
         let foundTicket = draft.ticketBoard[i].data.find(x => x.id === ticketId);
         if (foundTicket)  {
@@ -96,23 +99,23 @@ export const Reducers = createReducer(
       }
   })),
 
-  on(AppActions.loadTicketBoardSuccess, (state, { board }) => ({
+  on(ApiActions.loadTicketBoardSuccess, (state, { board }) => ({
     ...state,
     ticketBoard: board
   })),
 
-  on(AppActions.userCreated, (state, { user }) => produce(state, draft => {
+  on(PushActions.userCreated, (state, { user }) => produce(state, draft => {
     draft.userListItems.push(user);
   })),
 
-  on(AppActions.userUpdated, (state, { user }) => produce(state, draft => {
+  on(PushActions.userUpdated, (state, { user }) => produce(state, draft => {
     let userIndex = draft.userListItems.findIndex(x => x.id === user.id);
     if (userIndex > -1) {
       draft.userListItems.splice(userIndex, 1, user);
     }
   })),
 
-  on(AppActions.loadUserListSuccess, (state, { users }) => ({
+  on(ApiActions.loadUserListSuccess, (state, { users }) => ({
     ...state,
     userListItems: users
   })),

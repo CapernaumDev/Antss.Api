@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "./store/app.state";
-import { loginWithToken } from './store/actions';
+import { loginWithToken } from './store/actions-system';
 import { LoginCredential } from "./models/login-credential";
 
 @Injectable({

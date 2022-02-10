@@ -7,7 +7,7 @@ import { FilterSourceDirective } from '@app/core/directives/filter-source.direct
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { AppState } from '@app/core/store/app.state';
 import { Store } from '@ngrx/store';
-import { loadTicketsRequested } from '@app/core/store/actions';
+import { loadTicketsRequested } from '@app/core/store/actions-ui';
 import { selectTicketList } from '@app/core/store/selectors';
 
 @Component({
