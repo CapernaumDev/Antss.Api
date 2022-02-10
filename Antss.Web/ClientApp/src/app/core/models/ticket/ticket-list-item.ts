@@ -4,6 +4,7 @@ export class TicketListItem {
   assignedTo!: string;
   ticketStatus!: string;
   description!: string;
-
+  title!: string;
+  
   animation!: string | null;
 }

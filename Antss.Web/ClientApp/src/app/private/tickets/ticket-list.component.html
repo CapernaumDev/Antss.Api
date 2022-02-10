@@ -25,7 +25,7 @@
         <th sortHeader ref="raisedBy">Raised By</th>
         <th sortHeader ref="assignedTo">Assigned To</th>
         <th sortHeader ref="ticketStatus">Status</th>
-        <th>Description</th>
+        <th>Title</th>
       </tr>
     </thead>
     <tbody>
@@ -34,7 +34,7 @@
         <td><ngb-highlight [result]="x.raisedBy" [term]="filterElement.currentValue">{{x.raisedBy}}</ngb-highlight></td>
         <td><ngb-highlight [result]="x.assignedTo" [term]="filterElement.currentValue">{{x.assignedTo}}</ngb-highlight></td>
         <td><ngb-highlight [result]="x.ticketStatus" [term]="filterElement.currentValue">{{x.ticketStatus}}</ngb-highlight></td>
-        <td><ngb-highlight [result]="x.description" [term]="filterElement.currentValue">{{x.description}}</ngb-highlight></td>
+        <td><ngb-highlight [result]="x.title" [term]="filterElement.currentValue">{{x.title}}</ngb-highlight></td>
       </tr>
     </tbody>
   </table>

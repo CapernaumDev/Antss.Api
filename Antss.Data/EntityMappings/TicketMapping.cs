@@ -13,7 +13,7 @@ namespace Antss.Data.EntityMappings
             builder.Property(x => x.AssignedToId).IsRequired(false);
             builder.HasOne(x => x.AssignedTo).WithMany().HasForeignKey(x => x.AssignedToId).OnDelete(DeleteBehavior.NoAction).IsRequired(false);
             builder.Property(x => x.TicketStatus).HasConversion<int>();
-            // Don't specify max length for Description, can be any length
+            builder.Property(x => x.Title).HasMaxLength(50);
         }
     }
 }

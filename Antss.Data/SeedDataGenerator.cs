@@ -37,18 +37,18 @@ namespace Antss.Data
                     }));
 
             modelBuilder.Entity<Ticket>().HasData(
-                    new { Id = 1, RaisedById = 3, AssignedToId = 2, TicketStatus = TicketStatuses.Raised, Description = "No monitor display" },
-                    new { Id = 2, RaisedById = 3, AssignedToId = 1, TicketStatus = TicketStatuses.Completed, Description = "No Wi-Fi" },
-                    new { Id = 3, RaisedById = 3, TicketStatus = TicketStatuses.InProgress, Description = "Emails not sending" },
-                    new { Id = 4, RaisedById = 4, TicketStatus = TicketStatuses.Raised, Description = "Virus?" },
-                    new { Id = 5, RaisedById = 4, TicketStatus = TicketStatuses.Raised, Description = "Printer won't print" },
-                    new { Id = 6, RaisedById = 4, TicketStatus = TicketStatuses.Raised, Description = "Can't access reddit" },
-                    new { Id = 7, RaisedById = 5, TicketStatus = TicketStatuses.Raised, Description = "issue with email" },
-                    new { Id = 8, RaisedById = 5, TicketStatus = TicketStatuses.Raised, Description = "No WiFi" },
-                    new { Id = 9, RaisedById = 6, TicketStatus = TicketStatuses.Raised, Description = "Proto app is crashing when I login" },
-                    new { Id = 10, RaisedById = 7, TicketStatus = TicketStatuses.Raised, Description = "why doesn't reddit work any more?" },
-                    new { Id = 11, RaisedById = 7, TicketStatus = TicketStatuses.Raised, Description = "Wifi issues" },
-                    new { Id = 12, RaisedById = 7, TicketStatus = TicketStatuses.Raised, Description = "Can't login" }
+                    new { Id = 1, RaisedById = 3, AssignedToId = 2, TicketStatus = TicketStatuses.Raised, Title = "No monitor display", Description = "test" },
+                    new { Id = 2, RaisedById = 3, AssignedToId = 1, TicketStatus = TicketStatuses.Completed, Title = "No Wi-Fi", Description = "test" },
+                    new { Id = 3, RaisedById = 3, TicketStatus = TicketStatuses.InProgress, Title = "Emails not sending", Description = "test" },
+                    new { Id = 4, RaisedById = 4, TicketStatus = TicketStatuses.Raised, Title = "Virus?", Description = "test" },
+                    new { Id = 5, RaisedById = 4, TicketStatus = TicketStatuses.Raised, Title = "Printer won't print", Description = "test" },
+                    new { Id = 6, RaisedById = 4, TicketStatus = TicketStatuses.Raised, Title = "Can't access reddit", Description = "test" },
+                    new { Id = 7, RaisedById = 5, TicketStatus = TicketStatuses.Raised, Title = "issue with email", Description = "test" },
+                    new { Id = 8, RaisedById = 5, TicketStatus = TicketStatuses.Raised, Title = "No WiFi", Description = "test" },
+                    new { Id = 9, RaisedById = 6, TicketStatus = TicketStatuses.Raised, Title = "Proto app is crashing when I login", Description = "test" },
+                    new { Id = 10, RaisedById = 7, TicketStatus = TicketStatuses.Raised, Title = "why doesn't reddit work any more?", Description = "test" },
+                    new { Id = 11, RaisedById = 7, TicketStatus = TicketStatuses.Raised, Title = "Wifi issues", Description = "test" },
+                    new { Id = 12, RaisedById = 7, TicketStatus = TicketStatuses.Raised, Title = "Can't login", Description = "test" }
                 );
 
             var ticketId = 13;
@@ -62,6 +62,7 @@ namespace Antss.Data
                     RaisedById = userId++,
                     AssignedToId = 2,
                     TicketStatus = TicketStatuses.Completed,
+                    Title = x.description.ToString().Substring(0, x.description.ToString().Length > 49 ? 50 : x.description.ToString().Length),
                     Description = x.description.ToString()
                 }));
         }

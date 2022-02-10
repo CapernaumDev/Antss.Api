@@ -61,6 +61,7 @@ namespace Antss.Services
                         Id = y.Id,
                         AssignedTo = y.AssignedTo.DisplayName,
                         Description = y.Description,
+                        Title = y.Title,
                         RaisedBy = y.RaisedBy.DisplayName,
                         RaisedById = y.RaisedById,
                         TicketStatus = _enumTransformer.GetEnumMemberAttributeValue(y.TicketStatus),
@@ -97,7 +98,8 @@ namespace Antss.Services
                 RaisedById = raisedBy.UserId,
                 AssignedToId = canAssignOnCreation ? ticketDto.AssignedToId : null,
                 TicketStatus = TicketStatuses.Raised,
-                Description = ticketDto.Description
+                Description = ticketDto.Description,
+                Title = ticketDto.Title
             };
 
             _db.Tickets.Add(newTicket);

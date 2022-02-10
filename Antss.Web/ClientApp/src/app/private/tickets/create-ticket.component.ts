@@ -15,7 +15,8 @@ import { selectAssignableUsers, selectCurrentUser } from '@app/core/store/select
 @Component({
   selector: 'create-ticket',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './create-ticket.component.html'
+  templateUrl: './create-ticket.component.html',
+  styleUrls: ['./create-ticket.component.css']
 })
 
 export class CreateTicketComponent extends BaseFormComponent implements OnInit {
@@ -57,6 +58,7 @@ export class CreateTicketComponent extends BaseFormComponent implements OnInit {
     this.editor = new Editor();
 
     this.form = this.formBuilder.group({
+      title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required]],
       assignedToId: [null]
     });
