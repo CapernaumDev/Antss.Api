@@ -40,3 +40,11 @@ export const loadUserListSuccess = createAction(
 export const loadUserListFailure = createAction(
     '[User API] Load User List Failure'
 );
+
+export const createTicketSuccess = createAction(
+    '[Ticket API] Create Ticket Success'
+)
+
+export const createTicketFailure = createAction(
+    '[Ticket API] Create Ticket Failure'
+)

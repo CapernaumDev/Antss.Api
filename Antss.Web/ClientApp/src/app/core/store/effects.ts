@@ -88,7 +88,7 @@ export class Effects {
         this.actions$.pipe(
             ofType(ApiActions.loadTicketsFailure, ApiActions.loadTicketBoardFailure),
             tap(() => alert('There was a problem loading tickets from the server'))
-        )
+        ), { dispatch: false }
     );
 
     loadUsers$ = createEffect(() =>
@@ -107,6 +107,34 @@ export class Effects {
         this.actions$.pipe(
             ofType(ApiActions.loadUserListFailure),
             tap(() => alert('There was a problem loading users from the server'))
+        ), { dispatch: false }
+    );
+
+    createTicketRequested$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(UiActions.createTicketRequested),
+            switchMap((action) => {
+                return this.apiService.createTicket(action.ticket).pipe(
+                    map((loginResult) => ApiActions.createTicketSuccess()),
+                    catchError((error) => of(ApiActions.createTicketFailure()))
+                )
+            })
         )
+    );
+
+    createTicketSuccess$ = createEffect(() => 
+        this.actions$.pipe(
+            ofType(ApiActions.createTicketSuccess),
+            tap(() => {
+                this.router.navigateByUrl('ticket-list');
+            })
+        ), { dispatch: false }
+    );
+
+    createTicketFailure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(ApiActions.createTicketFailure),
+            tap(() => alert('There was a problem creating the ticket'))
+        ), { dispatch: false }
     );
 }

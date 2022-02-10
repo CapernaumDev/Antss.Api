@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { LoginCredential } from '../models/login-credential';
+import { CreateTicket } from '../models/ticket/create-ticket';
 import { TicketListItem } from '../models/ticket/ticket-list-item';
 
 export const loginWithCredentials = createAction(
@@ -29,3 +30,8 @@ export const loadTicketBoardRequested = createAction(
 export const loadUserListRequested = createAction(
     '[User List] Load User List Requested'
 );
+
+export const createTicketRequested = createAction(
+    '[Create Ticket Form] Create Ticket Requested',
+    props<{ ticket: CreateTicket }>()
+)
