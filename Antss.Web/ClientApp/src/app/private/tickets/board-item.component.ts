@@ -19,7 +19,7 @@ export class TicketBoardItemComponent implements OnInit {
   }
 
   @Input() ticket!: TicketListItem;
-  @Input() filterElement!: FilterInputComponent;
+  @Input() filterTerm!: string;
 
   ngOnInit(): void {
   }

@@ -31,7 +31,7 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
 
       result = data.map(boardColumn => {
         boardColumn = Object.assign({}, boardColumn);
-        boardColumn.data = boardColumn.data.filter(ticket => ticket.description.toLowerCase().includes(term))
+        boardColumn.data = boardColumn.data.filter(ticket => ticket.title.toLowerCase().includes(term))
         return boardColumn;
       });
     } else {

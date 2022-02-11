@@ -26,6 +26,7 @@ export class TicketBoardComponent implements OnInit {
   boardDataSource = new TicketBoardDataSource([]);
   board$: Observable<BoardColumn<TicketListItem>[]> = this.boardDataSource.data$;
   recordCount$: Observable<number> = this.boardDataSource.recordCount$;
+  filterTerm!: string;
 
   @ViewChild(FilterSourceDirective) filterSource!: FilterSourceDirective;
   @ViewChild('filterElement') filterElement!: FilterInputComponent;
@@ -51,6 +52,7 @@ export class TicketBoardComponent implements OnInit {
       boardColumnIndex: event.currentIndex 
     }));
 
+    //TODO: through store
     this.apiService.updateTicketStatus(new UpdateTicketStatus(ticket.id, ticketStatusId, event.currentIndex))
       .pipe(
         take(1),
@@ -81,6 +83,10 @@ export class TicketBoardComponent implements OnInit {
 
   ngAfterViewInit() {
     this.boardDataSource.filterSource = this.filterSource;
+    this.filterSource.filterChange
+      .subscribe((setFilterEvent) => { 
+        this.filterTerm = setFilterEvent.filterTerm || '';
+      });    
   }
 
   ngOnDestroy() {

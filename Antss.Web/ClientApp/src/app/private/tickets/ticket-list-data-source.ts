@@ -25,7 +25,7 @@ export class TicketListDataSource extends DataSource<TicketListItem> {
             return x.assignedTo?.toLowerCase().includes(term)
               || x.raisedBy.toLowerCase().includes(term)
               || x.ticketStatus.toLowerCase().includes(term)
-              || x.description.toLowerCase().includes(term)
+              || x.title.toLowerCase().includes(term)
           });
         } else {
           return data.filter(x => x.id === filterTermAsNumber);
