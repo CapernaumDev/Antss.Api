@@ -56,7 +56,7 @@ namespace Antss.Services
                 {
                     Title = _enumTransformer.GetEnumMemberAttributeValue(x.Key),
                     Id = (int)x.Key,
-                    Data = x.Select(y => new TicketListItem
+                    Items = x.Select(y => new TicketListItem
                     {
                         Id = y.Id,
                         AssignedTo = y.AssignedTo.DisplayName,
@@ -80,7 +80,7 @@ namespace Antss.Services
                     boardColumns.Add(new BoardColumn<TicketListItem>
                     {
                         Id = (int)ticketStatus,
-                        Data = new List<TicketListItem>(),
+                        Items = new List<TicketListItem>(),
                         Title = _enumTransformer.GetEnumMemberAttributeValue(ticketStatus)
                     });
             }

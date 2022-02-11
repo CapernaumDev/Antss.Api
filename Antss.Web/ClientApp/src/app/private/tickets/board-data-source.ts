@@ -31,13 +31,13 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
 
       result = data.map(boardColumn => {
         boardColumn = Object.assign({}, boardColumn);
-        boardColumn.data = boardColumn.data.filter(ticket => ticket.title.toLowerCase().includes(term))
+        boardColumn.items = boardColumn.items.filter(ticket => ticket.title.toLowerCase().includes(term))
         return boardColumn;
       });
     } else {
       result = data.map(boardColumn => {
         boardColumn = Object.assign({}, boardColumn);
-        boardColumn.data = boardColumn.data.filter(ticket => ticket.id == filterTermAsNumber)
+        boardColumn.items = boardColumn.items.filter(ticket => ticket.id == filterTermAsNumber)
         return boardColumn;
       });
     }
@@ -59,7 +59,7 @@ export class TicketBoardDataSource extends DataSource<BoardColumn<TicketListItem
     let count = 0;
 
     data.forEach(x => {
-      count += x.data.length;
+      count += x.items.length;
     });
 
     this.ticketCount.next(count);

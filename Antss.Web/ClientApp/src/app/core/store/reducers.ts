@@ -62,8 +62,8 @@ export const Reducers = createReducer(
       if (!draft.ticketListItems.find(x => x.id === ticket.id))
         draft.ticketListItems.push(ticket);
 
-      if (draft.ticketBoard.length && !draft.ticketBoard[0].data.find(x => x.id === ticket.id)) {
-        draft.ticketBoard[0].data.splice(0, 0, ticket)
+      if (draft.ticketBoard.length && !draft.ticketBoard[0].items.find(x => x.id === ticket.id)) {
+        draft.ticketBoard[0].items.splice(0, 0, ticket)
       }
   })),
 
@@ -76,13 +76,13 @@ export const Reducers = createReducer(
       let destinationBoardColumn = draft.ticketBoard.find(x => x.title === ticket.ticketStatus);
       if (destinationBoardColumn) {
         for (let i = 0; i < draft.ticketBoard.length; i++) {
-          let foundTicketIndex = draft.ticketBoard[i].data.findIndex(x => x.id === ticket.id);
+          let foundTicketIndex = draft.ticketBoard[i].items.findIndex(x => x.id === ticket.id);
           if (foundTicketIndex > -1) {
-            draft.ticketBoard[i].data.splice(foundTicketIndex, 1);
-            if (boardColumnIndex != null && boardColumnIndex > -1 && destinationBoardColumn.data.length >= boardColumnIndex)
-              destinationBoardColumn.data.splice(boardColumnIndex, 0, ticket);
+            draft.ticketBoard[i].items.splice(foundTicketIndex, 1);
+            if (boardColumnIndex != null && boardColumnIndex > -1 && destinationBoardColumn.items.length >= boardColumnIndex)
+              destinationBoardColumn.items.splice(boardColumnIndex, 0, ticket);
             else
-              destinationBoardColumn.data.push(ticket);
+              destinationBoardColumn.items.push(ticket);
             break;
           }
         }
@@ -91,7 +91,7 @@ export const Reducers = createReducer(
 
   on(SystemActions.ticketAnimationPlayed, (state, { ticketId }) => produce(state, draft => {
       for (let i = 0; i < draft.ticketBoard.length; i++) {
-        let foundTicket = draft.ticketBoard[i].data.find(x => x.id === ticketId);
+        let foundTicket = draft.ticketBoard[i].items.find(x => x.id === ticketId);
         if (foundTicket)  {
           foundTicket.animation = null;
           break;

@@ -24,8 +24,8 @@
             {{ column.title }}
           </div>
           <div class="tasks-container" id="{{column.id}}" [cdkDropListConnectedTo]="['1', '2', '3']" cdkDropList
-            [cdkDropListData]="column.data" (cdkDropListDropped)="drop($event)">
-            <div board-item *ngFor="let ticket of column.data as TicketListItem; index as i; trackBy: trackTicketBy"
+            [cdkDropListData]="column" (cdkDropListDropped)="drop($event)">
+            <div board-item *ngFor="let ticket of column.items as TicketListItem; index as i; trackBy: trackTicketBy"
               [ticket]="ticket" [filterTerm]="filterTerm" cdkDrag>
             </div>
           </div>

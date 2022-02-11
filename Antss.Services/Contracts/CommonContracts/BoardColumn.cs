@@ -4,6 +4,6 @@
     {
         public string Title { get; set; }
         public int Id { get; set; }
-        public IEnumerable<T> Data { get; set; }
+        public IEnumerable<T> Items { get; set; }
     }
 }
