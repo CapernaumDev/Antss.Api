@@ -18,6 +18,7 @@ namespace Antss.Data.EntityMappings
             builder.Ignore(x => x.DisplayName);
             builder.HasOne(x => x.Office).WithMany().HasForeignKey(x => x.OfficeId);
             builder.HasMany(x => x.AssignedTickets).WithOne(x => x.AssignedTo).HasForeignKey(x => x.AssignedToId);
+            builder.HasMany(x => x.Sessions).WithOne(x => x.User).HasForeignKey(x => x.UserId);
         }
     }
 }

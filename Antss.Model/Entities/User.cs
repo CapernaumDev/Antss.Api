@@ -11,11 +11,10 @@
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
-        public Guid? AccessToken { get; set; } 
-        public DateTime? AccessTokenExpiryUtc { get; set; }
 
         public string DisplayName => LastName + ", " + FirstName;
 
-        public IEnumerable<Ticket>? AssignedTickets { get; set; } = new List<Ticket>();
+        public ICollection<Ticket>? AssignedTickets { get; set; } = new List<Ticket>();
+        public ICollection<UserSession> Sessions { get; set; } = new List<UserSession>();
     }
 }

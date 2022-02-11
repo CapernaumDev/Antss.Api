@@ -3,6 +3,7 @@ using Antss.Model.Entities;
 using Antss.Services.Common;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.UserContracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Antss.Services
 {
@@ -57,8 +58,13 @@ namespace Antss.Services
 
             var accessToken = Guid.NewGuid();
             _loginResult.AccessToken = accessToken;
-            user.AccessToken = accessToken;
-            user.AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7);
+
+            user.Sessions.Add(new UserSession
+            {
+                AccessToken = accessToken,
+                AccessTokenExpiryUtc = DateTime.UtcNow.AddDays(7)
+            });
+
             _db.SaveChanges();
 
             _user = user;
@@ -69,11 +75,11 @@ namespace Antss.Services
         {
             var loginResult = new LoginResult();
 
-            var user = _db.Users.SingleOrDefault(x => x.AccessToken == Guid.Parse(accessToken));
+            var session = _db.UserSessions.Include(x => x.User).FirstOrDefault(x => x.AccessToken == Guid.Parse(accessToken));
 
-            if (user == null || user.AccessTokenExpiryUtc < DateTime.UtcNow) return;
+            if (session == null || session.AccessTokenExpiryUtc < DateTime.UtcNow) return;
 
-            _user = user;
+            _user = session.User;
             _loggedIn = true;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Antss.Data;
 using Antss.Services.Common;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
@@ -62,14 +63,14 @@ namespace Antss.Web.Authorization
                 return Task.FromResult(AuthenticateResult.Fail(InvalidTokenFormatMessage));
             }
     
-            var user = _db.Users.SingleOrDefault(x => x.AccessToken == accessToken);
+            var session = _db.UserSessions.Include(x => x.User).FirstOrDefault(x => x.AccessToken == accessToken);
 
-            if (user != null && user.AccessTokenExpiryUtc > DateTime.UtcNow)
+            if (session != null && session.AccessTokenExpiryUtc > DateTime.UtcNow)
             {
                 var identity = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim("UserTypeId", ((int)user.UserType).ToString()),
-                    new Claim("UserId", user.Id.ToString())
+                    new Claim("UserTypeId", ((int)session.User.UserType).ToString()),
+                    new Claim("UserId", session.User.Id.ToString())
                 }, nameof(BasicTokenAuthHandler));
 
                 var principal = new ClaimsPrincipal(identity);

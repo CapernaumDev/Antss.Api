@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
-import { FilterInputComponent } from '@app/core/components/filter-input.component';
 import { Store } from '@ngrx/store';
 import { ticketAnimationPlayed } from '@app/core/store/actions-system';
 import confirmationHighlightAnimation from '@app/core/animations/confirmation-highlight.animation';

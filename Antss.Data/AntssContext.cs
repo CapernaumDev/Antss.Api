@@ -13,6 +13,7 @@ namespace Antss.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Office> Offices { get; set; }
 

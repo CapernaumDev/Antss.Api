@@ -4,6 +4,7 @@ using Antss.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Antss.Data.Migrations
 {
     [DbContext(typeof(AntssContext))]
-    partial class AntssContextModelSnapshot : ModelSnapshot
+    [Migration("20220211140012_AddUserSessions")]
+    partial class AddUserSessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3794,6 +3796,12 @@ namespace Antss.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("AccessToken")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("AccessTokenExpiryUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ContactNumber")
                         .IsRequired()
@@ -9419,7 +9427,7 @@ namespace Antss.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSessions");
+                    b.ToTable("UserSession");
                 });
 
             modelBuilder.Entity("Antss.Model.Entities.Ticket", b =>
