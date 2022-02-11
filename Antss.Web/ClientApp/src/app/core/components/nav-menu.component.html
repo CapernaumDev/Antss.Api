@@ -25,15 +25,19 @@
               <a class="nav-link text-dark" [routerLink]="['/']" (click)="logout()">Logout</a>
             </li>
             <li class="nav-item" *ngIf="user.isLoggedIn" [routerLinkActive]="['link-active']">
-              <a class="nav-link" [routerLink]="'my-profile'" class="user-icon">
-                <fa-icon [icon]="faUserCircle" size="2x" [title]="user.firstName + ' ' + user.lastName"></fa-icon>
+              <a [routerLink]="'my-profile'" [title]="user.firstName + ' ' + user.lastName">
+                <button class="btn btn-outline-primary link-button">
+                  <fa-icon [icon]="faUserCircle" ></fa-icon>
+                </button>
               </a>
             </li>
             
           </ng-container>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="'create-ticket'" class="envelope-icon">
-              <fa-icon [icon]="faEnvelope" size="2x" title="Create Ticket"></fa-icon>
+            <a [routerLink]="'create-ticket'" class="envelope-icon">
+              <button class="btn btn-outline-primary link-button">
+                <fa-icon [icon]="faEnvelope" title="Create Ticket"></fa-icon>
+              </button> 
             </a>
           </li>
           <ng-template #showLogin>

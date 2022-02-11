@@ -21,13 +21,10 @@ html {
   font-weight: bold;
 }
 
-.envelope-icon {
-  color: dodgerblue; 
-  padding: 0; 
+.envelope-icon { 
   margin-left: 10px;
 }
 
-.user-icon {
-  color: dodgerblue; 
-  padding: 0
+.link-button {
+  padding: .250rem .50rem
 }
