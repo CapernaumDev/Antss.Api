@@ -9,7 +9,7 @@ namespace Antss.Data.EntityMappings
         public void Configure(EntityTypeBuilder<UserSession> builder)
         {
             builder.HasKey(x => x.Id);
-
+            builder.HasIndex(x => x.AccessToken);
             builder.HasOne(x => x.User).WithMany(x => x.Sessions).HasForeignKey(x => x.UserId);
         }
     }
