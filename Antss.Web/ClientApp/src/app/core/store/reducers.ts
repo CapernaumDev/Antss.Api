@@ -124,4 +124,9 @@ export const Reducers = createReducer(
     ...state,
     editingUser: user
   })),
+
+  on(SystemActions.setPreviousUrl, (state, { url }) => ({
+    ...state,
+    previousUrl: url
+  }))
 );

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CurrentUser } from '../models/user/current-user';
@@ -16,6 +16,7 @@ import { selectCurrentUser } from '../store/selectors';
 export class NavMenuComponent implements OnInit {
   public currentUser$: Observable<CurrentUser | null>;
   public faUserCircle = faUserCircle;
+  public faEnvelope = faEnvelope;
 
   isExpanded = false;
 

@@ -15,7 +15,8 @@ export interface AppState {
     ticketListItems: TicketListItem[],
     ticketBoard: BoardColumn<TicketListItem>[],
     userListItems: UserListItem[],
-    editingUser: User | null
+    editingUser: User | null,
+    previousUrl: string | null
 }
 
 export const initialState: AppState = {
@@ -28,5 +29,6 @@ export const initialState: AppState = {
     ticketListItems: [],
     ticketBoard: [],
     userListItems: [],
-    editingUser: null
+    editingUser: null,
+    previousUrl: null
 };

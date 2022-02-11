@@ -19,3 +19,8 @@ export const ticketAnimationPlayed = createAction(
     '[UI Update on Server Push] Ticket Animation Finished Playing',
     props<{ ticketId: number }>()
 )
+
+export const setPreviousUrl = createAction(
+    '[Route Change] Set Previous Url',
+    props<{ url: string }>()
+)

@@ -20,3 +20,14 @@ html {
 .link-active {
   font-weight: bold;
 }
+
+.envelope-icon {
+  color: dodgerblue; 
+  padding: 0; 
+  margin-left: 10px;
+}
+
+.user-icon {
+  color: dodgerblue; 
+  padding: 0
+}

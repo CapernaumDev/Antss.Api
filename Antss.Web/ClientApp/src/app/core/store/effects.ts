@@ -12,7 +12,7 @@ import { AppState } from './app.state';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { SignalRService } from '../signalr.service';
-import { selectAfterLoginRedirect, selectCurrentUser } from './selectors';
+import { selectAfterLoginRedirect, selectCurrentUser, selectPreviousUrl } from './selectors';
 
 @Injectable()
 export class Effects {
@@ -125,8 +125,9 @@ export class Effects {
     createTicketSuccess$ = createEffect(() => 
         this.actions$.pipe(
             ofType(ApiActions.createTicketSuccess),
-            tap(() => {
-                this.router.navigateByUrl('ticket-list');
+            withLatestFrom(this.store.select(selectPreviousUrl)),
+            tap(([action, previousUrl]) => {
+                this.router.navigateByUrl(previousUrl == null || previousUrl == '/' ? 'ticket-list' : previousUrl);
             })
         ), { dispatch: false }
     );

@@ -35,6 +35,11 @@ export const selectAfterLoginRedirect = createSelector(
   (state) => state.afterLoginRedirect
 );
 
+export const selectPreviousUrl = createSelector(
+  getAppState,
+  (state) => state.previousUrl
+);
+
 export const selectTicketList = createSelector(
   getAppState,
   (state) => state.ticketListItems
