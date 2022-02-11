@@ -13,6 +13,7 @@ import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { SignalRService } from '../signalr.service';
 import { selectAfterLoginRedirect, selectCurrentUser, selectPreviousUrl } from './selectors';
+import { UpdateTicketStatus } from '../models/ticket/update-ticket-status';
 
 @Injectable()
 export class Effects {
@@ -197,4 +198,25 @@ export class Effects {
             tap(() => alert('There was a problem saving the user'))
         ), { dispatch: false }
     );
+
+    updateTicketStatusRequested = createEffect(() => 
+        this.actions$.pipe(
+            ofType(UiActions.ticketStatusUpdatedByUser),
+            switchMap((action) => {
+                return this.apiService.updateTicketStatus(
+                    new UpdateTicketStatus(action.ticket.id, action.newTicketStatusId, action.boardColumnIndex))
+                    .pipe(
+                        map((result) => ApiActions.updateTicketStatusSuccess()),
+                        catchError((error) => of(ApiActions.updateTicketStatusFailure()))
+                    )
+            })
+        )
+    );
+
+    updateTicketStatusFailure = createEffect(() => 
+        this.actions$.pipe(
+            ofType(ApiActions.updateTicketStatusFailure),
+            tap(() => alert('There was a problem updating the ticket'))
+        ), { dispatch: false } //TODO: UI feedback and move ticket back
+    )
 }

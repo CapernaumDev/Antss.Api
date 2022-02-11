@@ -33,6 +33,22 @@ export const loadTicketBoardFailure = createAction(
     '[Ticket API] Load Ticket Board Failure'
 );
 
+export const createTicketSuccess = createAction(
+    '[Ticket API] Create Ticket Success'
+)
+
+export const createTicketFailure = createAction(
+    '[Ticket API] Create Ticket Failure'
+)
+
+export const updateTicketStatusSuccess = createAction(
+    '[Ticket API] Update Ticket Status Success'
+);
+
+export const updateTicketStatusFailure = createAction(
+    '[Ticket API] Update Ticket Status Failed'
+);
+
 export const loadUserListSuccess = createAction(
     '[User API] Load User List Success',
     props<{ users: UserListItem[] }>()
@@ -41,14 +57,6 @@ export const loadUserListSuccess = createAction(
 export const loadUserListFailure = createAction(
     '[User API] Load User List Failure'
 );
-
-export const createTicketSuccess = createAction(
-    '[Ticket API] Create Ticket Success'
-)
-
-export const createTicketFailure = createAction(
-    '[Ticket API] Create Ticket Failure'
-)
 
 export const loadUserSuccess = createAction(
     '[User API] Load User Success',
@@ -60,7 +68,7 @@ export const loadUserFailure = createAction(
 );
 
 export const createUserSuccess = createAction(
-    '[User API] Create User Success',
+    '[User API] Create User Success'
 );
 
 export const createUserFailure = createAction(
@@ -68,9 +76,10 @@ export const createUserFailure = createAction(
 );
 
 export const updateUserSuccess = createAction(
-    '[User API] Update User Success',
+    '[User API] Update User Success'
 );
 
 export const updateUserFailure = createAction(
     '[User API] Update User Failed'
 );
+

@@ -4,12 +4,11 @@ import { Store } from '@ngrx/store';
 
 import { BoardColumn } from '@app/core/models/board-column';
 import { TicketListItem } from '@app/core/models/ticket/ticket-list-item';
-import { catchError, Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from '@app/core/api.service';
 import { TicketBoardDataSource } from './board-data-source';
 import { FilterSourceDirective } from '@app/core/directives/filter-source.directive';
 import { FilterInputComponent } from '@app/core/components/filter-input.component';
-import { UpdateTicketStatus } from '@app/core/models/ticket/update-ticket-status';
 import { AppState } from '@app/core/store/app.state';
 import { loadTicketBoardRequested, ticketStatusUpdatedByUser } from '@app/core/store/actions-ui';
 import { TicketStatuses } from '@app/core/models/ticket/ticket-statuses';
@@ -44,28 +43,14 @@ export class TicketBoardComponent implements OnInit {
     if (event.previousContainer === event.container) return;
 
     let ticket = event.previousContainer.data[event.previousIndex];
-    let ticketStatusId = parseInt(event.container.id);
-    let newTicketStatus = TicketStatuses[ticketStatusId].replace('_', ' '); //TODO: sort this out
+    let newTicketStatusId = parseInt(event.container.id);
+    let newTicketStatus = TicketStatuses[newTicketStatusId].replace('_', ' ');
 
     this.store.dispatch(ticketStatusUpdatedByUser({ 
       ticket: {...ticket, ticketStatus: newTicketStatus}, 
-      boardColumnIndex: event.currentIndex 
+      boardColumnIndex: event.currentIndex,
+      newTicketStatusId: newTicketStatusId
     }));
-
-    //TODO: through store
-    this.apiService.updateTicketStatus(new UpdateTicketStatus(ticket.id, ticketStatusId, event.currentIndex))
-      .pipe(
-        take(1),
-        catchError(err => {
-          alert('There was a problem updating the ticket status');
-          this.store.dispatch(ticketStatusUpdatedByUser({ 
-            ticket: ticket, 
-            boardColumnIndex: event.previousIndex 
-          }));
-          throw err;
-        }))
-        .subscribe(() => {
-        });
   }
 
   trackTicketBy(index: number, ticket: TicketListItem): number {

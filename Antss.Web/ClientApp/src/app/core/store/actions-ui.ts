@@ -20,7 +20,11 @@ export const loadTicketsRequested = createAction(
 
 export const ticketStatusUpdatedByUser = createAction(
     '[Ticket Board] Ticket Status Updated',
-    props<{ ticket: TicketListItem, boardColumnIndex: number | null }>()
+    props<{ 
+        ticket: TicketListItem, 
+        boardColumnIndex: number | null,
+        newTicketStatusId: number
+     }>()
 );
 
 export const loadTicketBoardRequested = createAction(
