@@ -19,7 +19,7 @@ builder.Services.AddAuthentication(
     .AddScheme<BasicTokenAuthSchemeOptions, BasicTokenAuthHandler>(
         "BasicToken", options => { });
 
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllers()
     .AddNewtonsoftJson(jsonOptions =>
     {
         jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
@@ -73,7 +73,7 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles();//TODO do we need this now it's just an api?
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -83,7 +83,5 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapHub<MainHub>("signalr");
-
-app.MapFallbackToFile("index.html"); ;
 
 app.Run();

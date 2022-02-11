@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antss.Web", "Antss.Web\Antss.Web.csproj", "{A34532BB-333B-4FBC-A68B-65AFF677C88A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antss.Api", "Antss.Web\Antss.Api.csproj", "{A34532BB-333B-4FBC-A68B-65AFF677C88A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antss.Model", "Antss.Model\Antss.Model.csproj", "{0CFA828C-52DD-4B6A-8C07-EDBB8004B821}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antss.Data", "Antss.Data\Antss.Data.csproj", "{27C6A107-287B-4896-9142-15F18C3BEDCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Antss.Services", "Antss.Services\Antss.Services.csproj", "{9D90CE87-FE41-4AF3-9D84-3897496019BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Antss.Services", "Antss.Services\Antss.Services.csproj", "{9D90CE87-FE41-4AF3-9D84-3897496019BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
