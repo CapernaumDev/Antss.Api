@@ -1,11 +1,11 @@
 ﻿using Antss.Services;
 using Antss.Services.Contracts.CommonContracts;
 using Antss.Services.Contracts.TicketContracts;
-using Antss.Web.Authorization;
-using Antss.Web.Push;
+using Antss.Api.Authorization;
+using Antss.Api.Push;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Antss.Web.Controllers
+namespace Antss.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace Antss.Web.Authorization
+namespace Antss.Api.Authorization
 {
     public class BasicTokenAuthHandler
         : AuthenticationHandler<BasicTokenAuthSchemeOptions>

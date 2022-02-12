@@ -1,6 +1,6 @@
 ﻿using Antss.Services.Common;
 
-namespace Antss.Web.Push
+namespace Antss.Api.Push
 {
     public class TicketBoardUpdateModel
     {

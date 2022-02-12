@@ -1,7 +1,7 @@
 ﻿using Antss.Services.Common;
 using Coravel.Queuing.Interfaces;
 
-namespace Antss.Web.Push
+namespace Antss.Api.Push
 {
     public class PushService
     {

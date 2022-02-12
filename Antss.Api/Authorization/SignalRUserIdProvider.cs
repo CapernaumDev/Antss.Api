@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace Antss.Web.Authorization
+namespace Antss.Api.Authorization
 {
     public class SignalRUserIdProvider : IUserIdProvider
     {

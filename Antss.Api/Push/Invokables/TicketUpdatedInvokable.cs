@@ -1,19 +1,19 @@
 ﻿using Antss.Model;
 using Antss.Services;
-using Antss.Web.Hubs;
-using Antss.Web.Push;
+using Antss.Api.Hubs;
+using Antss.Api.Push;
 using Coravel.Invocable;
 using Microsoft.AspNetCore.SignalR;
 
-public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<TicketBoardUpdateModel>
+public class TicketUpdatedInvokable : IInvocable, IInvocableWithPayload<TicketBoardUpdateModel>
 {
     public TicketBoardUpdateModel Payload { get; set; }
 
     private readonly IHubContext<MainHub> _hub;
     private readonly TicketService _svc;
-    private const string ClientCommand = "ticketCreated";
+    private const string ClientCommand = "ticketStatusUpdated";
 
-    public TicketCreatedInvokable(TicketService svc, IHubContext<MainHub> hub)
+    public TicketUpdatedInvokable(TicketService svc, IHubContext<MainHub> hub)
     {
         _svc = svc;
         _hub = hub;
@@ -24,9 +24,9 @@ public class TicketCreatedInvokable : IInvocable, IInvocableWithPayload<TicketBo
         var ticket = await _svc.GetListItem(Payload.TicketId);
 
         await _hub.Clients.User(ticket.RaisedById.ToString())
-            .SendAsync(ClientCommand, ticket, Payload.InitiatedByUser.UserId);
+            .SendAsync(ClientCommand, ticket, Payload.BoardColumnIndex, Payload.InitiatedByUser.UserId);
 
         await _hub.Clients.Groups(UserTypes.Admin.ToString(), UserTypes.Support.ToString())
-            .SendAsync(ClientCommand, ticket, Payload.InitiatedByUser.UserId);
+            .SendAsync(ClientCommand, ticket, Payload.BoardColumnIndex, Payload.InitiatedByUser.UserId);
     }
 }

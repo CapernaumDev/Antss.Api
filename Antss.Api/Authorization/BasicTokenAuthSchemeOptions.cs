@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 
-namespace Antss.Web.Authorization
+namespace Antss.Api.Authorization
 {
     public class BasicTokenAuthSchemeOptions
         : AuthenticationSchemeOptions

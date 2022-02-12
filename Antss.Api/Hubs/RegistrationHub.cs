@@ -1,9 +1,9 @@
 ﻿using Antss.Services;
-using Antss.Web.Authorization;
+using Antss.Api.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
-namespace Antss.Web.Hubs
+namespace Antss.Api.Hubs
 {
     [Authorize]
     public partial class MainHub : Hub

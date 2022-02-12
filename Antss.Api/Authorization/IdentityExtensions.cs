@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Antss.Web.Authorization
+namespace Antss.Api.Authorization
 {
     public static class IdentityExtensions
     {
