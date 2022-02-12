@@ -73,7 +73,6 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();//TODO do we need this now it's just an api?
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
